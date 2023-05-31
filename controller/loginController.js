@@ -21,7 +21,7 @@ async function login(req, res) {
 
     res.json({ token })
   } catch (err) {
-    res.json("Error: " + login.errors)
+    res.json(login.errors)
   }
 }
 

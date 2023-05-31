@@ -4,7 +4,7 @@ dotenv.config()
 
 let Login = function (data) {
   this.data = data
-  this.errors = [""]
+  this.errors = []
   this.userGroups = [""]
 }
 
@@ -16,15 +16,12 @@ Login.prototype.cleaneUp = function () {
 }
 
 Login.prototype.validate = function () {
-  return new Promise(async (resolve, reject) => {
-    if (this.data.username == "") {
-      this.errors.push("Felhasználónév megadása kötelező.")
-    }
-    if (this.data.password == "") {
-      this.errors.push("Jelszó megadása kötelező.")
-    }
-    resolve()
-  })
+  if (this.data.username == "") {
+    this.errors.push("Felhasználónév megadása kötelező.")
+  }
+  if (this.data.password == "") {
+    this.errors.push("Jelszó megadása kötelező.")
+  }
 }
 
 Login.prototype.login = function () {
@@ -32,8 +29,8 @@ Login.prototype.login = function () {
     this.cleaneUp()
     this.validate()
 
-    if (this.errors.length == 0) {
-      reject(new Error(this.errors))
+    if (this.errors.length > 0) {
+      reject(this.errors)
     } else {
       try {
         const result = await this.authenticate()
@@ -64,8 +61,7 @@ Login.prototype.authenticate = function () {
     bindCredentials: password
   }
 
-  return new Promise( async (resolve, reject) => {
-    
+  return new Promise(async (resolve, reject) => {
     ad.getGroupMembershipForUser(opts, usernameWithDomain, function (err, groups) {
       if (err) {
         errors.push("ERROR: " + JSON.stringify(err))
@@ -89,9 +85,7 @@ Login.prototype.authenticate = function () {
         resolve({ username: username, userGroups: userGroups })
       }
     })
-
   })
-
 }
 
 module.exports = Login
