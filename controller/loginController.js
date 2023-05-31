@@ -8,8 +8,7 @@ async function login(req, res) {
   let login = new Login(req.body)
   try {
     let result = await login.login()
-    console.log(result)
-    const token = await jwt.sign(
+    const token = jwt.sign(
       {
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
         data: {

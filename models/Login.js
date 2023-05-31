@@ -53,62 +53,45 @@ Login.prototype.authenticate = function () {
 
   const ad = new ActiveDirectory(ldapConfig)
 
-  return new Promise(async (resolve, reject) => {
-    let usernameWithDomain = this.data.username + process.env.DOMAIN
-    let username = this.data.username
-    let password = this.data.password
-    let errors = this.errors
-    let userGroups = this.userGroups
+  let usernameWithDomain = this.data.username + process.env.DOMAIN
+  let username = this.data.username
+  let password = this.data.password
+  let errors = this.errors
+  let userGroups = this.userGroups
 
-    Login.prototype.authenticate = await ad.authenticate(usernameWithDomain, password, function (err, auth) {
+  let opts = {
+    bindDN: usernameWithDomain,
+    bindCredentials: password
+  }
+
+  return new Promise( async (resolve, reject) => {
+    
+    ad.getGroupMembershipForUser(opts, usernameWithDomain, function (err, groups) {
       if (err) {
-        if (err.code == "ETIMEDOUT") {
-          errors.push("A szerver nem elérhető!")
-          reject(new Error(errors))
-        } else {
-          if (err.code == 49) {
-            errors.push("Hibás felhasználónév/jelszó.")
-            reject(new Error(errors))
-          } else {
-            errors.push("Hibakód: " + JSON.stringify(err.code) + "; Hiba leírás: " + JSON.stringify(err))
-            reject(new Error(errors))
-          }
-        }
-      } else if (auth) {
-        let opts = {
-          bindDN: usernameWithDomain,
-          bindCredentials: password
-        }
-
-        ad.getGroupMembershipForUser(opts, usernameWithDomain, function (err, groups) {
-          if (err) {
-            errors.push("ERROR: " + JSON.stringify(err))
-            reject(new Error(errors))
-          } else if (!groups) {
-            errors.push("User: " + usernameWithDomain + " not found.")
-            reject(new Error(errors))
-          } else {
-            groups.forEach(element => {
-              if (element.cn == "Tartományfelhasználók") {
-                userGroups[0] = element.cn
-              } //kérelmezők AD csoport neve
-              if (element.cn == "JogosultsagigenyEngedelyezok") {
-                userGroups[1] = element.cn
-              } //engedélyezők AD csoport neve
-              if (element.cn == "JogosultsagigenyAdminisztrator") {
-                userGroups[2] = element.cn
-              } //létrehozók AD csoport neve
-            })
-
-            resolve({ username: username, userGroups: userGroups })
-          }
-        })
+        errors.push("ERROR: " + JSON.stringify(err))
+        reject(new Error(errors))
+      } else if (!groups) {
+        errors.push("User: " + usernameWithDomain + " not found.")
+        reject(new Error(errors))
       } else {
-        errors.push("Hibás felhasználónév/jelszó")
-        reject(new Error(this.errors))
+        groups.forEach(element => {
+          if (element.cn == "Tartományfelhasználók") {
+            userGroups[0] = element.cn
+          } //kérelmezők AD csoport neve
+          if (element.cn == "JogosultsagigenyEngedelyezok") {
+            userGroups[1] = element.cn
+          } //engedélyezők AD csoport neve
+          if (element.cn == "JogosultsagigenyAdminisztrator") {
+            userGroups[2] = element.cn
+          } //létrehozók AD csoport neve
+        })
+
+        resolve({ username: username, userGroups: userGroups })
       }
     })
+
   })
+
 }
 
 module.exports = Login
