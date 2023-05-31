@@ -1,19 +1,20 @@
-const express = require('express')
+const express = require("express")
 const router = express.Router()
-const loginController = require('./controller/loginController')
-const { verifyToken} = require("./controller/loginController")
+const loginController = require("./controller/loginController")
+const requestController = require("./controller/requestController")
+const { verifyToken } = require("./controller/loginController")
+const cors = require("cors")
+
+router.use(cors())
 
 //router.get('/', userController.home)
-router.post('/login', loginController.login)
+router.post("/login", loginController.login)
 router.use(verifyToken)
 //router.get('/home', userController.mustBeLogedIn, /*userController.igenylok,*/ requestController.newForm)
-router.post("/test", loginController.testNext)
-router.post("/testGet", loginController.testGet)
-
 
 //requests
-//router.post('/requestNew', userController.mustBeLogedIn, /*userController.igenylok,*/ requestController.newUser)
-//router.get('/requestsList', userController.mustBeLogedIn, userController.engedejezok, requestController.getRequests)
+router.post("/request-new", /*userController.igenylok,*/ requestController.createNewUserTicket)
+router.get("/requests-list-all", /*loginController.engedejezok,*/ requestController.getAllRequest)
 //router.post('/requestUpdate', userController.mustBeLogedIn, userController.engedejezok, requestController.update)
 //router.post('/distributionListUpdate', userController.mustBeLogedIn, userController.engedejezok, requestController.updateDistributionList)
 //router.get('/requestsHandle', userController.mustBeLogedIn, userController.admin, requestController.getRequestsHandle)
