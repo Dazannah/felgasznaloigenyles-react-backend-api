@@ -16,10 +16,10 @@ Login.prototype.cleaneUp = function () {
 }
 
 Login.prototype.validate = function () {
-  if (this.data.username == "") {
+  if (this.data.username == "" || this.data.username == null) {
     this.errors.push("Felhasználónév megadása kötelező.")
   }
-  if (this.data.password == "") {
+  if (this.data.password == "" || this.data.password == null) {
     this.errors.push("Jelszó megadása kötelező.")
   }
 }
@@ -36,7 +36,7 @@ Login.prototype.login = function () {
         const result = await this.authenticate()
         resolve(result)
       } catch (err) {
-        reject(err)
+        reject(this.errors)
       }
     }
   })
@@ -64,10 +64,10 @@ Login.prototype.authenticate = function () {
   return new Promise(async (resolve, reject) => {
     ad.getGroupMembershipForUser(opts, usernameWithDomain, function (err, groups) {
       if (err) {
-        errors.push("ERROR: " + JSON.stringify(err))
+        errors.push("Hibás felhasználónév/jelszó.")
         reject(new Error(errors))
       } else if (!groups) {
-        errors.push("User: " + usernameWithDomain + " not found.")
+        errors.push("Nincs jogosultságod az alkalmazás használatához.")
         reject(new Error(errors))
       } else {
         groups.forEach(element => {
