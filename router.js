@@ -3,18 +3,20 @@ const router = express.Router()
 const loginController = require("./controller/loginController")
 const requestController = require("./controller/requestController")
 const { verifyToken } = require("./controller/loginController")
+const arrays = require("./arrays")
 const cors = require("cors")
 
 router.use(cors())
 
 //router.get('/', userController.home)
 router.post("/login", loginController.login)
+router.post("/get-arrays", arrays.getArrays)
 router.use(verifyToken)
 //router.get('/home', userController.mustBeLogedIn, /*userController.igenylok,*/ requestController.newForm)
 
 //requests
 router.post("/request-new", /*userController.igenylok,*/ requestController.createNewUserTicket)
-router.get("/requests-list-all", /*loginController.engedejezok,*/ requestController.getAllRequest)
+router.post("/requests-list-all", /*loginController.engedejezok,*/ requestController.getAllRequest)
 //router.post('/requestUpdate', userController.mustBeLogedIn, userController.engedejezok, requestController.update)
 //router.post('/distributionListUpdate', userController.mustBeLogedIn, userController.engedejezok, requestController.updateDistributionList)
 //router.get('/requestsHandle', userController.mustBeLogedIn, userController.admin, requestController.getRequestsHandle)
