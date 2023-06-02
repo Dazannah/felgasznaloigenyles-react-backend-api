@@ -1,9 +1,10 @@
 const Ticket = require("../models/Ticket")
 
-async function createNewUserTicket(req, res) {
-  const ticket = new Ticket(req.body)
-  const result = await ticket.createNewUserTicket()
-  res.json(result)
+async function createNewTicket(req, res) {
+  const ticket = new Ticket(req.body.dataToSend)
+  const response = await ticket.createNewUserTicket()
+  //const result = await ticket.createNewUserTicket()
+  res.json(response)
 }
 
 async function getAllRequest(req, res) {
@@ -12,6 +13,6 @@ async function getAllRequest(req, res) {
 }
 
 module.exports = {
-  createNewUserTicket,
+  createNewTicket,
   getAllRequest
 }

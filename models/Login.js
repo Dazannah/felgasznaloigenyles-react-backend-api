@@ -64,7 +64,7 @@ Login.prototype.authenticate = function () {
   return new Promise(async (resolve, reject) => {
     ad.getGroupMembershipForUser(opts, usernameWithDomain, function (err, groups) {
       if (err) {
-        errors.push("Hibás felhasználónév/jelszó.")
+        errors.push("Hitelesítő szerver nem elérhető.")
         reject(new Error(errors))
       } else if (!groups) {
         errors.push("Nincs jogosultságod az alkalmazás használatához.")

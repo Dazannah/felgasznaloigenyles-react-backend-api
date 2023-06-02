@@ -6,8 +6,9 @@ let Ticket = function (data) {
 }
 
 Ticket.prototype.createNewUserTicket = async function () {
+  console.log(this.data)
   try {
-    const result = await requestsDB.insertOne(this.data)
+    //const result = await requestsDB.insertOne(this.data)
     return result
   } catch (err) {
     return err
