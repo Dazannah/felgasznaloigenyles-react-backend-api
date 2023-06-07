@@ -22,6 +22,6 @@ async function getAllRequest(req, res) {
 }
 
 module.exports = {
-  createNewUserTicket,
+  createNewTicket,
   getAllRequest
 }
