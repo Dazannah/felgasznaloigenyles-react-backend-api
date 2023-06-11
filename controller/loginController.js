@@ -32,7 +32,11 @@ async function verifyToken(req, res, next) {
     req.body.decodedToken = decodedToken
     next()
   } catch (err) {
-    res.json(err)
+    if (err.name == "TokenExpiredError") {
+      res.json({ tokenExpired: true })
+    } else {
+      res.json(err)
+    }
   }
 }
 

@@ -12,6 +12,8 @@ router.use(cors())
 router.post("/login", loginController.login)
 router.post("/get-data", utils.getStartData)
 
+router.post("/validate-token", verifyToken, (req, res) => res.json({ tokenExpired: false }))
+
 router.use(verifyToken)
 //router.get('/home', userController.mustBeLogedIn, /*userController.igenylok,*/ requestController.newForm)
 

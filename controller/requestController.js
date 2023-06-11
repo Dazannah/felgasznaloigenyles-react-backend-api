@@ -1,7 +1,7 @@
 const Ticket = require("../models/Ticket")
 
 async function createNewUserTicket(req, res) {
-  const ticket = new Ticket(req.body, "newRequest")
+  const ticket = new Ticket(req.body, req.body.process)
   const errors = ticket.validate()
 
   if (errors) {

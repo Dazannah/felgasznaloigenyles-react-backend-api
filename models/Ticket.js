@@ -1,10 +1,14 @@
 const requestsDB = require("../db").db("jogosultsagigenylo").collection("requests")
 
 let Ticket = function (data, type) {
-  if (type == "newRequest") {
+  if (type == "Új felhasználó") {
     this.data = data.dataToSend
-    this.data.requestedBy = data.decodedToken.data.username
+    this.data.ticketCreation = {
+      userName: data.decodedToken.data.username,
+      createTime: require("../utils.js").getCurrentTime()
+    }
   }
+  this.data.process = type
   this.errors = []
 }
 
@@ -18,7 +22,8 @@ Ticket.prototype.validate = function () {
 
     if (this.errors.length != 0) return this.errors
   } catch (e) {
-    return e
+    this.errors.push(JSON.stringify(e))
+    return this.errors
   }
 }
 

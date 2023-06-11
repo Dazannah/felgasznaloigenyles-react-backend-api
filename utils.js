@@ -28,6 +28,22 @@ async function getStartData(req, res) {
   res.json([arrays, allClass])
 }
 
+function getCurrentTime() {
+  let dateObject = new Date()
+
+  let date = ("0" + dateObject.getDate()).slice(-2)
+  let month = ("0" + (dateObject.getMonth() + 1)).slice(-2)
+  let year = dateObject.getFullYear()
+
+  let hours = dateObject.getHours()
+  let minutes = dateObject.getMinutes()
+  let seconds = dateObject.getSeconds()
+  let tempCurrentTime = year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds
+
+  return tempCurrentTime
+}
+
 module.exports = {
-  getStartData
+  getStartData,
+  getCurrentTime
 }
