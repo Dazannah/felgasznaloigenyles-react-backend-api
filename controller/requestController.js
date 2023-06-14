@@ -21,7 +21,15 @@ async function getAllRequest(req, res) {
   res.json(requests)
 }
 
+async function updateTicketPermission(req, res) {
+  const type = "updatePermission"
+  const ticket = new Ticket(req.body.values, type)
+  const result = await ticket.updatePermission()
+  console.log(result)
+}
+
 module.exports = {
   createNewUserTicket,
-  getAllRequest
+  getAllRequest,
+  updateTicketPermission
 }

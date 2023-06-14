@@ -8,6 +8,10 @@ let Ticket = function (data, type) {
       createTime: require("../utils.js").getCurrentTime()
     }
   }
+  if (type == "updatePermission") {
+    this.data = data
+    console.log("asd")
+  }
   this.data.process = type
   this.errors = []
 }
@@ -39,6 +43,15 @@ Ticket.prototype.createNewUserTicket = async function () {
 Ticket.prototype.findAll = async function () {
   try {
     const response = await requestsDB.find().toArray()
+    return response
+  } catch (err) {
+    return err
+  }
+}
+
+Ticket.prototype.updatePermission = async function () {
+  try {
+    const response = await requestsDB.findOneAndUpdate()
     return response
   } catch (err) {
     return err
