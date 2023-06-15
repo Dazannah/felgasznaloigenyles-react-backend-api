@@ -16,20 +16,25 @@ async function createNewUserTicket(req, res) {
   }
 }
 
-async function getAllRequest(req, res) {
-  const requests = await Ticket.prototype.findAll()
+async function getAllForPermission(req, res) {
+  const requests = await Ticket.prototype.getAllForPermission()
   res.json(requests)
 }
 
 async function updateTicketPermission(req, res) {
   const type = "updatePermission"
-  const ticket = new Ticket(req.body.values, type)
-  const result = await ticket.updatePermission()
-  console.log(result)
+  const ticket = new Ticket(req.body, type)
+
+  try{
+    const result = await ticket.updatePermission()
+    res.json(result)
+  }catch(err){
+    res.json(err)
+  }
 }
 
 module.exports = {
   createNewUserTicket,
-  getAllRequest,
+  getAllForPermission,
   updateTicketPermission
 }

@@ -1,4 +1,5 @@
 const requestsDB = require("../db").db("jogosultsagigenylo").collection("requests")
+const ObjectID = require('mongodb').ObjectId
 
 let Ticket = function (data, type) {
   if (type == "Új felhasználó") {
@@ -9,8 +10,11 @@ let Ticket = function (data, type) {
     }
   }
   if (type == "updatePermission") {
-    this.data = data
-    console.log("asd")
+    this.data = data.values
+    this.data.authorizedBy = {
+      userName: data.decodedToken.data.username,
+      time: require("../utils.js").getCurrentTime()
+    }
   }
   this.data.process = type
   this.errors = []
@@ -40,9 +44,11 @@ Ticket.prototype.createNewUserTicket = async function () {
   }
 }
 
-Ticket.prototype.findAll = async function () {
+Ticket.prototype.getAllForPermission = async function () {
   try {
-    const response = await requestsDB.find().toArray()
+    const response = await requestsDB.find({
+      "permission.allowed": { "$nin":["Elutasított", "Engedélyezett"] }
+    }).toArray()
     return response
   } catch (err) {
     return err
@@ -51,7 +57,17 @@ Ticket.prototype.findAll = async function () {
 
 Ticket.prototype.updatePermission = async function () {
   try {
-    const response = await requestsDB.findOneAndUpdate()
+    const response = await requestsDB.findOneAndUpdate({
+      _id: new ObjectID(this.data.ticketId)
+    },{
+      $set: {
+        permission: {
+          allowed: this.data.permission,
+          permissionNote: this.data.notes,
+          permissionTime: this.data.authorizedBy.time,
+          authorizedBy: this.data.authorizedBy.userName
+        }}
+    })
     return response
   } catch (err) {
     return err

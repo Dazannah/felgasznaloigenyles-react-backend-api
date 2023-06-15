@@ -20,7 +20,7 @@ router.use(verifyToken)
 //requests
 router.post("/create-new-ticket", /*userController.igenylok,*/ requestController.createNewUserTicket)
 
-router.post("/requests-list-all", /*loginController.engedejezok,*/ requestController.getAllRequest)
+router.post("/requests-list-all", /*loginController.engedejezok,*/ requestController.getAllForPermission)
 router.post("/request-update", /*userController.mustBeLogedIn, userController.engedejezok,*/ requestController.updateTicketPermission)
 //router.post('/distributionListUpdate', userController.mustBeLogedIn, userController.engedejezok, requestController.updateDistributionList)
 //router.get('/requestsHandle', userController.mustBeLogedIn, userController.admin, requestController.getRequestsHandle)
