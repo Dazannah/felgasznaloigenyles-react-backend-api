@@ -1,3 +1,5 @@
+const { response } = require("express")
+
 const requestsDB = require("../db").db("jogosultsagigenylo").collection("requests")
 const ObjectID = require("mongodb").ObjectId
 
@@ -76,6 +78,20 @@ Ticket.prototype.updatePermission = async function () {
         }
       }
     )
+    return response
+  } catch (err) {
+    return err
+  }
+}
+
+Ticket.prototype.getAllowedTickets = async function () {
+  try {
+    const response = await requestsDB
+      .find({
+        "permission.allowed": "Engedélyezett",
+        "completed.isCompleted": { $nin: [true] }
+      })
+      .toArray()
     return response
   } catch (err) {
     return err

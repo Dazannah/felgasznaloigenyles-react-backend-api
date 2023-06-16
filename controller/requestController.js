@@ -25,10 +25,19 @@ async function updateTicketPermission(req, res) {
   const type = "updatePermission"
   const ticket = new Ticket(req.body, type)
 
-  try{
+  try {
     const result = await ticket.updatePermission()
     res.json(result)
-  }catch(err){
+  } catch (err) {
+    res.json(err)
+  }
+}
+
+async function getAllowedTickets(req, res) {
+  try {
+    const allowedTickets = await Ticket.prototype.getAllowedTickets()
+    res.json(allowedTickets)
+  } catch (err) {
     res.json(err)
   }
 }
@@ -36,5 +45,6 @@ async function updateTicketPermission(req, res) {
 module.exports = {
   createNewUserTicket,
   getAllForPermission,
-  updateTicketPermission
+  updateTicketPermission,
+  getAllowedTickets
 }
