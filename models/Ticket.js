@@ -1,5 +1,5 @@
 const requestsDB = require("../db").db("jogosultsagigenylo").collection("requests")
-const ObjectID = require('mongodb').ObjectId
+const ObjectID = require("mongodb").ObjectId
 
 let Ticket = function (data, type) {
   if (type == "Új felhasználó") {
@@ -10,7 +10,8 @@ let Ticket = function (data, type) {
     }
   }
   if (type == "updatePermission") {
-    this.data = data.values
+    this.data = data.dataToSend
+    this.data.userNames = data.dataToSend.userNames
     this.data.authorizedBy = {
       userName: data.decodedToken.data.username,
       time: require("../utils.js").getCurrentTime()
@@ -46,9 +47,11 @@ Ticket.prototype.createNewUserTicket = async function () {
 
 Ticket.prototype.getAllForPermission = async function () {
   try {
-    const response = await requestsDB.find({
-      "permission.allowed": { "$nin":["Elutasított", "Engedélyezett"] }
-    }).toArray()
+    const response = await requestsDB
+      .find({
+        "permission.allowed": { $nin: ["Elutasított", "Engedélyezett"] }
+      })
+      .toArray()
     return response
   } catch (err) {
     return err
@@ -57,17 +60,22 @@ Ticket.prototype.getAllForPermission = async function () {
 
 Ticket.prototype.updatePermission = async function () {
   try {
-    const response = await requestsDB.findOneAndUpdate({
-      _id: new ObjectID(this.data.ticketId)
-    },{
-      $set: {
-        permission: {
-          allowed: this.data.permission,
-          permissionNote: this.data.notes,
-          permissionTime: this.data.authorizedBy.time,
-          authorizedBy: this.data.authorizedBy.userName
-        }}
-    })
+    const response = await requestsDB.findOneAndUpdate(
+      {
+        _id: new ObjectID(this.data.ticketId)
+      },
+      {
+        $set: {
+          userNames: this.data.userNames,
+          permission: {
+            allowed: this.data.permission,
+            permissionNote: this.data.notes,
+            permissionTime: this.data.authorizedBy.time,
+            authorizedBy: this.data.authorizedBy.userName
+          }
+        }
+      }
+    )
     return response
   } catch (err) {
     return err
