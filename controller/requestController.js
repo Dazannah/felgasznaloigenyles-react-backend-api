@@ -42,9 +42,23 @@ async function getAllowedTickets(req, res) {
   }
 }
 
+async function closeNewUserTicket(req, res) {
+  const type = "closeNewUserTicket"
+  const ticket = new Ticket(req.body, type)
+
+  try {
+    await ticket.createUser()
+    const closeResult = await ticket.closeNewUserTicket()
+    res.json(closeResult)
+  } catch (err) {
+    res.json(err)
+  }
+}
+
 module.exports = {
   createNewUserTicket,
   getAllForPermission,
   updateTicketPermission,
-  getAllowedTickets
+  getAllowedTickets,
+  closeNewUserTicket
 }

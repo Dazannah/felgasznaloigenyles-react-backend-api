@@ -1,6 +1,7 @@
 const { response } = require("express")
 
 const requestsDB = require("../db").db("jogosultsagigenylo").collection("requests")
+const usersDB = require("../db").db("jogosultsagigenylo").collection("users")
 const ObjectID = require("mongodb").ObjectId
 
 let Ticket = function (data, type) {
@@ -15,6 +16,13 @@ let Ticket = function (data, type) {
     this.data = data.dataToSend
     this.data.userNames = data.dataToSend.userNames
     this.data.authorizedBy = {
+      userName: data.decodedToken.data.username,
+      time: require("../utils.js").getCurrentTime()
+    }
+  }
+  if (type == "closeNewUserTicket") {
+    this.data = data.dataToSend
+    this.data.createdBy = {
       userName: data.decodedToken.data.username,
       time: require("../utils.js").getCurrentTime()
     }
@@ -89,10 +97,53 @@ Ticket.prototype.getAllowedTickets = async function () {
     const response = await requestsDB
       .find({
         "permission.allowed": "Engedélyezett",
-        "completed.isCompleted": { $nin: [true] }
+        isCompleted: { $nin: [true] }
       })
       .toArray()
     return response
+  } catch (err) {
+    return err
+  }
+}
+
+Ticket.prototype.closeNewUserTicket = async function () {
+  try {
+    const response = await requestsDB.findOneAndUpdate(
+      {
+        _id: new ObjectID(this.data.ticketId)
+      },
+      {
+        $set: {
+          completed: this.data.createdBy,
+          isCompleted: true,
+          userId: new ObjectID(this.createdUser.insertedId)
+        }
+      }
+    )
+    return "ok"
+  } catch (err) {
+    return err
+  }
+}
+
+Ticket.prototype.createUser = async function () {
+  try {
+    const ticketData = await requestsDB.findOne({
+      _id: new ObjectID(this.data.ticketId)
+    })
+    const userData = {
+      personalInformations: ticketData.personalInformations,
+      userPermissionsLeft: ticketData.userPermissionsLeft,
+      userPermissionsMiddle: ticketData.userPermissionsMiddle,
+      userPermissionsRight: ticketData.userPermissionsRight,
+      technical: ticketData.technical
+    }
+    try {
+      this.createdUser = await usersDB.insertOne(userData)
+      return "ok"
+    } catch (err) {
+      return err
+    }
   } catch (err) {
     return err
   }
