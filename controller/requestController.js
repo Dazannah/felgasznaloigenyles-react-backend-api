@@ -55,10 +55,20 @@ async function closeNewUserTicket(req, res) {
   }
 }
 
+async function completedTickets(req, res) {
+  try {
+    const response = await Ticket.prototype.getCompletedTickets()
+    res.json(response)
+  } catch (err) {
+    res.json(err)
+  }
+}
+
 module.exports = {
   createNewUserTicket,
   getAllForPermission,
   updateTicketPermission,
   getAllowedTickets,
-  closeNewUserTicket
+  closeNewUserTicket,
+  completedTickets
 }

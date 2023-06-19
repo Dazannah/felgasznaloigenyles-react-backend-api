@@ -24,7 +24,7 @@ router.post("/requests-list-all", /*loginController.engedejezok,*/ requestContro
 router.post("/request-update", /*userController.engedejezok,*/ requestController.updateTicketPermission)
 router.post("/get-allowed-tickets", /*userController.engedejezok,*/ requestController.getAllowedTickets)
 router.post("/close-new-user-ticket", /*userController.admin,*/ requestController.closeNewUserTicket)
-//router.post('/requestCompleted', userController.mustBeLogedIn, userController.admin, requestController.completed)
+router.post("/get-completed-tickets", /* userController.admin,*/ requestController.completedTickets)
 //router.post('/distributinCompleted', userController.mustBeLogedIn, userController.admin, requestController.completedDistributionList)
 //router.get('/requestClosed', userController.mustBeLogedIn, userController.adminEngedejezok, requestController.closed)
 

@@ -149,4 +149,17 @@ Ticket.prototype.createUser = async function () {
   }
 }
 
+Ticket.prototype.getCompletedTickets = async function () {
+  try {
+    const response = await requestsDB
+      .find({
+        isCompleted: true
+      })
+      .toArray()
+    return response
+  } catch (err) {
+    return err
+  }
+}
+
 module.exports = Ticket
