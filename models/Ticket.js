@@ -1,16 +1,15 @@
-const { response } = require("express")
-
 const requestsDB = require("../db").db("jogosultsagigenylo").collection("requests")
 const usersDB = require("../db").db("jogosultsagigenylo").collection("users")
 const ObjectID = require("mongodb").ObjectId
 
-let Ticket = function (data, type) {
+const Ticket = function (data, type) {
   if (type == "Új felhasználó") {
     this.data = data.dataToSend
     this.data.ticketCreation = {
       userName: data.decodedToken.data.username,
       createTime: require("../utils.js").getCurrentTime()
     }
+    this.data.personalInformations.classId = new ObjectID(data.dataToSend.personalInformations.classId)
   }
   if (type == "updatePermission") {
     this.data = data.dataToSend
@@ -156,6 +155,7 @@ Ticket.prototype.createUser = async function () {
       _id: new ObjectID(this.data.ticketId)
     })
     const userData = {
+      userNames: ticketData.userNames,
       personalInformations: ticketData.personalInformations,
       userPermissionsLeft: ticketData.userPermissionsLeft,
       userPermissionsMiddle: ticketData.userPermissionsMiddle,

@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 const loginController = require("./controller/loginController")
 const requestController = require("./controller/requestController")
+const userController = require("./controller/userController")
 const { verifyToken } = require("./controller/loginController")
 const utils = require("./utils")
 const cors = require("cors")
@@ -33,7 +34,7 @@ router.post("/get-completed-tickets", /* userController.admin,*/ requestControll
 //router.post('/distributionListNew', userController.mustBeLogedIn, /*userController.igenylok,*/ distributionController.distributionListNew)
 
 //user
-//router.get('/listUsers', userController.mustBeLogedIn, /*userController.igenylok,*/ getUserController.listUsers)
+router.post("/list-users", /*userController.igenylok,*/ userController.listUsers)
 //router.get('/user/:id', userController.mustBeLogedIn, /*userController.igenylok,*/ getUserController.listSingleUser)
 //router.post('/user/:id/delete', userController.mustBeLogedIn, /*userController.igenylok,*/ getUserController.requestDeleteUser)
 //router.get('/user/:id/edit', userController.mustBeLogedIn, /*userController.igenylok,*/ getUserController.requestEditUser)

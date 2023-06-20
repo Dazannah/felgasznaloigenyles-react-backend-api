@@ -10,15 +10,19 @@ async function createNewUserTicket(req, res) {
     try {
       const result = await ticket.createNewUserTicket()
       res.json(result)
-    } catch (e) {
-      res.json(e)
+    } catch (err) {
+      res.json(err)
     }
   }
 }
 
 async function getAllForPermission(req, res) {
-  const requests = await Ticket.prototype.getAllForPermission()
-  res.json(requests)
+  try {
+    const requests = await Ticket.prototype.getAllForPermission()
+    res.json(requests)
+  } catch (err) {
+    res.json(err)
+  }
 }
 
 async function updateTicketPermission(req, res) {
