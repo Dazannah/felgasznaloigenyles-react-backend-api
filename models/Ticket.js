@@ -70,22 +70,46 @@ Ticket.prototype.getAllForPermission = async function () {
 
 Ticket.prototype.updatePermission = async function () {
   try {
-    const response = await requestsDB.findOneAndUpdate(
-      {
-        _id: new ObjectID(this.data.ticketId)
-      },
-      {
-        $set: {
-          userNames: this.data.userNames,
-          permission: {
-            allowed: this.data.permission,
-            permissionNote: this.data.notes,
-            permissionTime: this.data.authorizedBy.time,
-            authorizedBy: this.data.authorizedBy.userName
+    let response
+    if (this.data.permission === "Elutasított") {
+      response = await requestsDB.findOneAndUpdate(
+        {
+          _id: new ObjectID(this.data.ticketId)
+        },
+        {
+          $set: {
+            userNames: this.data.userNames,
+            permission: {
+              allowed: this.data.permission,
+              permissionNote: this.data.notes,
+              permissionTime: this.data.authorizedBy.time,
+              authorizedBy: this.data.authorizedBy.userName
+            },
+            completed: {
+              time: this.data.authorizedBy.time
+            }
           }
         }
-      }
-    )
+      )
+    } else {
+      response = await requestsDB.findOneAndUpdate(
+        {
+          _id: new ObjectID(this.data.ticketId)
+        },
+        {
+          $set: {
+            userNames: this.data.userNames,
+            permission: {
+              allowed: this.data.permission,
+              permissionNote: this.data.notes,
+              permissionTime: this.data.authorizedBy.time,
+              authorizedBy: this.data.authorizedBy.userName
+            }
+          }
+        }
+      )
+    }
+
     return response
   } catch (err) {
     return err
@@ -153,7 +177,7 @@ Ticket.prototype.getCompletedTickets = async function () {
   try {
     const response = await requestsDB
       .find({
-        isCompleted: true
+        $or: [{ "permission.allowed": "Elutasított" }, { isCompleted: true }]
       })
       .toArray()
     return response
