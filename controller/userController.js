@@ -19,7 +19,10 @@ async function requestEditUser(req, res) {
   }
 }
 
+async function requestDeleteUser(req, res) {}
+
 module.exports = {
   listUsers,
-  requestEditUser
+  requestEditUser,
+  requestDeleteUser
 }
