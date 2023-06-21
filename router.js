@@ -13,7 +13,7 @@ router.use(cors())
 router.post("/login", loginController.login)
 router.post("/get-data", utils.getStartData)
 
-router.post("/validate-token", verifyToken, (req, res) => res.json({ tokenExpired: false }))
+router.get("/validate-token", verifyToken, (req, res) => res.json({ tokenExpired: false }))
 
 router.use(verifyToken)
 //router.get('/home', userController.mustBeLogedIn, /*userController.igenylok,*/ requestController.newForm)
@@ -21,11 +21,11 @@ router.use(verifyToken)
 //requests
 router.post("/create-new-ticket", /*userController.igenylok,*/ requestController.createNewUserTicket)
 
-router.post("/requests-list-all", /*loginController.engedejezok,*/ requestController.getAllForPermission)
+router.get("/requests-list-all", /*loginController.engedejezok,*/ requestController.getAllForPermission)
 router.post("/request-update", /*userController.engedejezok,*/ requestController.updateTicketPermission)
-router.post("/get-allowed-tickets", /*userController.engedejezok,*/ requestController.getAllowedTickets)
+router.get("/get-allowed-tickets", /*userController.engedejezok,*/ requestController.getAllowedTickets)
 router.post("/close-new-user-ticket", /*userController.admin,*/ requestController.closeNewUserTicket)
-router.post("/get-completed-tickets", /* userController.admin,*/ requestController.completedTickets)
+router.get("/get-completed-tickets", /* userController.admin,*/ requestController.completedTickets)
 //router.post('/distributinCompleted', userController.mustBeLogedIn, userController.admin, requestController.completedDistributionList)
 //router.get('/requestClosed', userController.mustBeLogedIn, userController.adminEngedejezok, requestController.closed)
 
@@ -34,10 +34,9 @@ router.post("/get-completed-tickets", /* userController.admin,*/ requestControll
 //router.post('/distributionListNew', userController.mustBeLogedIn, /*userController.igenylok,*/ distributionController.distributionListNew)
 
 //user
-router.post("/list-users", /*userController.igenylok,*/ userController.listUsers)
-//router.get('/user/:id', userController.mustBeLogedIn, /*userController.igenylok,*/ getUserController.listSingleUser)
+router.get("/list-users", /*userController.igenylok,*/ userController.listUsers)
 //router.post('/user/:id/delete', userController.mustBeLogedIn, /*userController.igenylok,*/ getUserController.requestDeleteUser)
-//router.get('/user/:id/edit', userController.mustBeLogedIn, /*userController.igenylok,*/ getUserController.requestEditUser)
+router.get("/user/:id/edit", /*userController.igenylok,*/ userController.requestEditUser)
 //router.post('/user/:id/edit', userController.mustBeLogedIn, /*userController.igenylok,*/ getUserController.saveEdit)
 
 //router.get('/error', userController.mustBeLogedIn, userController.errorSite)
