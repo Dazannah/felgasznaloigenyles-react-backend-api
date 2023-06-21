@@ -39,9 +39,4 @@ router.get("/list-users", /*userController.igenylok,*/ userController.listUsers)
 router.get("/user/:id/edit", /*userController.igenylok,*/ userController.requestEditUser)
 //router.post('/user/:id/edit', userController.mustBeLogedIn, /*userController.igenylok,*/ getUserController.saveEdit)
 
-//router.get('/error', userController.mustBeLogedIn, userController.errorSite)
-
-//logOut
-//router.post('/logOut',  userController.mustBeLogedIn, userController.logOut)
-
 module.exports = router

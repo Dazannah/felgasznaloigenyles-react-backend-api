@@ -9,6 +9,17 @@ async function listUsers(req, res) {
   }
 }
 
+async function requestEditUser(req, res) {
+  try {
+    const user = new Users(req.params.id, "getSingleUser")
+    const response = await user.getSingleUser()
+    res.json(response)
+  } catch (err) {
+    res.json(err)
+  }
+}
+
 module.exports = {
-  listUsers
+  listUsers,
+  requestEditUser
 }

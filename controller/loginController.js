@@ -26,17 +26,21 @@ async function login(req, res) {
 }
 
 async function verifyToken(req, res, next) {
-  const token = req.body.token
   try {
-    const decodedToken = await jwt.verify(token, process.env.JWTSECRET)
-    req.body.decodedToken = decodedToken
-    next()
-  } catch (err) {
-    if (err.name == "TokenExpiredError") {
-      res.json({ tokenExpired: true })
-    } else {
-      res.json(err)
+    const [type, token] = req.headers.authorization.split(" ")
+    try {
+      const decodedToken = await jwt.verify(token, process.env.JWTSECRET)
+      req.body.decodedToken = decodedToken
+      next()
+    } catch (err) {
+      if (err.name == "TokenExpiredError") {
+        res.json({ tokenExpired: true })
+      } else {
+        res.json(err)
+      }
     }
+  } catch (err) {
+    res.json(err)
   }
 }
 
