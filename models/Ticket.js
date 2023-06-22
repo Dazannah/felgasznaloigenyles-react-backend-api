@@ -2,6 +2,30 @@ const requestsDB = require("../db").db("jogosultsagigenylo").collection("request
 const usersDB = require("../db").db("jogosultsagigenylo").collection("users")
 const ObjectID = require("mongodb").ObjectId
 
+/*const TicketSerializers = {
+  "Új felhasználó":  (data, decodedToken)=>{
+    const ticketData ={
+      data: data.dataToSend,
+      ticketCreation: {
+        userName: data.decodedToken.data.username,
+        createTime: require("../utils.js").getCurrentTime()
+      },
+      personalInformations.classId: new ObjectID(data.dataToSend.personalInformations.classId)
+    }
+  }
+}
+
+const Ticket = function (data, type) {
+  const serializer = TicketSerializers[type]
+  if (serializer) {
+    this.data = serializer(data, data.decodedToken)
+  } else {
+    this.data = data.dataToSend
+  }
+  this.data.process = type
+  this.errors = []
+}*/
+
 const Ticket = function (data, type) {
   if (type == "Új felhasználó") {
     this.data = data.dataToSend
@@ -11,6 +35,7 @@ const Ticket = function (data, type) {
     }
     this.data.personalInformations.classId = new ObjectID(data.dataToSend.personalInformations.classId)
   }
+
   if (type == "updatePermission") {
     this.data = data.dataToSend
     this.data.userNames = data.dataToSend.userNames
@@ -25,6 +50,20 @@ const Ticket = function (data, type) {
       userName: data.decodedToken.data.username,
       time: require("../utils.js").getCurrentTime()
     }
+  }
+
+  if (type === "searchDeleteInProgress") {
+    this.data = data
+  }
+
+  if (type === "Felhasználó törlése") {
+    this.data = data.user
+    this.data.ticketCreation = {
+      userName: data.decodedToken.data.username,
+      createTime: require("../utils.js").getCurrentTime()
+    }
+    this.data.userId = this.data._id
+    delete this.data._id
   }
   this.data.process = type
   this.errors = []
@@ -182,6 +221,27 @@ Ticket.prototype.getCompletedTickets = async function () {
       .toArray()
     return response
   } catch (err) {
+    return err
+  }
+}
+
+Ticket.prototype.findDeletedRequestInProgress = async function () {
+  try {
+    const deletInProgress = await requestsDB.findOne({
+      $and: [{ userId: new ObjectID(this.data.userId) }, { process: "Felhasználó törlése" }, { isCompleted: { $nin: [true] } }]
+    })
+    return deletInProgress
+  } catch (err) {
+    return err
+  }
+}
+
+Ticket.prototype.createDeleteTicket = async function () {
+  try {
+    const response = await requestsDB.insertOne(this.data)
+    return response
+  } catch (err) {
+    console.log(err)
     return err
   }
 }
