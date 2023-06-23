@@ -5,7 +5,8 @@
   "main": "db.js",
   "scripts": {
     "auto": "nodemon db.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "debug": "nodemon --inspect db.js"
   },
   "author": "",
   "license": "ISC",

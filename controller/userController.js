@@ -1,4 +1,5 @@
 const Users = require("../models/Users")
+const Ticket = require("../models/Ticket")
 
 async function listUsers(req, res) {
   try {
@@ -21,12 +22,17 @@ async function requestEditUser(req, res) {
 
 async function requestDeleteUser(req, res) {
   try {
-    const userToDelete = new Users(req.params.id, "", req.body.decodedToken)
-    const deleteInProgress = await userToDelete.searchForDeletRequest()
-    if (deleteInProgress) {
+    const ticket = new Ticket({ userId: req.params.id }, "searchDeleteInProgress")
+    const isDeleteInProgress = await ticket.findDeletedRequestInProgress()
+
+    if (isDeleteInProgress) {
       res.json("A felhasználónak van folyamatban lévő törlési kérelme.")
     } else {
-      const response = await userToDelete.createUserDelete()
+      const user = new Users(req.params.id)
+      const userWholeData = await user.getSingleUser()
+
+      const ticket = new Ticket({ user: userWholeData, decodedToken: req.body.decodedToken }, "Felhasználó törlése")
+      const response = await ticket.createDeleteTicket()
       res.json(response)
     }
   } catch (err) {

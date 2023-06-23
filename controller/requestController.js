@@ -1,7 +1,6 @@
 const Ticket = require("../models/Ticket")
 
 async function createNewUserTicket(req, res) {
-  console.log(req.body)
   const ticket = new Ticket(req.body, req.body.process)
   const errors = ticket.validate()
 
@@ -69,11 +68,22 @@ async function completedTickets(req, res) {
   }
 }
 
+async function closeDeleteUserRequest(req, res) {
+  const ticket = new Ticket(req.body, "closeDeleteUserRequest")
+  try {
+    const closeDeleteResult = await ticket.closeDeleteUserRequest()
+    res.json(closeDeleteResult)
+  } catch (err) {
+    res.json(err)
+  }
+}
+
 module.exports = {
   createNewUserTicket,
   getAllForPermission,
   updateTicketPermission,
   getAllowedTickets,
   closeNewUserTicket,
-  completedTickets
+  completedTickets,
+  closeDeleteUserRequest
 }

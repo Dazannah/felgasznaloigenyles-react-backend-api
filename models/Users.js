@@ -1,7 +1,8 @@
 const requestsDB = require("../db").db("jogosultsagigenylo").collection("requests")
 const usersDB = require("../db").db("jogosultsagigenylo").collection("users")
+const deletedUsersDB = require("../db").db("jogosultsagigenylo").collection("deletedUsers")
 const ObjectID = require("mongodb").ObjectId
-const Ticket = require("../models/Ticket")
+const Ticket = require("./Ticket")
 
 const Users = function (data, type, token) {
   this.id = data
@@ -31,7 +32,7 @@ Users.prototype.getSingleUser = async function () {
 
 Users.prototype.searchForDeletRequest = async function () {
   try {
-    const ticket = new Ticket({ userId: this.id }, "searchDeleteInProgress")
+    //itt nem lép bele a szaros modellbe valamiért
     const deleteInProgress = await ticket.findDeletedRequestInProgress()
     return deleteInProgress
   } catch (err) {
@@ -44,9 +45,25 @@ Users.prototype.createUserDelete = async function () {
     const user = await usersDB.findOne({
       _id: new ObjectID(this.id)
     })
-    const ticket = new Ticket({ user: user, decodedToken: this.token }, "Felhasználó törlése")
-    const response = await ticket.createDeleteTicket()
+
     return response
+  } catch (err) {
+    return err
+  }
+}
+
+Users.prototype.deleteUser = async function () {
+  try {
+    const userData = await usersDB.findOne({ _id: this.id })
+    userData.status = "deleted"
+
+    const deletedUserInsertResult = await deletedUsersDB.insertOne(userData)
+    if (deletedUserInsertResult.acknowledged) {
+      const deleteUserResult = await usersDB.deleteOne({ _id: userData._id })
+      console.log(deleteUserResult)
+      return deleteUserResult
+    }
+    return deletedUserInsertResult
   } catch (err) {
     return err
   }

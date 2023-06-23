@@ -1,6 +1,7 @@
 const requestsDB = require("../db").db("jogosultsagigenylo").collection("requests")
 const usersDB = require("../db").db("jogosultsagigenylo").collection("users")
 const ObjectID = require("mongodb").ObjectId
+const Users = require("./Users")
 
 /*const TicketSerializers = {
   "Új felhasználó":  (data, decodedToken)=>{
@@ -52,7 +53,7 @@ const Ticket = function (data, type) {
     }
   }
 
-  if (type === "searchDeleteInProgress") {
+  if (type == "searchDeleteInProgress") {
     this.data = data
   }
 
@@ -64,6 +65,13 @@ const Ticket = function (data, type) {
     }
     this.data.userId = this.data._id
     delete this.data._id
+  }
+  if (type === "closeDeleteUserRequest") {
+    this.data = { ticketId: data.values.ticketId }
+    this.data.createdBy = {
+      userName: data.decodedToken.data.username,
+      time: require("../utils.js").getCurrentTime()
+    }
   }
   this.data.process = type
   this.errors = []
@@ -176,13 +184,14 @@ Ticket.prototype.closeNewUserTicket = async function () {
       },
       {
         $set: {
+          userNames: this.data.userNames,
           completed: this.data.createdBy,
           isCompleted: true,
           userId: new ObjectID(this.createdUser.insertedId)
         }
       }
     )
-    return "ok"
+    return response
   } catch (err) {
     return err
   }
@@ -194,7 +203,7 @@ Ticket.prototype.createUser = async function () {
       _id: new ObjectID(this.data.ticketId)
     })
     const userData = {
-      userNames: ticketData.userNames,
+      userNames: this.data.userNames,
       personalInformations: ticketData.personalInformations,
       userPermissionsLeft: ticketData.userPermissionsLeft,
       userPermissionsMiddle: ticketData.userPermissionsMiddle,
@@ -242,7 +251,33 @@ Ticket.prototype.createDeleteTicket = async function () {
     const response = await requestsDB.insertOne(this.data)
     return response
   } catch (err) {
-    console.log(err)
+    return err
+  }
+}
+
+Ticket.prototype.closeDeleteUserRequest = async function () {
+  try {
+    const wholeTicket = await requestsDB.findOne({ _id: new ObjectID(this.data.ticketId) })
+    const user = new Users(wholeTicket.userId)
+    const deleteResult = await user.deleteUser()
+    if (deleteResult.acknowledged === true) {
+      const closeTicket = await requestsDB.findOneAndUpdate(
+        {
+          _id: new ObjectID(wholeTicket._id)
+        },
+        {
+          $set: {
+            completed: this.data.createdBy,
+            isCompleted: true
+          }
+        }
+      )
+      console.log(closeTicket)
+      return closeTicket
+    } else {
+      return deleteResult
+    }
+  } catch (err) {
     return err
   }
 }

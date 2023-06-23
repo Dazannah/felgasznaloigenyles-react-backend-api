@@ -21,7 +21,6 @@ async function getAllClass() {
 }
 
 async function getStartData(req, res) {
-  console.log()
   const arrays = getArrays()
   const allClass = await getAllClass()
 
