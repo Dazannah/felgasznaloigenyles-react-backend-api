@@ -199,7 +199,8 @@ Ticket.prototype.createUser = async function () {
       userPermissionsLeft: ticketData.userPermissionsLeft,
       userPermissionsMiddle: ticketData.userPermissionsMiddle,
       userPermissionsRight: ticketData.userPermissionsRight,
-      technical: ticketData.technical
+      technical: ticketData.technical,
+      status: "active"
     }
     try {
       this.createdUser = await usersDB.insertOne(userData)
