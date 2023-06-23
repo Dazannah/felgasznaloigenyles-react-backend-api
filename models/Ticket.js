@@ -261,19 +261,22 @@ Ticket.prototype.closeDeleteUserRequest = async function () {
     const user = new Users(wholeTicket.userId)
     const deleteResult = await user.deleteUser()
     if (deleteResult.acknowledged === true) {
-      const closeTicket = await requestsDB.findOneAndUpdate(
-        {
-          _id: new ObjectID(wholeTicket._id)
-        },
-        {
-          $set: {
-            completed: this.data.createdBy,
-            isCompleted: true
+      try {
+        const closeTicket = await requestsDB.findOneAndUpdate(
+          {
+            _id: new ObjectID(wholeTicket._id)
+          },
+          {
+            $set: {
+              completed: this.data.createdBy,
+              isCompleted: true
+            }
           }
-        }
-      )
-      console.log(closeTicket)
-      return closeTicket
+        )
+        return "Felhasználó törlése sikeres"
+      } catch (err) {
+        return err
+      }
     } else {
       return deleteResult
     }
