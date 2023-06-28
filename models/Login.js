@@ -1,5 +1,6 @@
-const ActiveDirectory = require("activedirectory")
+const ActiveDirectory = require("activedirectory2")
 const dotenv = require("dotenv")
+
 dotenv.config()
 
 let Login = function (data) {
@@ -43,18 +44,20 @@ Login.prototype.login = function () {
 }
 
 Login.prototype.authenticate = function () {
-  let ldapConfig = {
-    url: process.env.LDAPURL,
-    baseDN: process.env.BASEDN
-  }
-
-  const ad = new ActiveDirectory(ldapConfig)
-
   let usernameWithDomain = this.data.username + process.env.DOMAIN
   let username = this.data.username
   let password = this.data.password
   let errors = this.errors
   let userGroups = this.userGroups
+
+  let ldapConfig = {
+    url: process.env.LDAPURL,
+    baseDN: process.env.BASEDN,
+    username: usernameWithDomain,
+    password
+  }
+
+  const ad = new ActiveDirectory(ldapConfig)
 
   let opts = {
     bindDN: usernameWithDomain,
@@ -62,15 +65,21 @@ Login.prototype.authenticate = function () {
   }
 
   return new Promise(async (resolve, reject) => {
-    ad.getGroupMembershipForUser(opts, usernameWithDomain, function (err, groups) {
+    ad.getGroupMembershipForUser(opts, function (err, groups) {
       if (err) {
-        errors.push("Hitelesítő szerver nem elérhető.")
+        const errorMessage = JSON.stringify(err)
+        const errorMessageObject = JSON.parse(errorMessage)
+
+        if (errorMessageObject.lde_dn === null) errors.push("Hibás flehasználónév/jelszó.")
+        if (errorMessageObject.code === "ENOTFOUND") errors.push("A hitelesítő szerver nem elérhető.")
+
         reject(new Error(errors))
       } else if (!groups) {
         errors.push("Nincs jogosultságod az alkalmazás használatához.")
         reject(new Error(errors))
       } else {
         groups.forEach(element => {
+          console.log(groups)
           if (element.cn == "Tartományfelhasználók") {
             userGroups[0] = element.cn
           } //kérelmezők AD csoport neve
