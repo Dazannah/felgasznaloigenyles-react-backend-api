@@ -78,6 +78,11 @@ async function closeDeleteUserRequest(req, res) {
   }
 }
 
+async function saveEditRequest(req, res) {
+  console.log(req.body)
+  res.json("asd")
+}
+
 module.exports = {
   createNewUserTicket,
   getAllForPermission,
@@ -85,5 +90,6 @@ module.exports = {
   getAllowedTickets,
   closeNewUserTicket,
   completedTickets,
-  closeDeleteUserRequest
+  closeDeleteUserRequest,
+  saveEditRequest
 }
