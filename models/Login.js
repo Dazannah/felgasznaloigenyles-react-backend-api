@@ -65,13 +65,16 @@ Login.prototype.authenticate = function () {
   }
 
   return new Promise(async (resolve, reject) => {
+    let runCount = 0
+
     ad.getGroupMembershipForUser(opts, function (err, groups) {
       if (err) {
         const errorMessage = JSON.stringify(err)
         const errorMessageObject = JSON.parse(errorMessage)
 
-        if (errorMessageObject.lde_dn === null) errors.push("Hibás flehasználónév/jelszó.")
+        if (errorMessageObject.lde_dn === null && runCount > 0) errors.push("Hibás flehasználónév/jelszó.")
         if (errorMessageObject.code === "ENOTFOUND") errors.push("A hitelesítő szerver nem elérhető.")
+        runCount++
 
         reject(new Error(errors))
       } else if (!groups) {
