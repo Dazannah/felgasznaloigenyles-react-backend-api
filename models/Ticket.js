@@ -28,7 +28,7 @@ const Ticket = function (data, type) {
 }*/
 
 const Ticket = function (data, type) {
-  if (type == "Új felhasználó") {
+  if (type == "Új felhasználó" || type == "Felhasználó módosítása") {
     this.data = data.dataToSend
     this.data.ticketCreation = {
       userName: data.decodedToken.data.username,
@@ -77,13 +77,23 @@ const Ticket = function (data, type) {
   this.errors = []
 }
 
-Ticket.prototype.validate = function () {
+Ticket.prototype.validate = async function () {
   try {
     if (!this.data.personalInformations.name) this.errors.push("Név megadása kötelező.")
     if (!this.data.personalInformations.classId) this.errors.push("Osztály megadása kötelező.")
     if (!this.data.personalInformations.classLeader) this.errors.push("Osztályvezető megadása kötelező.")
     if (!this.data.personalInformations.workPost) this.errors.push("Beosztás megadása kötelező.")
     if (!this.data.personalInformations.workLocation) this.errors.push("Munkavégzés hely megadása kötelező.")
+
+    if (this.data.process === "Felhasználó módosítása") {
+      const isEditInProgress = await this.findEditRequestInProgress()
+      if (isEditInProgress) this.errors.push("A felhasználónak van folyamatban lévő módosítási igénye.")
+      try {
+        this.data.userId = new ObjectID(this.data.userId)
+      } catch (err) {
+        this.errors.push(err)
+      }
+    }
 
     if (this.errors.length != 0) return this.errors
   } catch (e) {
@@ -202,6 +212,7 @@ Ticket.prototype.createUser = async function () {
     const ticketData = await requestsDB.findOne({
       _id: new ObjectID(this.data.ticketId)
     })
+    delete ticketData.personalInformations.ticketId
     const userData = {
       userNames: this.data.userNames,
       personalInformations: ticketData.personalInformations,
@@ -241,6 +252,18 @@ Ticket.prototype.findDeletedRequestInProgress = async function () {
       $and: [{ userId: new ObjectID(this.data.userId) }, { process: "Felhasználó törlése" }, { isCompleted: { $nin: [true] } }]
     })
     return deletInProgress
+  } catch (err) {
+    return err
+  }
+}
+
+Ticket.prototype.findEditRequestInProgress = async function () {
+  try {
+    const editInProgress = await requestsDB.findOne({
+      $and: [{ userId: new ObjectID(this.data.userId) }, { process: "Felhasználó módosítása" }, { isCompleted: { $nin: [true] } }]
+    })
+
+    return editInProgress
   } catch (err) {
     return err
   }

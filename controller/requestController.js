@@ -79,8 +79,19 @@ async function closeDeleteUserRequest(req, res) {
 }
 
 async function saveEditRequest(req, res) {
-  console.log(req.body)
-  res.json("asd")
+  const ticket = new Ticket(req.body, req.body.process)
+  const errors = await ticket.validate()
+
+  if (errors) {
+    res.json({ errors: errors })
+  } else {
+    try {
+      const result = await ticket.createNewUserTicket()
+      res.json(result)
+    } catch (err) {
+      res.json(err)
+    }
+  }
 }
 
 module.exports = {
