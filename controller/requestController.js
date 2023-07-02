@@ -100,10 +100,8 @@ async function closeEditUserRequest(req, res) {
   const ticket = new Ticket(req.body, type)
 
   try {
-    await ticket.updateUser()
-    /*await ticket.createUser()
-    const closeResult = await ticket.closeNewUserTicket()
-    res.json(closeResult)*/
+    const response = await ticket.updateUser()
+    res.json(response)
   } catch (err) {
     res.json(err)
   }

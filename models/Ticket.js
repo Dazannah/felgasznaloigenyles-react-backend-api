@@ -101,11 +101,10 @@ Ticket.prototype.validate = async function () {
           this.data.userId = new ObjectID(this.data.userId)
           const whatToChange = await this.getWhatToChange()
 
-          if (whatToChange.whatToChange.add.length == 0 && whatToChange.whatToChange.delete.length == 0 && whatToChange.whatToChange.edit.length == 0) {
+          if (whatToChange.add.length == 0 && whatToChange.delete.length == 0 && whatToChange.edit.length == 0) {
             this.errors.push("Legalább egy módosítást végre kell hajtani.")
           } else {
             this.data.change = whatToChange.whatToChange
-            this.data.userNames = whatToChange.userNames
           }
         } catch (err) {
           this.errors.push(err)
@@ -338,7 +337,13 @@ Ticket.prototype.getWhatToChange = async function () {
 
   for (const property in user.personalInformations) {
     if (String(user.personalInformations[property]) != String(this.data.personalInformations[property])) {
-      whatToChange.edit.push(property)
+      whatToChange.edit.push({ route: "personalInformations", name: property })
+    }
+  }
+
+  for (const property in user.userNames) {
+    if (user.userNames[property] != this.data.userNames[property]) {
+      whatToChange.edit.push({ route: "userNames", name: property })
     }
   }
 
@@ -348,19 +353,50 @@ Ticket.prototype.getWhatToChange = async function () {
     for (const property in user[objectToCheckProperty]) {
       if (user[objectToCheckProperty][property].value != this.data[objectToCheckProperty][property].value) {
         if (this.data[objectToCheckProperty][property].value === true) {
-          whatToChange.add.push(this.data[objectToCheckProperty][property].name)
+          whatToChange.add.push({ route: objectToCheckProperty, name: this.data[objectToCheckProperty][property].name })
         } else {
-          whatToChange.delete.push(this.data[objectToCheckProperty][property].name)
+          whatToChange.delete.push({ route: objectToCheckProperty, name: this.data[objectToCheckProperty][property].name })
         }
       }
     }
   }
 
-  return { whatToChange: whatToChange, userNames: user.userNames }
+  return whatToChange
 }
 
 Ticket.prototype.updateUser = async function () {
-  console.log(this)
+  try {
+    const ticket = await requestsDB.findOne({ _id: new ObjectID(this.data.ticketId) })
+
+    const userUpdateData = {
+      userNames: this.data.userNames,
+      personalInformations: ticket.personalInformations,
+      userPermissionsLeft: ticket.userPermissionsLeft,
+      userPermissionsMiddle: ticket.userPermissionsMiddle,
+      userPermissionsRight: ticket.userPermissionsRight
+    }
+
+    const userUpdateResult = await usersDB.findOneAndUpdate(
+      { _id: ticket.userId },
+      {
+        $set: userUpdateData
+      }
+    )
+
+    await requestsDB.findOneAndUpdate(
+      { _id: new ObjectID(this.data.ticketId) },
+      {
+        $set: {
+          completed: this.data.createdBy,
+          isCompleted: true
+        }
+      }
+    )
+
+    return userUpdateResult
+  } catch (err) {
+    return err
+  }
 }
 
 module.exports = Ticket
