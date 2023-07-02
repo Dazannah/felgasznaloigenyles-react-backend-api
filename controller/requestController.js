@@ -12,7 +12,6 @@ async function createNewUserTicket(req, res) {
   } else {
     try {
       const result = await ticket.createNewUserTicket()
-      console.log(result)
       res.json(result)
     } catch (err) {
       res.json(err)
@@ -119,7 +118,6 @@ async function getRequestsForUser(req, res) {
       .toArray()
     res.json(userRequests)
   } catch (err) {
-    console.log(err)
     res.json(err)
   }
 }

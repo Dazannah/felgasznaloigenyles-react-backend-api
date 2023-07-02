@@ -342,8 +342,10 @@ Ticket.prototype.getWhatToChange = async function () {
   }
 
   for (const property in user.personalInformations) {
-    if (String(user.personalInformations[property]) != String(this.data.personalInformations[property])) {
-      whatToChange.edit.push({ route: "personalInformations", name: property })
+    if (property != "ticketId") {
+      if (String(user.personalInformations[property]) != String(this.data.personalInformations[property])) {
+        whatToChange.edit.push({ route: "personalInformations", name: property })
+      }
     }
   }
 
