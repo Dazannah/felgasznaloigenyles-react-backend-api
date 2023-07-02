@@ -39,5 +39,6 @@ router.get("/list-users", /*userController.igenylok,*/ userController.listUsers)
 router.post("/user/:id/delete", /*userController.igenylok,*/ userController.requestDeleteUser)
 router.get("/user/:id/edit", /*userController.igenylok,*/ userController.requestEditUser)
 router.post("/user/:id/edit", /*userController.igenylok,*/ requestController.saveEditRequest)
+router.get("/user/:id/requests", requestController.getRequestsForUser)
 
 module.exports = router

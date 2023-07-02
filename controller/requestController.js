@@ -1,4 +1,7 @@
+const ObjectId = require("mongodb").ObjectId
 const Ticket = require("../models/Ticket")
+
+const requestsDB = require("../db").db("jogosultsagigenylo").collection("requests")
 
 async function createNewUserTicket(req, res) {
   const ticket = new Ticket(req.body, req.body.process)
@@ -107,6 +110,20 @@ async function closeEditUserRequest(req, res) {
   }
 }
 
+async function getRequestsForUser(req, res) {
+  try {
+    const userRequests = await requestsDB
+      .find({
+        userId: new ObjectId(req.params.id)
+      })
+      .toArray()
+    res.json(userRequests)
+  } catch (err) {
+    console.log(err)
+    res.json(err)
+  }
+}
+
 module.exports = {
   createNewUserTicket,
   getAllForPermission,
@@ -116,5 +133,6 @@ module.exports = {
   completedTickets,
   closeDeleteUserRequest,
   saveEditRequest,
-  closeEditUserRequest
+  closeEditUserRequest,
+  getRequestsForUser
 }
