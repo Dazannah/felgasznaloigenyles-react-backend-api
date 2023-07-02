@@ -5,7 +5,7 @@ const requestsDB = require("../db").db("jogosultsagigenylo").collection("request
 
 async function createNewUserTicket(req, res) {
   const ticket = new Ticket(req.body, req.body.process)
-  const errors = ticket.validate()
+  const errors = await ticket.validate()
 
   if (errors) {
     res.json({ errors: errors })
