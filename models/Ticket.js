@@ -101,7 +101,7 @@ Ticket.prototype.validate = async function () {
           this.data.userId = new ObjectID(this.data.userId)
           const whatToChange = await this.getWhatToChange()
 
-          if (whatToChange.add.length == 0 && whatToChange.delete.length == 0 && whatToChange.edit.length == 0) {
+          if (whatToChange.add.length == 0 && whatToChange.delete.length == 0 && whatToChange.edit.length == 0 && this.data.createTextArea == "") {
             this.errors.push("Legalább egy módosítást végre kell hajtani.")
           } else {
             this.data.change = whatToChange.whatToChange
@@ -277,7 +277,7 @@ Ticket.prototype.findDeletedRequestInProgress = async function () {
 Ticket.prototype.findEditRequestInProgress = async function () {
   try {
     const editInProgress = await requestsDB.findOne({
-      $and: [{ userId: new ObjectID(this.data.userId) }, { process: "Felhasználó módosítása" }, { isCompleted: { $nin: [true] } }]
+      $and: [{ userId: new ObjectID(this.data.userId) }, { process: "Felhasználó módosítása" }, { isCompleted: { $nin: [true] } }, { "permission.allowed": { $nin: ["Elutasított"] } }]
     })
 
     return editInProgress
