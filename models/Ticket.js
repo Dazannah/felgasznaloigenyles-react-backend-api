@@ -73,6 +73,13 @@ const Ticket = function (data, type) {
       time: require("../utils.js").getCurrentTime()
     }
   }
+  if (type === "closeEditRequest") {
+    this.data = data.dataToSend
+    this.data.createdBy = {
+      userName: data.decodedToken.data.username,
+      time: require("../utils.js").getCurrentTime()
+    }
+  }
   this.data.process = type
   this.errors = []
 }
@@ -87,11 +94,22 @@ Ticket.prototype.validate = async function () {
 
     if (this.data.process === "Felhasználó módosítása") {
       const isEditInProgress = await this.findEditRequestInProgress()
-      if (isEditInProgress) this.errors.push("A felhasználónak van folyamatban lévő módosítási igénye.")
-      try {
-        this.data.userId = new ObjectID(this.data.userId)
-      } catch (err) {
-        this.errors.push(err)
+      if (isEditInProgress) {
+        this.errors.push("A felhasználónak van folyamatban lévő módosítási igénye.")
+      } else {
+        try {
+          this.data.userId = new ObjectID(this.data.userId)
+          const whatToChange = await this.getWhatToChange()
+
+          if (whatToChange.whatToChange.add.length == 0 && whatToChange.whatToChange.delete.length == 0 && whatToChange.whatToChange.edit.length == 0) {
+            this.errors.push("Legalább egy módosítást végre kell hajtani.")
+          } else {
+            this.data.change = whatToChange.whatToChange
+            this.data.userNames = whatToChange.userNames
+          }
+        } catch (err) {
+          this.errors.push(err)
+        }
       }
     }
 
@@ -306,6 +324,43 @@ Ticket.prototype.closeDeleteUserRequest = async function () {
   } catch (err) {
     return err
   }
+}
+
+Ticket.prototype.getWhatToChange = async function () {
+  const user = await usersDB.findOne({ _id: this.data.userId })
+  const objectToCheck = ["userPermissionsLeft", "userPermissionsMiddle", "userPermissionsRight"]
+
+  const whatToChange = {
+    add: [],
+    delete: [],
+    edit: []
+  }
+
+  for (const property in user.personalInformations) {
+    if (String(user.personalInformations[property]) != String(this.data.personalInformations[property])) {
+      whatToChange.edit.push(property)
+    }
+  }
+
+  for (let i = 0; i < objectToCheck.length; i++) {
+    let objectToCheckProperty = objectToCheck[i]
+
+    for (const property in user[objectToCheckProperty]) {
+      if (user[objectToCheckProperty][property].value != this.data[objectToCheckProperty][property].value) {
+        if (this.data[objectToCheckProperty][property].value === true) {
+          whatToChange.add.push(this.data[objectToCheckProperty][property].name)
+        } else {
+          whatToChange.delete.push(this.data[objectToCheckProperty][property].name)
+        }
+      }
+    }
+  }
+
+  return { whatToChange: whatToChange, userNames: user.userNames }
+}
+
+Ticket.prototype.updateUser = async function () {
+  console.log(this)
 }
 
 module.exports = Ticket

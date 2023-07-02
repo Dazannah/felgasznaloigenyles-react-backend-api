@@ -16,7 +16,6 @@ router.post("/get-data", utils.getStartData)
 router.get("/validate-token", verifyToken, (req, res) => res.json({ tokenExpired: false }))
 
 router.use(verifyToken)
-//router.get('/home', userController.mustBeLogedIn, /*userController.igenylok,*/ requestController.newForm)
 
 //requests
 router.post("/create-new-ticket", /*userController.igenylok,*/ requestController.createNewUserTicket)
@@ -26,7 +25,8 @@ router.post("/request-update", /*userController.engedejezok,*/ requestController
 router.get("/get-allowed-tickets", /*userController.engedejezok,*/ requestController.getAllowedTickets)
 router.get("/get-completed-tickets", /* userController.admin,*/ requestController.completedTickets)
 router.post("/close-new-user-ticket", /*userController.admin,*/ requestController.closeNewUserTicket)
-router.post("/close-delete-user-request", requestController.closeDeleteUserRequest)
+router.post("/close-delete-user-request", /*userController.admin,*/ requestController.closeDeleteUserRequest)
+router.post("/close-edit-user-request", /*userController.admin,*/ requestController.closeEditUserRequest)
 //router.post('/distributinCompleted', userController.mustBeLogedIn, userController.admin, requestController.completedDistributionList)
 //router.get('/requestClosed', userController.mustBeLogedIn, userController.adminEngedejezok, requestController.closed)
 
