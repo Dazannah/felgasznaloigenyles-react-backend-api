@@ -28,60 +28,66 @@ const Ticket = function (data, type) {
 }*/
 
 const Ticket = function (data, type) {
-  if (type == "Új felhasználó" || type == "Felhasználó módosítása") {
-    this.data = data.dataToSend
-    this.data.ticketCreation = {
-      userName: data.decodedToken.data.username,
-      createTime: require("../utils.js").getCurrentTime()
+  try {
+    if (type == "Új felhasználó" || type == "Felhasználó módosítása") {
+      this.data = data.dataToSend
+      this.data.ticketCreation = {
+        userName: data.decodedToken.data.username,
+        createTime: require("../utils.js").getCurrentTime()
+      }
+      this.data.personalInformations.classId = new ObjectID(data.dataToSend.personalInformations.classId)
     }
-    this.data.personalInformations.classId = new ObjectID(data.dataToSend.personalInformations.classId)
-  }
 
-  if (type == "updatePermission") {
-    this.data = data.dataToSend
-    this.data.userNames = data.dataToSend.userNames
-    this.data.authorizedBy = {
-      userName: data.decodedToken.data.username,
-      time: require("../utils.js").getCurrentTime()
+    if (type == "updatePermission") {
+      this.data = data.dataToSend
+      this.data.userNames = data.dataToSend.userNames
+      this.data.authorizedBy = {
+        userName: data.decodedToken.data.username,
+        time: require("../utils.js").getCurrentTime()
+      }
     }
-  }
-  if (type == "closeNewUserTicket") {
-    this.data = data.dataToSend
-    this.data.createdBy = {
-      userName: data.decodedToken.data.username,
-      time: require("../utils.js").getCurrentTime()
+    if (type == "closeNewUserTicket") {
+      this.data = data.dataToSend
+      this.data.createdBy = {
+        userName: data.decodedToken.data.username,
+        time: require("../utils.js").getCurrentTime()
+      }
     }
-  }
 
-  if (type == "searchDeleteInProgress") {
-    this.data = data
-  }
+    if (type == "searchDeleteInProgress") {
+      this.data = data
+    }
 
-  if (type === "Felhasználó törlése") {
-    this.data = data.user
-    this.data.ticketCreation = {
-      userName: data.decodedToken.data.username,
-      createTime: require("../utils.js").getCurrentTime()
+    if (type === "Felhasználó törlése") {
+      this.data = data.user
+      this.data.ticketCreation = {
+        userName: data.decodedToken.data.username,
+        createTime: require("../utils.js").getCurrentTime()
+      }
+      this.data.userId = this.data._id
+      delete this.data._id
     }
-    this.data.userId = this.data._id
-    delete this.data._id
-  }
-  if (type === "closeDeleteUserRequest") {
-    this.data = { ticketId: data.values.ticketId }
-    this.data.createdBy = {
-      userName: data.decodedToken.data.username,
-      time: require("../utils.js").getCurrentTime()
+    if (type === "closeDeleteUserRequest") {
+      this.data = { ticketId: data.values.ticketId }
+      this.data.createdBy = {
+        userName: data.decodedToken.data.username,
+        time: require("../utils.js").getCurrentTime()
+      }
     }
-  }
-  if (type === "closeEditRequest") {
-    this.data = data.dataToSend
-    this.data.createdBy = {
-      userName: data.decodedToken.data.username,
-      time: require("../utils.js").getCurrentTime()
+    if (type === "closeEditRequest") {
+      this.data = data.dataToSend
+      this.data.createdBy = {
+        userName: data.decodedToken.data.username,
+        time: require("../utils.js").getCurrentTime()
+      }
     }
+    console.log(this.data)
+    this.data.process = type
+    this.errors = []
+  } catch (err) {
+    this.errors = []
+    return JSON.stringify(err)
   }
-  this.data.process = type
-  this.errors = []
 }
 
 Ticket.prototype.validate = async function () {
