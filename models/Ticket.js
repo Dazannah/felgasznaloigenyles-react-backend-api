@@ -81,7 +81,6 @@ const Ticket = function (data, type) {
         time: require("../utils.js").getCurrentTime()
       }
     }
-    console.log(this.data)
     this.data.process = type
     this.errors = []
   } catch (err) {

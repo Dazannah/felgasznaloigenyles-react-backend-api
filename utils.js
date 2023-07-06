@@ -13,7 +13,6 @@ function getArrays() {
 async function getAllClass() {
   try {
     const response = await classesDB.find().toArray()
-
     return response
   } catch (err) {
     return err
