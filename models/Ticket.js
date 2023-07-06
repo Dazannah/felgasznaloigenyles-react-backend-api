@@ -99,20 +99,19 @@ Ticket.prototype.validate = async function () {
 
     if (this.data.process === "Felhasználó módosítása") {
       const isEditInProgress = await this.findEditRequestInProgress()
+      const isDeletInProgress = await this.findDeletedRequestInProgress()
       if (isEditInProgress) {
         this.errors.push("A felhasználónak van folyamatban lévő módosítási igénye.")
+      } else if (isDeletInProgress) {
+        this.errors.push("A felhasználó törlése folyamatban, így nem lehet módosítást ígényelni.")
       } else {
-        try {
-          this.data.userId = new ObjectID(this.data.userId)
-          const whatToChange = await this.getWhatToChange()
+        this.data.userId = new ObjectID(this.data.userId)
+        const whatToChange = await this.getWhatToChange()
 
-          if (whatToChange.add.length == 0 && whatToChange.delete.length == 0 && whatToChange.edit.length == 0 && this.data.createTextArea == "") {
-            this.errors.push("Legalább egy módosítást végre kell hajtani.")
-          } else {
-            this.data.change = whatToChange.whatToChange
-          }
-        } catch (err) {
-          this.errors.push(err)
+        if (whatToChange.add.length == 0 && whatToChange.delete.length == 0 && whatToChange.edit.length == 0 && this.data.createTextArea == "") {
+          this.errors.push("Legalább egy módosítást végre kell hajtani.")
+        } else {
+          this.data.change = whatToChange.whatToChange
         }
       }
     }
