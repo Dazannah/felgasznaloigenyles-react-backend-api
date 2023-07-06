@@ -19,6 +19,15 @@ Users.prototype.getAllUser = async function () {
   }
 }
 
+Users.prototype.getAllDeletedUser = async function () {
+  try {
+    const users = await deletedUsersDB.find().sort({ "personalInformations.name": -1 }).toArray()
+    return users
+  } catch (err) {
+    return err
+  }
+}
+
 Users.prototype.getSingleUser = async function () {
   try {
     const user = await usersDB.findOne({

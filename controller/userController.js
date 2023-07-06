@@ -41,8 +41,18 @@ async function requestDeleteUser(req, res) {
   }
 }
 
+async function listDeletedUsers(req, res) {
+  try {
+    const response = await Users.prototype.getAllDeletedUser()
+    res.json(response)
+  } catch (err) {
+    res.json(err)
+  }
+}
+
 module.exports = {
   listUsers,
   requestEditUser,
-  requestDeleteUser
+  requestDeleteUser,
+  listDeletedUsers
 }

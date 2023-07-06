@@ -35,7 +35,8 @@ router.post("/close-edit-user-request", /*userController.admin,*/ requestControl
 //router.post('/distributionListNew', userController.mustBeLogedIn, /*userController.igenylok,*/ distributionController.distributionListNew)
 
 //user
-router.get("/list-users", /*userController.igenylok,*/ userController.listUsers)
+router.get("/list-active-users", /*userController.igenylok,*/ userController.listUsers)
+router.get("/list-deleted-users", /*userController.igenylok,*/ userController.listDeletedUsers)
 router.post("/user/:id/delete", /*userController.igenylok,*/ userController.requestDeleteUser)
 router.get("/user/:id/edit", /*userController.igenylok,*/ userController.requestEditUser)
 router.post("/user/:id/edit", /*userController.igenylok,*/ requestController.saveEditRequest)
