@@ -3,6 +3,7 @@ const router = express.Router()
 const loginController = require("./controller/loginController")
 const requestController = require("./controller/requestController")
 const userController = require("./controller/userController")
+const distributionListController = require("./controller/distributionListController")
 const { verifyToken } = require("./controller/loginController")
 const utils = require("./utils")
 const cors = require("cors")
@@ -32,7 +33,7 @@ router.post("/close-edit-user-request", /*userController.admin,*/ requestControl
 
 //
 //router.get('/distributionList', userController.mustBeLogedIn, /*userController.igenylok,*/ distributionController.distributionList)
-//router.post('/distributionListNew', userController.mustBeLogedIn, /*userController.igenylok,*/ distributionController.distributionListNew)
+router.post('/create-new-distribution-list', /*userController.igenylok,*/ distributionListController.createNewDistributionList)
 
 //user
 router.get("/list-active-users", /*userController.igenylok,*/ userController.listUsers)
