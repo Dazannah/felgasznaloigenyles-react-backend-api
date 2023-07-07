@@ -44,8 +44,8 @@ DistributionList.prototype.createNewDistributionRequest = async function(){
         const insertResult = await requestsDB.insertOne({
             mainAddress: this.create.mainAddress,
             adresses:  this.create.adresses,
-            creationData: this.data.creationData,
-            process: "Új terjesztésilista"
+            ticketCreation: this.data.creationData,
+            process: "Új terjesztési lista"
         })
 
         return insertResult
