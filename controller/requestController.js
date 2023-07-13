@@ -1,5 +1,6 @@
 const ObjectId = require("mongodb").ObjectId
 const Ticket = require("../models/Ticket")
+const { Database, GetRequestsData } = require("../models/Database")
 
 const requestsDB = require("../db").db("jogosultsagigenylo").collection("requests")
 
@@ -21,7 +22,7 @@ async function createNewUserTicket(req, res) {
 
 async function getAllForPermission(req, res) {
   try {
-    const requests = await Ticket.prototype.getAllForPermission()
+    const requests = await GetRequestsData.prototype.getAllRequestForPermission()
     res.json(requests)
   } catch (err) {
     res.json(err)
@@ -42,7 +43,7 @@ async function updateTicketPermission(req, res) {
 
 async function getAllowedTickets(req, res) {
   try {
-    const allowedTickets = await Ticket.prototype.getAllowedTickets()
+    const allowedTickets = await GetRequestsData.prototype.getAllowedTickets()
     res.json(allowedTickets)
   } catch (err) {
     res.json(err)
@@ -64,7 +65,7 @@ async function closeNewUserTicket(req, res) {
 
 async function completedTickets(req, res) {
   try {
-    const response = await Ticket.prototype.getCompletedTickets()
+    const response = await GetRequestsData.prototype.getCompletedTickets()
     res.json(response)
   } catch (err) {
     res.json(err)

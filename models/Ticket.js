@@ -132,19 +132,6 @@ Ticket.prototype.createNewUserTicket = async function () {
   }
 }
 
-Ticket.prototype.getAllForPermission = async function () {
-  try {
-    const response = await requestsDB
-      .find({
-        "permission.allowed": { $nin: ["Elutasított", "Engedélyezett"] }
-      })
-      .toArray()
-    return response
-  } catch (err) {
-    return err
-  }
-}
-
 Ticket.prototype.updatePermission = async function () {
   try {
     let response
@@ -193,20 +180,6 @@ Ticket.prototype.updatePermission = async function () {
   }
 }
 
-Ticket.prototype.getAllowedTickets = async function () {
-  try {
-    const response = await requestsDB
-      .find({
-        "permission.allowed": "Engedélyezett",
-        isCompleted: { $nin: [true] }
-      })
-      .toArray()
-    return response
-  } catch (err) {
-    return err
-  }
-}
-
 Ticket.prototype.closeNewUserTicket = async function () {
   try {
     const response = await requestsDB.findOneAndUpdate(
@@ -249,19 +222,6 @@ Ticket.prototype.createUser = async function () {
     } catch (err) {
       return err
     }
-  } catch (err) {
-    return err
-  }
-}
-
-Ticket.prototype.getCompletedTickets = async function () {
-  try {
-    const response = await requestsDB
-      .find({
-        $or: [{ "permission.allowed": "Elutasított" }, { isCompleted: true }]
-      })
-      .toArray()
-    return response
   } catch (err) {
     return err
   }

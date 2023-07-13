@@ -66,6 +66,8 @@ class CloseNewDistributionList extends DistributionList {
   async closeNewDistributionList() {
     console.log(this.data.creationData)
   }
+
+  async saveDL() {}
 }
 
 module.exports = { DistributionList, CloseNewDistributionList }
