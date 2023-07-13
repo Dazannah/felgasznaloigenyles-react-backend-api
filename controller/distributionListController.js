@@ -1,4 +1,4 @@
-const DistributionList = require("../models/DistributionList")
+const { DistributionList, CloseNewDistributionList } = require("../models/DistributionList")
 
 async function createNewDistributionList(req, res) {
   const distributionList = new DistributionList(req.body)
@@ -17,6 +17,9 @@ async function createNewDistributionList(req, res) {
 }
 
 async function closeCreateDistributionList(req, res) {
+  const distributionList = new CloseNewDistributionList(req.body)
+
+  distributionList.closeNewDistributionList()
   res.json("asd")
 }
 

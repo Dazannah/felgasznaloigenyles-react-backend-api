@@ -58,4 +58,14 @@ class DistributionList {
   }
 }
 
-module.exports = DistributionList
+class CloseNewDistributionList extends DistributionList {
+  constructor(data) {
+    super(data)
+  }
+
+  async closeNewDistributionList() {
+    console.log(this.data.creationData)
+  }
+}
+
+module.exports = { DistributionList, CloseNewDistributionList }
