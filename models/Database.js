@@ -7,12 +7,26 @@ const usersDB = database.collection("users")
 const distributionDB = database.collection("distributionLists")
 
 class Database {
-  constructor({collection, _id}) {
-    if(collection) this.db = database.collection(collection)
-    if(_id) this._id = _id
+  constructor({ collection, _id }) {
+    if (collection) this.db = database.collection(collection)
+    if (_id) this._id = _id
   }
 }
 class SaveData extends Database {}
+
+class GetData extends Database {
+  constructor({ collection }) {
+    super({ collection })
+  }
+
+  async getAllFromCollection() {
+    try {
+      return await this.db.find().toArray()
+    } catch (err) {
+      throw new Error(err)
+    }
+  }
+}
 
 class GetRequestsData extends Database {
   async reUsableFind(conditions) {
@@ -58,13 +72,13 @@ class GetRequestsData extends Database {
     }
   }
 
-  async findOneById(){
-    try{
-      return await this.db.findOne({_id: new ObjectID(this._id)})
-    }catch(err){
-      return err 
+  async findOneById() {
+    try {
+      return await this.db.findOne({ _id: new ObjectID(this._id) })
+    } catch (err) {
+      return err
     }
   }
 }
 
-module.exports = { Database, GetRequestsData, SaveData }
+module.exports = { Database, GetRequestsData, SaveData, GetData }

@@ -35,6 +35,7 @@ router.post("/close-edit-user-request", /*userController.admin,*/ requestControl
 //router.get('/distributionList', userController.mustBeLogedIn, /*userController.igenylok,*/ distributionController.distributionList)
 router.post("/create-new-distribution-list", /*userController.igenylok,*/ distributionListController.createNewDistributionList)
 router.post("/close-distribution-list-create-request", /*userController.admin,*/ distributionListController.closeCreateDistributionList)
+router.get("/get-distribution-lists", /* userController.admin,*/ distributionListController.getDistributionLists)
 
 //user
 router.get("/list-active-users", /*userController.igenylok,*/ userController.listUsers)

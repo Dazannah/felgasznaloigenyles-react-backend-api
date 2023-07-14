@@ -1,4 +1,5 @@
 const { DistributionList, CloseNewDistributionList } = require("../models/DistributionList")
+const { GetData } = require("../models/Database")
 
 async function createNewDistributionList(req, res) {
   const distributionList = new DistributionList(req.body)
@@ -17,22 +18,31 @@ async function createNewDistributionList(req, res) {
 }
 
 async function closeCreateDistributionList(req, res) {
-  try{
+  try {
     const distributionList = new CloseNewDistributionList(req.body)
     await distributionList.getDataToSave()
     await distributionList.saveDistributionList()
     await distributionList.closeRequest()
 
     res.json("A terjesztési lista sikeresen elkészült.")
-
-  }catch(err){
+  } catch (err) {
     console.log(err)
     res.json(err)
   }
+}
 
+async function getDistributionLists(req, res) {
+  try {
+    const getData = new GetData({ collection: "distributionLists" })
+    const distributionLists = await getData.getAllFromCollection()
+    res.json(distributionLists)
+  } catch (err) {
+    res.json(err)
+  }
 }
 
 module.exports = {
   createNewDistributionList,
-  closeCreateDistributionList
+  closeCreateDistributionList,
+  getDistributionLists
 }
