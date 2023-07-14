@@ -17,10 +17,19 @@ async function createNewDistributionList(req, res) {
 }
 
 async function closeCreateDistributionList(req, res) {
-  const distributionList = new CloseNewDistributionList(req.body)
+  try{
+    const distributionList = new CloseNewDistributionList(req.body)
+    await distributionList.getDataToSave()
+    await distributionList.saveDistributionList()
+    await distributionList.closeRequest()
 
-  distributionList.closeNewDistributionList()
-  res.json("asd")
+    res.json("A terjesztési lista sikeresen elkészült.")
+
+  }catch(err){
+    console.log(err)
+    res.json(err)
+  }
+
 }
 
 module.exports = {

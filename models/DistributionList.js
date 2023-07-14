@@ -1,3 +1,6 @@
+const { ObjectId } = require("mongodb")
+const { GetRequestsData } = require("./Database")
+
 const requestsDB = require("../db").db("jogosultsagigenylo").collection("requests")
 const distributionDB = require("../db").db("jogosultsagigenylo").collection("distributionLists")
 
@@ -18,7 +21,7 @@ class DistributionList {
       const splitIt = this.data.dataToSend.distributionListAddy.split("@")
       this.create = {
         mainAddress: splitIt[0],
-        adresses: []
+        addresses: []
       }
     }
 
@@ -35,7 +38,7 @@ class DistributionList {
         this.errors.push(`${i + 1}. email címet meg kell adni.`)
       } else {
         const splitIt = this.data.dataToSend[keys[i]].split("@")
-        this.create.adresses.push(splitIt[0])
+        this.create.addresses.push(splitIt[0])
       }
     }
 
@@ -46,7 +49,7 @@ class DistributionList {
     try {
       const insertResult = await requestsDB.insertOne({
         mainAddress: this.create.mainAddress,
-        adresses: this.create.adresses,
+        addresses: this.create.addresses,
         ticketCreation: this.data.creationData,
         process: "Új terjesztési lista"
       })
@@ -63,11 +66,50 @@ class CloseNewDistributionList extends DistributionList {
     super(data)
   }
 
-  async closeNewDistributionList() {
-    console.log(this.data.creationData)
+  async getDataToSave(){
+    try{
+      const getRequestData = new GetRequestsData({collection: "requests", _id: `${this.data.dataToSend.ticketId}`})
+      const ticketToClose = await getRequestData.findOneById()
+  
+      this.dataToSave = {
+        mainAddress: ticketToClose.mainAddress,
+        addresses: ticketToClose.addresses,
+        status: "Aktív",
+        createTime: this.data.creationData.createTime
+      }
+
+    }catch(err){
+      throw new Error(err)
+    }
+
   }
 
-  async saveDL() {}
+  async saveDistributionList() {
+    try{
+      const result = await distributionDB.insertOne(this.dataToSave)
+      this.insertedId = result.insertedId
+    }catch(err){
+      throw new Error(err)
+    }
+  }
+
+  async closeRequest(){
+    try{
+      const completed = this.data.creationData
+      const isCompleted = true
+      const userId = this.insertedId
+
+      await requestsDB.findOneAndUpdate({_id: new ObjectId(this.data.dataToSend.ticketId)},{
+        $set:{
+        completed,
+        isCompleted,
+        userId}
+      })
+
+    }catch(err){
+      throw new Error(err)
+    }
+  }
 }
 
 module.exports = { DistributionList, CloseNewDistributionList }
