@@ -4,6 +4,7 @@ const loginController = require("./controller/loginController")
 const requestController = require("./controller/requestController")
 const userController = require("./controller/userController")
 const distributionListController = require("./controller/distributionListController")
+const searchController = require("./controller/searchController")
 const { verifyToken } = require("./controller/loginController")
 const utils = require("./utils")
 const cors = require("cors")
@@ -28,14 +29,14 @@ router.get("/get-completed-tickets", /* userController.admin,*/ requestControlle
 router.post("/close-new-user-ticket", /*userController.admin,*/ requestController.closeNewUserTicket)
 router.post("/close-delete-user-request", /*userController.admin,*/ requestController.closeDeleteUserRequest)
 router.post("/close-edit-user-request", /*userController.admin,*/ requestController.closeEditUserRequest)
-//router.post('/distributinCompleted', userController.mustBeLogedIn, userController.admin, requestController.completedDistributionList)
-//router.get('/requestClosed', userController.mustBeLogedIn, userController.adminEngedejezok, requestController.closed)
 
-//
-//router.get('/distributionList', userController.mustBeLogedIn, /*userController.igenylok,*/ distributionController.distributionList)
+//distributin lists
+router.get("/get-distribution-lists", /* userController.admin,*/ distributionListController.getDistributionLists)
 router.post("/create-new-distribution-list", /*userController.igenylok,*/ distributionListController.createNewDistributionList)
 router.post("/close-distribution-list-create-request", /*userController.admin,*/ distributionListController.closeCreateDistributionList)
-router.get("/get-distribution-lists", /* userController.admin,*/ distributionListController.getDistributionLists)
+
+//table head search
+router.post("/table-head-search", /*userController.admin,*/ searchController.tableHeadSearch)
 
 //user
 router.get("/list-active-users", /*userController.igenylok,*/ userController.listUsers)

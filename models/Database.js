@@ -7,9 +7,11 @@ const usersDB = database.collection("users")
 const distributionDB = database.collection("distributionLists")
 
 class Database {
-  constructor({ collection, _id }) {
+  constructor({ collection, _id, accessor, value }) {
     if (collection) this.db = database.collection(collection)
     if (_id) this._id = _id
+    if (accessor) this.accessor = accessor
+    if (value) this.value = value
   }
 }
 class SaveData extends Database {}
@@ -76,9 +78,30 @@ class GetRequestsData extends Database {
     try {
       return await this.db.findOne({ _id: new ObjectID(this._id) })
     } catch (err) {
+      throw new Error(err)
+    }
+  }
+}
+
+class Serach extends Database {
+  constructor(collection, accessor, value) {
+    super(collection, accessor, value)
+  }
+
+  async search() {
+    console.log(this.value)
+
+    const querry = this.value
+      ? {
+          [this.accessor]: { $regex: new RegExp(`${this.value}`, "i") }
+        }
+      : {}
+    try {
+      return await this.db.find(querry).toArray()
+    } catch (err) {
       return err
     }
   }
 }
 
-module.exports = { Database, GetRequestsData, SaveData, GetData }
+module.exports = { Database, GetRequestsData, SaveData, GetData, Serach }
