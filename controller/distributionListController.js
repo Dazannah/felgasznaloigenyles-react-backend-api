@@ -26,7 +26,6 @@ async function closeCreateDistributionList(req, res) {
 
     res.json("A terjesztési lista sikeresen elkészült.")
   } catch (err) {
-    console.log(err)
     res.json(err)
   }
 }

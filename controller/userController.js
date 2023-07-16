@@ -36,7 +36,6 @@ async function requestDeleteUser(req, res) {
 
       const ticket = new Ticket({ user: userWholeData, decodedToken: req.body.decodedToken }, "Felhasználó törlése")
       const response = await ticket.createDeleteTicket()
-      console.log(response)
       res.json(response)
     }
   } catch (err) {
