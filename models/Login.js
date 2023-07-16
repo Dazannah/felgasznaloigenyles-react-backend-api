@@ -82,7 +82,6 @@ Login.prototype.authenticate = function () {
         reject(new Error(errors))
       } else {
         groups.forEach(element => {
-          console.log(groups)
           if (element.cn == "Tartományfelhasználók") {
             userGroups[0] = element.cn
           } //kérelmezők AD csoport neve

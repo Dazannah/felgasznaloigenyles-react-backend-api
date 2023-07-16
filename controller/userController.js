@@ -24,9 +24,12 @@ async function requestDeleteUser(req, res) {
   try {
     const ticket = new Ticket({ userId: req.params.id }, "searchDeleteInProgress")
     const isDeleteInProgress = await ticket.findDeletedRequestInProgress()
+    const isEditInProgress = await ticket.findEditRequestInProgress()
 
     if (isDeleteInProgress) {
       res.json("A felhasználónak van folyamatban lévő törlési kérelme.")
+    } else if (isEditInProgress) {
+      res.json("A felhasználónak van folyamatban lévő módosítási kérelme, így nem lehet törlést ígényelni.")
     } else {
       const user = new Users(req.params.id)
       const userWholeData = await user.getSingleUser()

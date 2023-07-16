@@ -89,8 +89,6 @@ class Serach extends Database {
   }
 
   async search() {
-    console.log(this.value)
-
     const querry = this.value
       ? {
           [this.accessor]: { $regex: new RegExp(`${this.value}`, "i") }
