@@ -342,7 +342,7 @@ Ticket.prototype.updateUser = async function () {
       userPermissionsRight: ticket.userPermissionsRight
     }
 
-    const userUpdateResult = await usersDB.findOneAndUpdate(
+    await usersDB.findOneAndUpdate(
       { _id: ticket.userId },
       {
         $set: userUpdateData
@@ -359,7 +359,7 @@ Ticket.prototype.updateUser = async function () {
       }
     )
 
-    return userUpdateResult
+    return "Módosítás sikeresen mentve."
   } catch (err) {
     return err
   }
