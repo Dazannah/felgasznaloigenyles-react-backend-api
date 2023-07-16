@@ -111,7 +111,7 @@ Ticket.prototype.validate = async function () {
         if (whatToChange.add.length == 0 && whatToChange.delete.length == 0 && whatToChange.edit.length == 0 && this.data.createTextArea == "") {
           this.errors.push("Legalább egy módosítást végre kell hajtani.")
         } else {
-          this.data.change = whatToChange.whatToChange
+          this.data.change = whatToChange
         }
       }
     }
