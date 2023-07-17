@@ -97,6 +97,11 @@ Ticket.prototype.validate = async function () {
     if (!this.data.personalInformations.workPost) this.errors.push("Beosztás megadása kötelező.")
     if (!this.data.personalInformations.workLocation) this.errors.push("Munkavégzés hely megadása kötelező.")
 
+    if (this.data.process === "Új felhasználó") {
+      const havePermissionSelected = this.isThereAnyPermissionChecked()
+      if (!havePermissionSelected) this.errors.push("Legalább egy jogosultságot ki kell választani.")
+    }
+
     if (this.data.process === "Felhasználó módosítása") {
       const isEditInProgress = await this.findEditRequestInProgress()
       const isDeletInProgress = await this.findDeletedRequestInProgress()
@@ -116,10 +121,32 @@ Ticket.prototype.validate = async function () {
       }
     }
 
-    if (this.errors.length != 0) return this.errors
+    if (this.errors.length > 0) return this.errors
   } catch (e) {
     this.errors.push(JSON.stringify(e))
     return this.errors
+  }
+}
+
+Ticket.prototype.isThereAnyPermissionChecked = function () {
+  let isItOkToSave = false
+
+  this.data.userPermissionsLeft.forEach(permission => {
+    if (permission.value === true) isItOkToSave = true
+  })
+
+  this.data.userPermissionsMiddle.forEach(permission => {
+    if (permission.value === true) isItOkToSave = true
+  })
+
+  this.data.userPermissionsRight.forEach(permission => {
+    if (permission.value === true) isItOkToSave = true
+  })
+
+  if (isItOkToSave) {
+    return true
+  } else {
+    return false
   }
 }
 
