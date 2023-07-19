@@ -64,7 +64,7 @@ Users.prototype.createUserDelete = async function () {
 Users.prototype.deleteUser = async function () {
   try {
     const userData = await usersDB.findOne({ _id: this.id })
-    userData.status = "deleted"
+    userData.status = "Törölt"
 
     const deletedUserInsertResult = await deletedUsersDB.insertOne(userData)
     if (deletedUserInsertResult.acknowledged) {

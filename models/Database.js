@@ -13,6 +13,14 @@ class Database {
     if (accessor) this.accessor = accessor
     if (value) this.value = value
   }
+
+  getStatusCondition(){
+    if(this.status === "closed") this.condition = { $or: [{ "permission.allowed": "Elutasított" }, { isCompleted: true }]}
+    if(this.status === "requestForPermission") this.condition = { "permission.allowed": { $nin: ["Elutasított", "Engedélyezett"] } }
+    if(this.status === "allowedRequests") this.condition = {"permission.allowed": "Engedélyezett", isCompleted: { $nin: [true] }}
+    if(this.status === "active") this.condition = {"status": "Aktív"}
+    if(this.status === "deleted") this.condition = {"status": "Törölt"}
+  }
 }
 class SaveData extends Database {}
 
@@ -32,9 +40,12 @@ class GetData extends Database {
 
 class GetRequestsData extends Database {
   async reUsableFind(conditions) {
-    const response = await requestsDB.find(conditions).toArray()
+    try{
+      return await requestsDB.find(conditions).toArray()
+    }catch(err){
+      return err
+    }
 
-    return response
   }
 
   async getAllRequestForPermission() {
@@ -84,8 +95,9 @@ class GetRequestsData extends Database {
 }
 
 class Serach extends Database {
-  constructor(collection, accessor, value) {
-    super(collection, accessor, value)
+  constructor({collection, accessor, value, status}) {
+    super({collection, accessor, value})
+    this.status = status
   }
 
   async search() {
@@ -95,7 +107,9 @@ class Serach extends Database {
         }
       : {}
     try {
-      return await this.db.find(querry).toArray()
+      return await this.db.find({
+       $and: [ querry, this.condition ]
+      }).toArray()
     } catch (err) {
       return err
     }
