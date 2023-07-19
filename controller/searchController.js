@@ -2,8 +2,7 @@ const { Serach } = require("../models/Database")
 
 async function tableHeadSearch(req, res) {
   try {
-    const search = new Serach({collection: req.body.collection, accessor: req.body.accessor, value: req.body.value, status: req.body.status})
-    console.log(search)
+    const search = new Serach({collection: req.body.collection, accessor: req.body.accessor, value: req.body.value, status: req.body.status, _id: req.body.userId})
     const condition = search.getStatusCondition()
     const result = await search.search(condition)
 

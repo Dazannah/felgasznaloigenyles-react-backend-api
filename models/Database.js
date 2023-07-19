@@ -20,6 +20,7 @@ class Database {
     if(this.status === "allowedRequests") this.condition = {"permission.allowed": "Engedélyezett", isCompleted: { $nin: [true] }}
     if(this.status === "active") this.condition = {"status": "Aktív"}
     if(this.status === "deleted") this.condition = {"status": "Törölt"}
+    if(this.status === "all") this.condition = {}
   }
 }
 class SaveData extends Database {}
@@ -95,21 +96,26 @@ class GetRequestsData extends Database {
 }
 
 class Serach extends Database {
-  constructor({collection, accessor, value, status}) {
-    super({collection, accessor, value})
+  constructor({collection, accessor, value, status, _id}) {
+    super({collection, accessor, value, _id})
     this.status = status
   }
 
+  getQuerry(){
+    const querry = []
+
+    if(this.value) querry.push({[this.accessor]: { $regex: new RegExp(`${this.value}`, "i") }})
+    if(this._id) console.log(this._id)//querry.push(this._id) itt valahol van egy kis gubanc
+    if(this.condition) querry.push(this.condition)
+
+    return {$and: querry}
+  }
+
   async search() {
-    const querry = this.value
-      ? {
-          [this.accessor]: { $regex: new RegExp(`${this.value}`, "i") }
-        }
-      : {}
+    const querry = this.getQuerry()
+
     try {
-      return await this.db.find({
-       $and: [ querry, this.condition ]
-      }).toArray()
+      return await this.db.find(querry).toArray()
     } catch (err) {
       return err
     }
