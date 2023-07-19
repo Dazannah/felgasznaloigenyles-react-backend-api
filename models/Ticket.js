@@ -241,6 +241,7 @@ Ticket.prototype.createUser = async function () {
       userPermissionsMiddle: ticketData.userPermissionsMiddle,
       userPermissionsRight: ticketData.userPermissionsRight,
       technical: ticketData.technical,
+      createDate: this.data.createdBy.time,
       status: "Aktív"
     }
     try {
