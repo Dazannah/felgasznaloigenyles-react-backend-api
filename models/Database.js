@@ -45,7 +45,7 @@ class GetData extends Database {
 class GetRequestsData extends Database {
   async reUsableFind(conditions) {
     try {
-      return await requestsDB.find().toArray()
+      return await requestsDB.find(conditions).toArray()
     } catch (err) {
       return err
     }
