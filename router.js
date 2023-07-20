@@ -1,6 +1,5 @@
 const express = require("express")
 const router = express.Router()
-const sereveReactFiles = require("./controller/sereveReactFiles")
 const loginController = require("./controller/loginController")
 const requestController = require("./controller/requestController")
 const userController = require("./controller/userController")
@@ -12,7 +11,6 @@ const cors = require("cors")
 
 router.use(cors())
 
-router.get('/', sereveReactFiles.serveIt)
 router.post("/login", loginController.login)
 router.post("/get-data", utils.getStartData)
 
