@@ -63,7 +63,7 @@ function applicants(req, res, next){
   if(isAuthorized){
     next()
   }else{
-    res.json("access denied")
+    res.status(403).send()
   }
 }
 
@@ -74,7 +74,7 @@ function authorizers(req, res, next){
   if(isAuthorized){
     next()
   }else{
-    res.json("access denied")
+    res.status(403).send()
   }
 }
 
@@ -85,7 +85,7 @@ function administrators(req, res, next){
   if(isAuthorized){
     next()
   }else{
-    res.json("access denied")
+    res.status(403).send()
   }
 }
 
