@@ -3,7 +3,7 @@ dotenv.config()
 const jwt = require("jsonwebtoken")
 const Cookies = require("js-cookie")
 const classesDB = require("../db").db("jogosultsagigenylo").collection("classes")
-const {Login, Autherization} = require("../models/Login")
+const { Login, Autherization } = require("../models/Login")
 
 async function login(req, res) {
   let login = new Login(req.body)
@@ -20,32 +20,31 @@ async function login(req, res) {
       process.env.JWTSECRET
     )
 
-    res.cookie('jwt', token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24}) //maxAge 1 nap
+    res.cookie("jwt", token, { httpOnly: true, sameSite: true, maxAge: 1000 * 60 * 60 * 24 }) //maxAge 1 nap
     res.json({ token })
   } catch (err) {
     res.json(login.errors)
   }
 }
 
-function getCookies(rawCookies){
-  if(rawCookies){
+function getCookies(rawCookies) {
+  if (rawCookies) {
     const splittedCookies = rawCookies.split(";")
-    const cookieObject ={}
-  
-    splittedCookies.forEach( (cookie, index) =>{
+    const cookieObject = {}
+
+    splittedCookies.forEach((cookie, index) => {
       splittedCookies[index] = cookie.trim()
     })
-  
-    splittedCookies.forEach( cookie =>{
+
+    splittedCookies.forEach(cookie => {
       let tmp = cookie.split("=")
       cookieObject[tmp[0]] = tmp[1]
     })
-  
+
     return cookieObject
-  }else{
+  } else {
     return {}
   }
-
 }
 
 async function verifyToken(req, res, next) {
@@ -80,46 +79,46 @@ function engedejezok(req, res, next) {
   }
 }
 
-function applicants(req, res, next){
+function applicants(req, res, next) {
   const authorization = new Autherization(req.body.decodedToken.data.userGroups)
   const isAuthorized = authorization.isApplicant()
 
-  if(isAuthorized){
+  if (isAuthorized) {
     next()
-  }else{
+  } else {
     res.status(403).send()
   }
 }
 
-function authorizers(req, res, next){
+function authorizers(req, res, next) {
   const authorization = new Autherization(req.body.decodedToken.data.userGroups)
   const isAuthorized = authorization.isAuthorizer()
 
-  if(isAuthorized){
+  if (isAuthorized) {
     next()
-  }else{
+  } else {
     res.status(403).send()
   }
 }
 
-function administrators(req, res, next){
+function administrators(req, res, next) {
   const authorization = new Autherization(req.body.decodedToken.data.userGroups)
   const isAuthorized = authorization.isAdministrator()
 
-  if(isAuthorized){
+  if (isAuthorized) {
     next()
-  }else{
+  } else {
     res.status(403).send()
   }
 }
 
-function administratorsAndAuthorizers(req, res, next){
+function administratorsAndAuthorizers(req, res, next) {
   const authorization = new Autherization(req.body.decodedToken.data.userGroups)
   const isAuthorized = authorization.isAdministratorOrAuthorizer()
 
-  if(isAuthorized){
+  if (isAuthorized) {
     next()
-  }else{
+  } else {
     res.status(403).send()
   }
 }

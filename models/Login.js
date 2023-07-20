@@ -100,39 +100,37 @@ Login.prototype.authenticate = function () {
 }
 
 class Autherization {
-  constructor(userGroups){
+  constructor(userGroups) {
     this.userGroups = userGroups
   }
 
-  getAccess(authorizationLevel){
+  getAccess(authorizationLevel) {
     let isAuthorized = false //in prod set it false
 
-    this.userGroups.forEach(group =>{
-      authorizationLevel.forEach( auth =>{
-        if(group === auth) isAuthorized = true
+    this.userGroups.forEach(group => {
+      authorizationLevel.forEach(auth => {
+        if (group === auth) isAuthorized = true
       })
     })
 
     return isAuthorized
   }
 
-  isApplicant(){
+  isApplicant() {
     return this.getAccess(["Tartományfelhasználók"])
   }
 
-  isAuthorizer(){
+  isAuthorizer() {
     return this.getAccess(["JogosultsagigenyEngedelyezok"])
   }
 
-  isAdministrator(){
+  isAdministrator() {
     return this.getAccess(["JogosultsagigenyAdminisztrator"])
   }
 
-  isAdministratorOrAuthorizer(){
+  isAdministratorOrAuthorizer() {
     return this.getAccess(["JogosultsagigenyEngedelyezok", "JogosultsagigenyAdminisztrator"])
   }
-
-
 }
 
-module.exports = {Login, Autherization}
+module.exports = { Login, Autherization }
