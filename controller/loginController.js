@@ -89,11 +89,23 @@ function administrators(req, res, next){
   }
 }
 
+function administratorsAndAuthorizers(req, res, next){
+  const authorization = new Autherization(req.body.decodedToken.data.userGroups)
+  const isAuthorized = authorization.isAdministratorOrAuthorizer()
+
+  if(isAuthorized){
+    next()
+  }else{
+    res.status(403).send()
+  }
+}
+
 module.exports = {
   login,
   verifyToken,
   engedejezok,
   applicants,
   authorizers,
-  administrators
+  administrators,
+  administratorsAndAuthorizers
 }

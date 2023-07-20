@@ -108,22 +108,28 @@ class Autherization {
     let isAuthorized = false //in prod set it false
 
     this.userGroups.forEach(group =>{
-      if(group === authorizationLevel) isAuthorized = true
+      authorizationLevel.forEach( auth =>{
+        if(group === auth) isAuthorized = true
+      })
     })
 
     return isAuthorized
   }
 
   isApplicant(){
-    return this.getAccess("Tartományfelhasználók")
+    return this.getAccess(["Tartományfelhasználók"])
   }
 
   isAuthorizer(){
-    return this.getAccess("JogosultsagigenyEngedelyezok")
+    return this.getAccess(["JogosultsagigenyEngedelyezok"])
   }
 
   isAdministrator(){
-    return this.getAccess("JogosultsagigenyAdminisztrator")
+    return this.getAccess(["JogosultsagigenyAdminisztrator"])
+  }
+
+  isAdministratorOrAuthorizer(){
+    return this.getAccess(["JogosultsagigenyEngedelyezok", "JogosultsagigenyAdminisztrator"])
   }
 
 

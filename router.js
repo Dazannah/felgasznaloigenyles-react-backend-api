@@ -25,7 +25,7 @@ router.post("/create-new-ticket", /*loginController.applicants,*/ requestControl
 router.get("/requests-list-all", loginController.authorizers, requestController.getAllForPermission)
 router.post("/request-update", loginController.authorizers, requestController.updateTicketPermission)
 router.get("/get-allowed-tickets", loginController.administrators, requestController.getAllowedTickets)
-router.get("/get-completed-tickets", loginController.administrators, requestController.completedTickets)
+router.get("/get-completed-tickets", loginController.administratorsAndAuthorizers, requestController.completedTickets)
 router.post("/close-new-user-ticket", loginController.administrators, requestController.closeNewUserTicket)
 router.post("/close-delete-user-request", loginController.administrators, requestController.closeDeleteUserRequest)
 router.post("/close-edit-user-request", loginController.administrators, requestController.closeEditUserRequest)
