@@ -20,30 +20,30 @@ router.get("/validate-token", verifyToken, (req, res) => res.json({ tokenExpired
 router.use(verifyToken)
 
 //requests
-router.post("/create-new-ticket", /*userController.igenylok,*/ requestController.createNewUserTicket)
+router.post("/create-new-ticket", /*loginController.applicants,*/ requestController.createNewUserTicket)
 
-router.get("/requests-list-all", /*loginController.engedejezok,*/ requestController.getAllForPermission)
-router.post("/request-update", /*userController.engedejezok,*/ requestController.updateTicketPermission)
-router.get("/get-allowed-tickets", /*userController.engedejezok,*/ requestController.getAllowedTickets)
-router.get("/get-completed-tickets", /* userController.admin,*/ requestController.completedTickets)
-router.post("/close-new-user-ticket", /*userController.admin,*/ requestController.closeNewUserTicket)
-router.post("/close-delete-user-request", /*userController.admin,*/ requestController.closeDeleteUserRequest)
-router.post("/close-edit-user-request", /*userController.admin,*/ requestController.closeEditUserRequest)
+router.get("/requests-list-all", loginController.authorizers, requestController.getAllForPermission)
+router.post("/request-update", loginController.authorizers, requestController.updateTicketPermission)
+router.get("/get-allowed-tickets", loginController.administrators, requestController.getAllowedTickets)
+router.get("/get-completed-tickets", loginController.administrators, requestController.completedTickets)
+router.post("/close-new-user-ticket", loginController.administrators, requestController.closeNewUserTicket)
+router.post("/close-delete-user-request", loginController.administrators, requestController.closeDeleteUserRequest)
+router.post("/close-edit-user-request", loginController.administrators, requestController.closeEditUserRequest)
 
 //distributin lists
-router.get("/get-distribution-lists", /* userController.admin,*/ distributionListController.getDistributionLists)
-router.post("/create-new-distribution-list", /*userController.igenylok,*/ distributionListController.createNewDistributionList)
-router.post("/close-distribution-list-create-request", /*userController.admin,*/ distributionListController.closeCreateDistributionList)
+router.get("/get-distribution-lists", /* loginController.applicants,*/ distributionListController.getDistributionLists)
+router.post("/create-new-distribution-list", /*loginController.applicants,*/ distributionListController.createNewDistributionList)
+router.post("/close-distribution-list-create-request", /*loginController.administrators,*/ distributionListController.closeCreateDistributionList)
 
 //table head search
-router.post("/table-head-search", /*userController.admin,*/ searchController.tableHeadSearch)
+router.post("/table-head-search", /*loginController.applicants,*/ searchController.tableHeadSearch)
 
 //user
-router.get("/list-active-users", /*userController.igenylok,*/ userController.listUsers)
-router.get("/list-deleted-users", /*userController.igenylok,*/ userController.listDeletedUsers)
-router.post("/user/:id/delete", /*userController.igenylok,*/ userController.requestDeleteUser)
-router.get("/user/:id/edit", /*userController.igenylok,*/ userController.requestEditUser)
-router.post("/user/:id/edit", /*userController.igenylok,*/ requestController.saveEditRequest)
+router.get("/list-active-users", /*loginController.applicants,*/ userController.listUsers)
+router.get("/list-deleted-users", /*loginController.applicants,*/ userController.listDeletedUsers)
+router.post("/user/:id/delete", /*loginController.applicants,*/ userController.requestDeleteUser)
+router.get("/user/:id/edit", /*loginController.applicants,*/ userController.requestEditUser)
+router.post("/user/:id/edit", /*loginController.applicants,*/ requestController.saveEditRequest)
 router.get("/user/:id/requests", requestController.getRequestsForUser)
 
 module.exports = router

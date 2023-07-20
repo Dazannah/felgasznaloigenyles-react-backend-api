@@ -14,7 +14,7 @@ async function getRequests() {
     const result = await requestsFrom.find().toArray()
     return result
   } catch (err) {
-    console.log(err)
+    return err
   }
 }
 

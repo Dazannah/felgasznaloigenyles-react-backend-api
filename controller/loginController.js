@@ -2,7 +2,7 @@ const dotenv = require("dotenv")
 dotenv.config()
 const jwt = require("jsonwebtoken")
 const classesDB = require("../db").db("jogosultsagigenylo").collection("classes")
-const Login = require("../models/Login")
+const {Login, Autherization} = require("../models/Login")
 
 async function login(req, res) {
   let login = new Login(req.body)
@@ -56,8 +56,44 @@ function engedejezok(req, res, next) {
   }
 }
 
+function applicants(req, res, next){
+  const authorization = new Autherization(req.body.decodedToken.data.userGroups)
+  const isAuthorized = authorization.isApplicant()
+
+  if(isAuthorized){
+    next()
+  }else{
+    res.json("access denied")
+  }
+}
+
+function authorizers(req, res, next){
+  const authorization = new Autherization(req.body.decodedToken.data.userGroups)
+  const isAuthorized = authorization.isAuthorizer()
+
+  if(isAuthorized){
+    next()
+  }else{
+    res.json("access denied")
+  }
+}
+
+function administrators(req, res, next){
+  const authorization = new Autherization(req.body.decodedToken.data.userGroups)
+  const isAuthorized = authorization.isAdministrator()
+
+  if(isAuthorized){
+    next()
+  }else{
+    res.json("access denied")
+  }
+}
+
 module.exports = {
   login,
   verifyToken,
-  engedejezok
+  engedejezok,
+  applicants,
+  authorizers,
+  administrators
 }

@@ -59,15 +59,15 @@ Login.prototype.authenticate = function () {
 
   const ad = new ActiveDirectory(ldapConfig)
 
-  let opts = {
+  /*let opts = {
     bindDN: usernameWithDomain,
     bindCredentials: password
-  }
+  }*/
 
   return new Promise(async (resolve, reject) => {
     let runCount = 0
 
-    ad.getGroupMembershipForUser(opts, function (err, groups) {
+    ad.getGroupMembershipForUser(usernameWithDomain, (err, groups) => {
       if (err) {
         const errorMessage = JSON.stringify(err)
         const errorMessageObject = JSON.parse(errorMessage)
@@ -99,4 +99,34 @@ Login.prototype.authenticate = function () {
   })
 }
 
-module.exports = Login
+class Autherization {
+  constructor(userGroups){
+    this.userGroups = userGroups
+  }
+
+  getAccess(authorizationLevel){
+    let isAuthorized = true //in prod set it false
+
+    this.userGroups.forEach(group =>{
+      if(group === authorizationLevel) isAuthorized = true
+    })
+
+    return isAuthorized
+  }
+
+  isApplicant(){
+    return this.getAccess("Tartományfelhasználók")
+  }
+
+  isAuthorizer(){
+    return this.getAccess("JogosultsagigenyEngedelyezok")
+  }
+
+  isAdministrator(){
+    return this.getAccess("JogosultsagigenyAdminisztrator")
+  }
+
+
+}
+
+module.exports = {Login, Autherization}
