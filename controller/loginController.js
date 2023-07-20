@@ -1,6 +1,7 @@
 const dotenv = require("dotenv")
 dotenv.config()
 const jwt = require("jsonwebtoken")
+const Cookies = require("js-cookie")
 const classesDB = require("../db").db("jogosultsagigenylo").collection("classes")
 const {Login, Autherization} = require("../models/Login")
 
@@ -19,20 +20,43 @@ async function login(req, res) {
       process.env.JWTSECRET
     )
 
+    res.cookie('jwt', token, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24}) //maxAge 1 nap
     res.json({ token })
   } catch (err) {
     res.json(login.errors)
   }
 }
 
-async function verifyToken(req, res, next) {
-  if (!req.headers.authorization) {
-    return res.json("You must provide jwt in the headers.")
+function getCookies(rawCookies){
+  if(rawCookies){
+    const splittedCookies = rawCookies.split(";")
+    const cookieObject ={}
+  
+    splittedCookies.forEach( (cookie, index) =>{
+      splittedCookies[index] = cookie.trim()
+    })
+  
+    splittedCookies.forEach( cookie =>{
+      let tmp = cookie.split("=")
+      cookieObject[tmp[0]] = tmp[1]
+    })
+  
+    return cookieObject
+  }else{
+    return {}
   }
-  const [type, token] = req.headers.authorization.split(" ")
+
+}
+
+async function verifyToken(req, res, next) {
+  const cookies = getCookies(req.headers.cookie)
+
+  if (!cookies.jwt) {
+    return res.json("You must provide jwt in the cookie.")
+  }
 
   try {
-    const decodedToken = await jwt.verify(token, process.env.JWTSECRET)
+    const decodedToken = await jwt.verify(cookies.jwt, process.env.JWTSECRET)
     req.body.decodedToken = decodedToken
     next()
   } catch (err) {
