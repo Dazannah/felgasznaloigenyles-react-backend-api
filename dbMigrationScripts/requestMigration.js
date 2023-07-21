@@ -58,7 +58,7 @@ async function serializeRequests(requests) {
       },
       completed: {
         userName: request.doneBy,
-        time: request.completionTime
+        createTime: request.completionTime
       },
       isCompleted: request.completion == "Kész" ? true : false,
       userId: request.userID,

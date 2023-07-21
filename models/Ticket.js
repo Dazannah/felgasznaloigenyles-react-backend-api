@@ -43,14 +43,14 @@ const Ticket = function (data, type) {
       this.data.userNames = data.dataToSend.userNames
       this.data.authorizedBy = {
         userName: data.decodedToken.data.username,
-        time: require("../utils.js").getCurrentTime()
+        createTime: require("../utils.js").getCurrentTime()
       }
     }
     if (type == "closeNewUserTicket") {
       this.data = data.dataToSend
       this.data.createdBy = {
         userName: data.decodedToken.data.username,
-        time: require("../utils.js").getCurrentTime()
+        createTime: require("../utils.js").getCurrentTime()
       }
     }
 
@@ -71,14 +71,14 @@ const Ticket = function (data, type) {
       this.data = { ticketId: data.values.ticketId }
       this.data.createdBy = {
         userName: data.decodedToken.data.username,
-        time: require("../utils.js").getCurrentTime()
+        createTime: require("../utils.js").getCurrentTime()
       }
     }
     if (type === "closeEditRequest") {
       this.data = data.dataToSend
       this.data.createdBy = {
         userName: data.decodedToken.data.username,
-        time: require("../utils.js").getCurrentTime()
+        createTime: require("../utils.js").getCurrentTime()
       }
     }
     this.data.process = type
@@ -173,11 +173,11 @@ Ticket.prototype.updatePermission = async function () {
             permission: {
               allowed: this.data.permission,
               permissionNote: this.data.notes,
-              permissionTime: this.data.authorizedBy.time,
+              permissionTime: this.data.authorizedBy.createTime,
               authorizedBy: this.data.authorizedBy.userName
             },
             completed: {
-              time: this.data.authorizedBy.time
+              createTime: this.data.authorizedBy.createTime
             }
           }
         }
@@ -193,7 +193,7 @@ Ticket.prototype.updatePermission = async function () {
             permission: {
               allowed: this.data.permission,
               permissionNote: this.data.notes,
-              permissionTime: this.data.authorizedBy.time,
+              permissionTime: this.data.authorizedBy.createTime,
               authorizedBy: this.data.authorizedBy.userName
             }
           }
@@ -241,7 +241,7 @@ Ticket.prototype.createUser = async function () {
       userPermissionsMiddle: ticketData.userPermissionsMiddle,
       userPermissionsRight: ticketData.userPermissionsRight,
       technical: ticketData.technical,
-      createDate: this.data.createdBy.time,
+      createTime: this.data.createdBy.createTime,
       status: "Aktív"
     }
     try {
