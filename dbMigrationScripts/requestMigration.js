@@ -1,7 +1,7 @@
 const { MongoClient } = require("mongodb")
 
 const client = new MongoClient("mongodb://root:root@localhost:27017/")
-const arrays = require("./arrays")
+const arrays = require("../arrays")
 
 const dbFrom = client.db("korhaz-live-copy")
 const dbTo = client.db("jogosultsagigenylo")
@@ -121,6 +121,7 @@ async function main() {
   const result = await requestsTo.insertMany(serialiezdRequets)
 
   console.log(result)
+  process.exit(0)
 }
 
 main()
