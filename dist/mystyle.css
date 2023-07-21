@@ -151,6 +151,7 @@ nav a:hover {
   max-width: 1300px;
   margin: 0 auto;
   margin-bottom: 20px;
+  height: 100%;
 }
 
 #upper-fileds-wrapper {
@@ -464,6 +465,43 @@ input[type="datetime-local"]:focus {
 }
 
 /* jump-to-top-arrow End*/
+
+/* Turn Page Buttons */
+
+#pages {
+  display: grid;
+  margin: 0 auto;
+  max-width: 30%;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  font-size: 120%;
+  height: fit-content;
+  padding-bottom: 20px;
+}
+
+#pages button {
+  font-size: 120%;
+  width: 30%;
+  justify-self: center;
+  align-self: center;
+}
+
+#pages span {
+  justify-self: center;
+  align-self: center;
+}
+
+#pages select {
+  font-size: 110%;
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  width: 50%;
+  justify-self: center;
+  align-self: center;
+  text-align: center;
+}
+
+/* Turn Page Buttons  End */
 
 /* Loading Dots */
 
