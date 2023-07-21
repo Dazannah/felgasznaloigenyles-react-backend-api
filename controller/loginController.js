@@ -51,7 +51,7 @@ async function verifyToken(req, res, next) {
   const cookies = getCookies(req.headers.cookie)
 
   if (!cookies.jwt) {
-    return res.json("You must provide jwt in the cookie.")
+    return res.status(401).send()
   }
 
   try {
