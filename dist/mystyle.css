@@ -1,5 +1,6 @@
 html {
   font-family: Tahoma, sans-serif;
+  scroll-behavior: smooth;
 }
 
 @media (min-width: 2500px) {
@@ -377,19 +378,16 @@ input[type="datetime-local"]:focus {
 /* Sort Head */
 
 #sort-head {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
   width: 100%;
   display: flex;
   justify-content: space-evenly;
-}
-
-.sticky-div {
-  position: fixed;
-  max-width: 1300px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  top: 0;
   background: rgba(255, 255, 255, 0.5);
   transition: 500ms;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .sort-element-wrapper {
@@ -449,15 +447,21 @@ input[type="datetime-local"]:focus {
 /* Edit Table End*/
 
 /* Jump-to-top-arrow */
-#jump-to-top-arrow-div {
+.arrow {
   position: fixed;
-  bottom: 0;
-  right: 0;
+  bottom: 20px;
+  right: 20px;
+  border: solid black;
+  border-width: 0 5px 5px 0;
+  padding: 3px;
+  rotate: -135deg;
+  height: 25px;
+  width: 25px;
 }
 
-.jump-to-top-arrow-span {
-  font-size: 500%;
-  color: #000;
+.arrow:hover {
+  border: solid #e3a420;
+  border-width: 0 5px 5px 0;
 }
 
 #jump-to-top-arrow-div:hover {
@@ -481,9 +485,11 @@ input[type="datetime-local"]:focus {
 
 #pages button {
   font-size: 120%;
+  height: fit-content;
   width: 30%;
   justify-self: center;
   align-self: center;
+  text-align: center;
 }
 
 #pages span {
