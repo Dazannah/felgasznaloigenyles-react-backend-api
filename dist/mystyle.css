@@ -234,11 +234,12 @@ nav a:hover {
   margin: auto;
   width: 100%;
   border: none;
-  min-height: 8%;
+  min-height: 75px;
   outline: none;
   font-size: 100%;
   margin-bottom: 5px;
   margin-top: 3px;
+  border-radius: 5px;
 }
 
 .active,
