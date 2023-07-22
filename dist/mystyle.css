@@ -85,6 +85,7 @@ body {
   background-color: #e3a420;
   color: #000;
   box-shadow: 0 3px 3px black;
+  transition: 150ms;
 }
 
 .hidden-lable {
@@ -136,6 +137,7 @@ nav a:hover {
   background-color: #e3a420;
   color: white;
   box-shadow: 0 5px 5px black;
+  transition: 150ms;
 }
 
 .active-main-menu-btn {
@@ -244,6 +246,7 @@ nav a:hover {
 .collapsible:hover {
   background-color: #e3a420;
   box-shadow: 0 3px 3px black;
+  transition: 150ms;
 }
 
 .collapsibleContent {
@@ -329,6 +332,7 @@ input[type="datetime-local"]:focus {
   background-color: #e3a420;
   color: #fff;
   box-shadow: 0 3px 3px black;
+  transition: 150ms;
 }
 
 .form-submit-input {
@@ -345,6 +349,7 @@ input[type="datetime-local"]:focus {
   background-color: #e3a420;
   color: #fff;
   box-shadow: 0 3px 3px black;
+  transition: 150ms;
 }
 
 #progress-container button {
@@ -356,6 +361,7 @@ input[type="datetime-local"]:focus {
   cursor: pointer;
   color: black;
   box-shadow: 0 3px 3px black;
+  transition: 150ms;
 }
 
 .user-edit-button {
@@ -369,10 +375,12 @@ input[type="datetime-local"]:focus {
 
 .user-edit-button:hover {
   background-color: rgb(255, 209, 122);
+  transition: 150ms;
 }
 
 .user-delete-button:hover {
   background-color: rgb(255, 116, 116);
+  transition: 150ms;
 }
 
 /* Sort Head */
@@ -462,6 +470,7 @@ input[type="datetime-local"]:focus {
 .arrow:hover {
   border: solid #e3a420;
   border-width: 0 5px 5px 0;
+  transition: 150ms;
 }
 
 #jump-to-top-arrow-div:hover {
@@ -505,6 +514,7 @@ input[type="datetime-local"]:focus {
   justify-self: center;
   align-self: center;
   text-align: center;
+  cursor: pointer;
 }
 
 /* Turn Page Buttons  End */

@@ -12,7 +12,7 @@ const Users = function (data, type, token) {
 
 Users.prototype.getAllUser = async function () {
   try {
-    const users = await usersDB.find({}).sort({ "permission.permissionTime": -1 }).toArray()
+    const users = await usersDB.find().sort({ "personalInformations.name": 1 }).toArray()
     return users
   } catch (err) {
     return err
@@ -21,7 +21,7 @@ Users.prototype.getAllUser = async function () {
 
 Users.prototype.getAllDeletedUser = async function () {
   try {
-    const users = await deletedUsersDB.find().sort({ "personalInformations.name": -1 }).toArray()
+    const users = await deletedUsersDB.find().sort({ "personalInformations.name": 1 }).toArray()
     return users
   } catch (err) {
     return err
