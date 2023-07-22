@@ -43,9 +43,12 @@ class GetData extends Database {
 }
 
 class GetRequestsData extends Database {
-  async reUsableFind(conditions) {
+  async reUsableFind(conditions, sortBy, order) {
     try {
-      return await requestsDB.find(conditions).toArray()
+      return await requestsDB
+        .find(conditions)
+        .sort({ [sortBy]: order })
+        .toArray()
     } catch (err) {
       return err
     }
@@ -53,9 +56,13 @@ class GetRequestsData extends Database {
 
   async getAllRequestForPermission() {
     try {
-      const response = await this.reUsableFind({
-        "permission.allowed": { $nin: ["Elutasított", "Engedélyezett"] }
-      })
+      const response = await this.reUsableFind(
+        {
+          "permission.allowed": { $nin: ["Elutasított", "Engedélyezett"] }
+        },
+        "permission.permissionTime",
+        "asc"
+      )
 
       return response
     } catch (err) {
@@ -65,10 +72,14 @@ class GetRequestsData extends Database {
 
   async getAllowedTickets() {
     try {
-      const response = await this.reUsableFind({
-        "permission.allowed": "Engedélyezett",
-        isCompleted: { $nin: [true] }
-      })
+      const response = await this.reUsableFind(
+        {
+          "permission.allowed": "Engedélyezett",
+          isCompleted: { $nin: [true] }
+        },
+        "permission.permissionTime",
+        "asc"
+      )
 
       return response
     } catch (err) {
@@ -78,9 +89,13 @@ class GetRequestsData extends Database {
 
   async getCompletedTickets() {
     try {
-      const response = await this.reUsableFind({
-        $or: [{ "permission.allowed": "Elutasított" }, { isCompleted: true }]
-      })
+      const response = await this.reUsableFind(
+        {
+          $or: [{ "permission.allowed": "Elutasított" }, { isCompleted: true }]
+        },
+        "personalInformations.name",
+        "asc"
+      )
 
       return response
     } catch (err) {
