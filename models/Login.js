@@ -105,7 +105,7 @@ class Autherization {
   }
 
   getAccess(authorizationLevel) {
-    let isAuthorized = true //in prod set it false
+    let isAuthorized = false //in prod set it false
 
     this.userGroups.forEach(group => {
       authorizationLevel.forEach(auth => {
