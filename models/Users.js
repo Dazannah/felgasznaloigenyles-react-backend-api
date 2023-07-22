@@ -41,8 +41,7 @@ Users.prototype.getSingleUser = async function () {
 
 Users.prototype.searchForDeletRequest = async function () {
   try {
-    //itt nem lép bele a szaros modellbe valamiért
-    const deleteInProgress = await ticket.findDeletedRequestInProgress()
+    const deleteInProgress = await Ticket.prototype.findDeletedRequestInProgress()
     return deleteInProgress
   } catch (err) {
     return err
