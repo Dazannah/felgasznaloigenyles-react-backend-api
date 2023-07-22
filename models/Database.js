@@ -3,8 +3,6 @@ const { ObjectId } = require("mongodb")
 const database = require("../db").db("jogosultsagigenylo")
 
 const requestsDB = database.collection("requests")
-const usersDB = database.collection("users")
-const distributionDB = database.collection("distributionLists")
 
 class Database {
   constructor({ collection, _id, accessor, value, userId }) {
@@ -139,10 +137,11 @@ class Serach extends Database {
   async search() {
     const querry = this.getQuerry()
     const order = this.getOrder()
-    console.log(order)
+
     try {
       return await this.db
         .find(querry)
+        .collation({ locale: "hu" })
         .sort({ [this.accessor]: order })
         .toArray()
     } catch (err) {

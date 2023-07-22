@@ -154,7 +154,6 @@ nav a:hover {
   max-width: 1300px;
   margin: 0 auto;
   margin-bottom: 20px;
-  height: 100%;
 }
 
 #upper-fileds-wrapper {
@@ -393,7 +392,6 @@ input[type="datetime-local"]:focus {
   display: flex;
   justify-content: space-evenly;
   background: rgba(255, 255, 255, 0.5);
-  transition: 500ms;
   padding-top: 10px;
   padding-bottom: 10px;
 }
@@ -455,27 +453,43 @@ input[type="datetime-local"]:focus {
 /* Edit Table End*/
 
 /* Jump-to-top-arrow */
-.arrow {
+#jump-to-top-arrow-div {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  border: solid black;
-  border-width: 0 5px 5px 0;
-  padding: 3px;
-  rotate: -135deg;
-  height: 25px;
-  width: 25px;
-}
-
-.arrow:hover {
-  border: solid #e3a420;
-  border-width: 0 5px 5px 0;
-  transition: 150ms;
+  width: 50px;
+  height: 50px;
+  background-color: #00000025;
+  border-radius: 100%;
 }
 
 #jump-to-top-arrow-div:hover {
   cursor: pointer;
+  background-color: #e3a420;
 }
+
+.arrow {
+  position: fixed;
+  bottom: 27px;
+  right: 32.5px;
+  height: 25px;
+  width: 25px;
+  border: solid black;
+  border-width: 5px 5px 0 0;
+  rotate: -45deg;
+  box-sizing: border-box;
+}
+
+#jump-to-top-arrow-div:hover .arrow {
+  border: solid #fff;
+  border-width: 5px 5px 0 0;
+}
+
+/*.arrow:hover {
+  border: solid #fff;
+  border-width: 5px 5px 0 0;
+  transition: 150ms;
+}*/
 
 /* jump-to-top-arrow End*/
 
@@ -489,7 +503,7 @@ input[type="datetime-local"]:focus {
   grid-template-rows: 1fr 1fr;
   font-size: 120%;
   height: fit-content;
-  padding-bottom: 20px;
+  padding: 10px 0;
 }
 
 #pages button {
@@ -1042,11 +1056,11 @@ input:checked + .slider:before {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  margin: auto;
+  margin: auto 0;
 }
 
 .sortText {
-  width: 16.66666666666667%;
+  width: 100%;
 }
 
 .shorterTextField {
