@@ -98,8 +98,9 @@ class GetRequestsData extends Database {
 }
 
 class Serach extends Database {
-  constructor({ collection, accessor, value, status, userId }) {
+  constructor({ collection, accessor, value, status, userId, order }) {
     super({ collection, accessor, value, userId })
+    this.order = order
     this.status = status
   }
 
@@ -112,10 +113,23 @@ class Serach extends Database {
     return { $and: querry }
   }
 
+  getOrder() {
+    if (this.order === "desc") {
+      return -1
+    } else {
+      return 1
+    }
+  }
+
   async search() {
     const querry = this.getQuerry()
+    const order = this.getOrder()
+    console.log(order)
     try {
-      return await this.db.find(querry).toArray()
+      return await this.db
+        .find(querry)
+        .sort({ [this.accessor]: order })
+        .toArray()
     } catch (err) {
       return err
     }
