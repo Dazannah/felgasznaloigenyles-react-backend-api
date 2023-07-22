@@ -63,12 +63,12 @@ const rightColumn = [
 ]
 
 const upperFields = [
-  { id: "name", value: "Név" },
-  { id: "dbId", value: "Osztály" },
-  { id: "classLeader", value: "Osztályvezető" },
-  { id: "post", value: "Beosztás" },
-  { id: "location", value: "Munkavégzés helye" },
-  { id: "validTo", value: "Érvényesség vége" }
+  { id: "name", name: "name", value: "Név" },
+  { id: "dbId", name: "classId", value: "Osztály" },
+  { id: "classLeader", name: "classLeader", value: "Osztályvezető" },
+  { id: "post", name: "post", value: "Beosztás" },
+  { id: "location", name: "workLocation", value: "Munkavégzés helye" },
+  { id: "validTo", name: "validTo", value: "Érvényesség vége" }
 ]
 
 function getArrays(req, res) {
