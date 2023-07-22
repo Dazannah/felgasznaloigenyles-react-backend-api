@@ -31,7 +31,7 @@ function serializeUsers(legacyUsers) {
       userPermissionsMiddle: [],
       userPermissionsRight: [],
       technical: {
-        isTechnical: false,
+        isTechnical: "Nem",
         technicalTextArea: ""
       },
       status: user.status
