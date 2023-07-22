@@ -97,6 +97,8 @@ Ticket.prototype.validate = async function () {
     if (!this.data.personalInformations.workPost) this.errors.push("Beosztás megadása kötelező.")
     if (!this.data.personalInformations.workLocation) this.errors.push("Munkavégzés hely megadása kötelező.")
 
+    if (this.data.technical) this.data.technical.isTechnical = this.data.technical.isTechnical === "on" ? "Igen" : "Nem"
+
     if (this.data.process === "Új felhasználó") {
       const havePermissionSelected = this.isThereAnyPermissionChecked()
       if (!havePermissionSelected) this.errors.push("Legalább egy jogosultságot ki kell választani.")
