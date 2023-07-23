@@ -1,30 +1,28 @@
 const dotenv = require("dotenv")
 dotenv.config()
-const jwt = require("jsonwebtoken")
+
 const Cookies = require("js-cookie")
 const classesDB = require("../db").db("jogosultsagigenylo").collection("classes")
 const { Login, Autherization } = require("../models/Login")
+const Jwt = require("../models/Jwt")
 
 async function login(req, res) {
-  let login = new Login(req.body)
-  try {
-    let result = await login.login()
-    const token = jwt.sign(
-      {
-        exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
-        data: {
-          username: result.username,
-          userGroups: result.userGroups
-        }
-      },
-      process.env.JWTSECRET
-    )
+  const login = new Login(req.body)
 
-    res.cookie("jwt", token, { httpOnly: true, sameSite: true, maxAge: 1000 * 60 * 60 * 24 }) //maxAge 1 nap
-    res.json({ token })
-  } catch (err) {
+  login.cleaneUp()
+  login.validate()
+
+  if (login.errors.length > 0) {
     res.json(login.errors)
   }
+
+  const result = await login.authenticate()
+
+  const jwt = new Jwt(result)
+  const token = jwt.sign()
+
+  res.cookie("jwt", token, { httpOnly: true, sameSite: true, maxAge: 1000 * 60 * 60 * 24 }) //maxAge 1 nap
+  res.json({ token })
 }
 
 function getCookies(rawCookies) {
