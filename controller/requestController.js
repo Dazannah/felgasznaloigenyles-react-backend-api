@@ -6,7 +6,8 @@ const { Database, GetRequestsData } = require("../models/Database")
 const requestsDB = require("../db").db("jogosultsagigenylo").collection("requests")
 
 async function createNewUserTicket(req, res) {
-  const request = new Request(req.body, "Új felhasználó")
+  const type = "Új felhasználó"
+  const request = new Request(req.body, type)
   const errors = await request.validate()
 
   if (errors) {
@@ -31,11 +32,12 @@ async function getAllForPermission(req, res) {
 }
 
 async function updateTicketPermission(req, res) {
-  const type = "updatePermission"
-  const ticket = new Ticket(req.body, type)
-
   try {
-    const result = await ticket.updatePermission()
+    const type = "updatePermission"
+    const request = new Request(req.body, type)
+    request.setDataForUpdatePermission()
+    const result = await request.updatePermission()
+
     res.json(result)
   } catch (err) {
     res.json(err)

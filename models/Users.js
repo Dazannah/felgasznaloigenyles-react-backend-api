@@ -49,7 +49,7 @@ class Users {
     }
   }
 
-  async createUserDelete() {
+  /*async createUserDelete() {
     try {
       const user = await usersDB.findOne({
         _id: new ObjectID(this.id)
@@ -59,7 +59,7 @@ class Users {
     } catch (err) {
       return err
     }
-  }
+  }*/
 
   async deleteUser() {
     try {

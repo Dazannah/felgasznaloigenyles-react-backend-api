@@ -46,6 +46,7 @@ const Ticket = function (data, type) {
         createTime: require("../utils.js").getCurrentTime()
       }
     }
+
     if (type == "closeNewUserTicket") {
       this.data = data.dataToSend
       this.data.createdBy = {
@@ -59,6 +60,7 @@ const Ticket = function (data, type) {
     }
 
     if (type === "Felhasználó törlése") {
+      //
       this.data = data.user
       this.data.ticketCreation = {
         userName: data.decodedToken.data.username,
