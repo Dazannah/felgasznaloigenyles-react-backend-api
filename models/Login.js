@@ -11,9 +11,9 @@ class Login {
   }
 
   cleaneUp() {
-    if (typeof this.data.username != "string") {
-      this.data.username = ""
-    }
+    if (typeof this.data.username != "string") this.data.username = ""
+    if (typeof this.data.password != "string") this.data.username = ""
+
     this.data.username = this.data.username.trim().toLowerCase()
   }
 
@@ -28,9 +28,6 @@ class Login {
 
   login() {
     return new Promise(async (resolve, reject) => {
-      this.cleaneUp()
-      this.validate()
-
       if (this.errors.length > 0) {
         reject(this.errors)
       } else {
