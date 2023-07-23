@@ -115,34 +115,34 @@ class Serach extends Database {
     super({ collection, accessor, value, userId })
     this.order = order
     this.status = status
+    this.querry = []
   }
 
   getQuerry() {
-    const querry = []
-    if (this.value) querry.push({ [this.accessor]: { $regex: new RegExp(`${this.value}`, "i") } })
-    if (this.userId) querry.push({ userId: new ObjectId(this.userId) })
-    if (this.condition) querry.push(this.condition)
+    if (this.value) this.querry.push({ [this.accessor]: { $regex: new RegExp(`${this.value}`, "i") } })
+    if (this.userId) this.querry.push({ userId: new ObjectId(this.userId) })
+    if (this.condition) this.querry.push(this.condition)
 
-    return { $and: querry }
+    //return { $and: querry }
   }
 
   getOrder() {
     if (this.order === "desc") {
-      return -1
+      this.order = -1
     } else {
-      return 1
+      this.order = 1
     }
   }
 
   async search() {
-    const querry = this.getQuerry()
-    const order = this.getOrder()
+    this.getQuerry()
+    this.getOrder()
 
     try {
       return await this.db
-        .find(querry)
+        .find({ $and: this.querry })
         .collation({ locale: "hu" })
-        .sort({ [this.accessor]: order })
+        .sort({ [this.accessor]: this.order })
         .toArray()
     } catch (err) {
       return err
