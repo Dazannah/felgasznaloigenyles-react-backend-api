@@ -1,10 +1,10 @@
 const dotenv = require("dotenv")
 dotenv.config()
 
-const Cookies = require("js-cookie")
 const classesDB = require("../db").db("jogosultsagigenylo").collection("classes")
 const { Login, Autherization } = require("../models/Login")
 const Jwt = require("../models/Jwt")
+const Cookies = require("../models/Cookies")
 
 async function login(req, res) {
   const login = new Login(req.body)
@@ -46,21 +46,23 @@ function getCookies(rawCookies) {
 }
 
 async function verifyToken(req, res, next) {
-  const cookies = getCookies(req.headers.cookie)
-
-  if (!cookies.jwt) {
-    return res.status(401).send()
-  }
-
   try {
-    const decodedToken = await jwt.verify(cookies.jwt, process.env.JWTSECRET)
+    const cookies = new Cookies(req.headers.cookie)
+    const cookieObj = cookies.getCookieObj()
+
+    if (!cookieObj.jwt) {
+      return res.status(401).send()
+    }
+
+    const jwt = new Jwt(cookieObj)
+    const decodedToken = jwt.validate()
     req.body.decodedToken = decodedToken
     next()
   } catch (err) {
     if (err.name == "TokenExpiredError") {
       res.json({ tokenExpired: true })
     } else {
-      res.json(err)
+      next(err)
     }
   }
 }
