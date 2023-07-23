@@ -5,14 +5,25 @@ const usersDB = require("../db").db("jogosultsagigenylo").collection("users")
 
 class Request {
   constructor(data, process) {
-    this.process = process
-    this.data = data.dataToSend
-    this.data.ticketCreation = {
-      userName: data.decodedToken.data.username,
-      createTime: require("../utils.js").getCurrentTime()
+    if (process == "Új felhasználó" || process == "Felhasználó módosítása") {
+      this.data = data.dataToSend
+      this.data.ticketCreation = {
+        userName: data.decodedToken.data.username,
+        createTime: require("../utils.js").getCurrentTime()
+      }
+      this.data.personalInformations.classId = new ObjectID(data.dataToSend.personalInformations.classId)
     }
-    this.data.personalInformations.classId = new ObjectID(data.dataToSend.personalInformations.classId)
 
+    if (process == "updatePermission") {
+      this.data = data.dataToSend
+      this.data.userNames = data.dataToSend.userNames
+      this.data.authorizedBy = {
+        userName: data.decodedToken.data.username,
+        createTime: require("../utils.js").getCurrentTime()
+      }
+    }
+
+    this.process = process
     this.errors = []
   }
 
@@ -142,6 +153,35 @@ class Request {
       return await requestsDB.insertOne(this.data)
     } catch (err) {
       return err
+    }
+  }
+
+  async updatePermission() {
+    try {
+      const result = await requestsDB.findOneAndUpdate(
+        {
+          _id: new ObjectID(this.data.ticketId)
+        },
+        {
+          $set: this.dataToSave
+        }
+      )
+      return result
+    } catch (err) {
+      return err
+    }
+  }
+
+  setDataForUpdatePermission() {
+    this.dataToSave = {
+      userNames: this.data.userNames,
+      permission: {
+        allowed: this.data.permission,
+        permissionNote: this.data.notes,
+        permissionTime: this.data.authorizedBy.createTime,
+        authorizedBy: this.data.authorizedBy.userName
+      },
+      ...(this.data.permission === "Elutasított" ? { completed: { createTime: this.data.authorizedBy.createTime } } : {})
     }
   }
 }
