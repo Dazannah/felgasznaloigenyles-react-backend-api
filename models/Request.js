@@ -28,13 +28,13 @@ class Request {
 
       if (this.process === "Új felhasználó") {
         const havePermissionSelected = this.isThereAnyPermissionChecked()
-        console.log(havePermissionSelected)
         if (!havePermissionSelected) this.errors.push("Legalább egy jogosultságot ki kell választani.")
       }
 
       if (this.process === "Felhasználó módosítása") {
         const isEditInProgress = await this.findEditRequestInProgress()
         const isDeletInProgress = await this.findDeletedRequestInProgress()
+
         if (isEditInProgress) {
           this.errors.push("A felhasználónak van folyamatban lévő módosítási igénye.")
         } else if (isDeletInProgress) {
@@ -73,20 +73,14 @@ class Request {
       if (permission.value === true) isItOkToSave = true
     })
 
-    if (isItOkToSave) {
-      return true
-    } else {
-      return false
-    }
+    return isItOkToSave
   }
 
   async findEditRequestInProgress() {
     try {
-      const editInProgress = await requestsDB.findOne({
+      return await requestsDB.findOne({
         $and: [{ userId: new ObjectID(this.data.userId) }, { process: "Felhasználó módosítása" }, { isCompleted: { $nin: [true] } }, { "permission.allowed": { $nin: ["Elutasított"] } }]
       })
-
-      return editInProgress
     } catch (err) {
       return err
     }
@@ -94,10 +88,9 @@ class Request {
 
   async findDeletedRequestInProgress() {
     try {
-      const deletInProgress = await requestsDB.findOne({
+      return await requestsDB.findOne({
         $and: [{ userId: new ObjectID(this.data.userId) }, { process: "Felhasználó törlése" }, { isCompleted: { $nin: [true] } }]
       })
-      return deletInProgress
     } catch (err) {
       return err
     }
@@ -146,8 +139,7 @@ class Request {
 
   async createNewUserTicket() {
     try {
-      const result = await requestsDB.insertOne(this.data)
-      return result
+      return await requestsDB.insertOne(this.data)
     } catch (err) {
       return err
     }
