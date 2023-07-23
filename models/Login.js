@@ -5,96 +5,62 @@ dotenv.config()
 
 class Login {
   constructor(data) {
-    this.data = data
+    this.usernameWithDomain = data.username + process.env.DOMAIN
+    this.username = data.username
+    this.password = data.password
+
     this.errors = []
     this.userGroups = [""]
   }
 
   cleaneUp() {
-    if (typeof this.data.username != "string") this.data.username = ""
-    if (typeof this.data.password != "string") this.data.username = ""
+    if (typeof this.username != "string") this.username = ""
+    if (typeof this.password != "string") this.username = ""
 
-    this.data.username = this.data.username.trim().toLowerCase()
+    this.username = this.username.trim().toLowerCase()
   }
 
   validate() {
-    if (this.data.username == "" || this.data.username == null) {
+    if (this.username == "" || this.username == null) {
       this.errors.push("Felhasználónév megadása kötelező.")
     }
-    if (this.data.password == "" || this.data.password == null) {
+    if (this.password == "" || this.password == null) {
       this.errors.push("Jelszó megadása kötelező.")
     }
   }
 
-  login() {
-    return new Promise(async (resolve, reject) => {
-      if (this.errors.length > 0) {
-        reject(this.errors)
-      } else {
-        try {
-          const result = await this.authenticate()
-          resolve(result)
-        } catch (err) {
-          reject(this.errors)
-        }
+  async authenticate() {
+    try {
+      let ldapConfig = {
+        url: process.env.LDAPURL,
+        baseDN: process.env.BASEDN,
+        username: this.usernameWithDomain,
+        password: this.password
       }
-    })
-  }
 
-  authenticate() {
-    let usernameWithDomain = this.data.username + process.env.DOMAIN
-    let username = this.data.username
-    let password = this.data.password
-    let errors = this.errors
-    let userGroups = this.userGroups
+      const ad = new ActiveDirectory(ldapConfig)
 
-    let ldapConfig = {
-      url: process.env.LDAPURL,
-      baseDN: process.env.BASEDN,
-      username: usernameWithDomain,
-      password
-    }
-
-    const ad = new ActiveDirectory(ldapConfig)
-
-    /*let opts = {
-      bindDN: usernameWithDomain,
-      bindCredentials: password
-    }*/
-
-    return new Promise(async (resolve, reject) => {
-      let runCount = 0
-
-      ad.getGroupMembershipForUser(usernameWithDomain, (err, groups) => {
-        if (err) {
-          const errorMessage = JSON.stringify(err)
-          const errorMessageObject = JSON.parse(errorMessage)
-
-          if (errorMessageObject.lde_dn === null && runCount > 0) errors.push("Hibás flehasználónév/jelszó.")
-          if (errorMessageObject.code === "ENOTFOUND") errors.push("A hitelesítő szerver nem elérhető.")
-          runCount++
-
-          reject(new Error(errors))
-        } else if (!groups) {
-          errors.push("Nincs jogosultságod az alkalmazás használatához.")
-          reject(new Error(errors))
-        } else {
+      return new Promise((resolve, reject) => {
+        ad.getGroupMembershipForUser(this.usernameWithDomain, (err, groups) => {
+          if (err) reject(err)
           groups.forEach(element => {
             if (element.cn == "Tartományfelhasználók") {
-              userGroups[0] = element.cn
+              this.userGroups[0] = element.cn
             } //kérelmezők AD csoport neve
             if (element.cn == "JogosultsagigenyEngedelyezok") {
-              userGroups[1] = element.cn
+              this.userGroups[1] = element.cn
             } //engedélyezők AD csoport neve
             if (element.cn == "JogosultsagigenyAdminisztrator") {
-              userGroups[2] = element.cn
+              this.userGroups[2] = element.cn
             } //létrehozók AD csoport neve
           })
 
-          resolve({ username: username, userGroups: userGroups })
-        }
+          resolve({ username: this.username, userGroups: this.userGroups })
+        })
       })
-    })
+    } catch (err) {
+      throw err
+    }
   }
 }
 
