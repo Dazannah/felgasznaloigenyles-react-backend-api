@@ -19,7 +19,6 @@ async function getRequests() {
 }
 
 async function serializeRequests(requests) {
-  //töröltnél mindent kipipált, és nem emelte át a userNames-t
   const serialiezdRequetsValue = requests.map(request => {
     const requestKeys = Object.keys(request)
 
@@ -58,7 +57,7 @@ async function serializeRequests(requests) {
       },
       completed: {
         userName: request.doneBy,
-        createTime: request.completionTime
+        createTime: request.permission.permission === "Elutasított" ? request.permission.permissionTime : request.completionTime
       },
       isCompleted: request.completion == "Kész" ? true : false,
       userId: request.userID,
