@@ -1,18 +1,19 @@
 const ObjectId = require("mongodb").ObjectId
 const Ticket = require("../models/Ticket")
+const Request = require("../models/Request")
 const { Database, GetRequestsData } = require("../models/Database")
 
 const requestsDB = require("../db").db("jogosultsagigenylo").collection("requests")
 
 async function createNewUserTicket(req, res) {
-  const ticket = new Ticket(req.body, req.body.process)
-  const errors = await ticket.validate()
+  const request = new Request(req.body, "Új felhasználó")
+  const errors = await request.validate()
 
   if (errors) {
     res.json({ errors: errors })
   } else {
     try {
-      const result = await ticket.createNewUserTicket()
+      const result = await request.createNewUserTicket()
       res.json(result)
     } catch (err) {
       res.json(err)
