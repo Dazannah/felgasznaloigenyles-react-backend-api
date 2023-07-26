@@ -1,24 +1,23 @@
 const { MongoClient } = require("mongodb")
 
-const client = new MongoClient("mongodb://root:root@localhost:27017/")
+const client = new MongoClient("mongodb://127.0.0.1:27017")
 const arrays = require("../arrays")
 
-const dbFrom = client.db("korhaz-live-copy")
+const dbFrom = client.db("copy")
 const dbTo = client.db("jogosultsagigenylo")
 
 const requestsFrom = dbFrom.collection("requests")
 const requestsTo = dbTo.collection("requests")
 
 async function getRequests() {
-  try {
+
     const result = await requestsFrom.find().toArray()
     return result
-  } catch (err) {
-    return err
-  }
+
 }
 
 async function serializeRequests(requests) {
+
   const serialiezdRequetsValue = requests.map(request => {
     const requestKeys = Object.keys(request)
 
@@ -38,7 +37,7 @@ async function serializeRequests(requests) {
       userPermissionsLeft: [],
       userPermissionsMiddle: [],
       userPermissionsRight: [],
-      createTextArea: request.request,
+      createTextArea: request.otherTextArea,
 
       technical: {
         isTechnical: false,
