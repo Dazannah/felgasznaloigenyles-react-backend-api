@@ -12,8 +12,6 @@ const cors = require("cors")
 
 router.use(cors())
 
-router.get("/excel", excelController.getUserExcel)
-
 router.post("/login", loginController.login)
 router.post("/get-data", utils.getStartData)
 
@@ -47,5 +45,8 @@ router.post("/user/:id/delete", /*loginController.applicants,*/ userController.r
 router.get("/user/:id/edit", /*loginController.applicants,*/ userController.requestEditUser)
 router.post("/user/:id/edit", /*loginController.applicants,*/ requestController.saveEditRequest)
 router.get("/user/:id/requests", requestController.getRequestsForUser)
+
+//excell
+router.get("/excel-get-all-user", excelController.getUserExcel)
 
 module.exports = router
