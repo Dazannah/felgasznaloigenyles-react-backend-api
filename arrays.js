@@ -64,10 +64,12 @@ const rightColumn = [
 
 const upperFields = [
   { id: "name", name: "name", value: "Név" },
+  { value: "Technikai fiók" },
   { id: "dbId", name: "classId", value: "Osztály" },
   { id: "classLeader", name: "classLeader", value: "Osztályvezető" },
   { id: "post", name: "post", value: "Beosztás" },
   { id: "location", name: "workLocation", value: "Munkavégzés helye" },
+  { value: "Érvényesség kezdete" },
   { id: "validTo", name: "validTo", value: "Érvényesség vége" }
 ]
 

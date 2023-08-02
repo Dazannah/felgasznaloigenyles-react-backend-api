@@ -5,11 +5,14 @@ const requestController = require("./controller/requestController")
 const userController = require("./controller/userController")
 const distributionListController = require("./controller/distributionListController")
 const searchController = require("./controller/searchController")
+const excelController = require("./controller/excelController")
 const { verifyToken } = require("./controller/loginController")
 const utils = require("./utils")
 const cors = require("cors")
 
 router.use(cors())
+
+router.get("/excel", excelController.getUserExcel)
 
 router.post("/login", loginController.login)
 router.post("/get-data", utils.getStartData)
