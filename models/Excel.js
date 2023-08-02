@@ -61,14 +61,17 @@ class GetAllUserExcel extends Excel{
         })
     }
 
-    /*addDataToExcel(){
+    addDataToExcel(){
         this.activeUsers.forEach((user, index)=>{
-
-            this.activeWs.cell(2, index + 1).string(name)
+            this.activeWs.cell(index + 2, 1).number(index + 1)
+            console.log(user)
+            /*element.forEach((field, fieldIndex)=>{
+                this.activeWs.cell(index + 1, index + 1).string(name)
+            })*/
         })
         //this.deletedUsers
         //this.activeWs.cell(1, index + 1).string(name)
-    }*/
+    }
 
 
 

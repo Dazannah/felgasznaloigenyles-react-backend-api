@@ -5,6 +5,7 @@ async function getUserExcel(req, res, next){
         const getAllUserExcel = new GetAllUserExcel(res)
         await getAllUserExcel.getDataForExcel()
         await getAllUserExcel.addHeaderToExCell()
+        getAllUserExcel.addDataToExcel()
         await getAllUserExcel.sendExcel()
 
         //res.status(200).json("ok")
