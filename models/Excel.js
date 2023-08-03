@@ -34,22 +34,26 @@ class GetAllUserExcel extends Excel{
 
         arrays.upperFields.forEach(element =>{
             headerNames.push(element.value)
-            this.headers.push(element.id)
+            if(element.id === "isTechnical"){
+                this.headers.push({name: element.id, route: "technical", subRoute: "isTechnical"})
+            }else{
+                this.headers.push({name: element.id, route: `personalInformations`, subRoute: `${element.subRoute}`})
+            }
         })
 
         arrays.leftColumn.forEach(element =>{
             headerNames.push(element.value)
-            this.headers.push(element.id)
+            this.headers.push({name: element.id, route: `userNames`, subRoute: `${element.id}`})
         })
 
-        arrays.middleColumn.forEach(element =>{
+        arrays.middleColumn.forEach((element, index) =>{
             headerNames.push(element.value)
-            this.headers.push(element.id)
+            this.headers.push({name: element.id, route: `userPermissionsMiddle`, subRoute: index})
         })
 
-        arrays.rightColumn.forEach(element =>{
+        arrays.rightColumn.forEach((element, index) =>{
             headerNames.push(element.value)
-            this.headers.push(element.id)
+            this.headers.push({name: element.id, route: `userPermissionsRight`, subRoute: index})
         })
 
         headerNames.forEach((name, index) =>{
@@ -62,21 +66,41 @@ class GetAllUserExcel extends Excel{
     }
 
     addDataToExcel(){
-        this.activeUsers.forEach((user, index)=>{
-            this.activeWs.cell(index + 2, 1).number(index + 1)
-            console.log(user)
-            /*element.forEach((field, fieldIndex)=>{
-                this.activeWs.cell(index + 1, index + 1).string(name)
-            })*/
+        this.helperGenerate(this.activeUsers, this.activeWs)
+        this.helperGenerate(this.deletedUsers, this.deletedWs)
+    }
+
+    helperGenerate(usersArray, workSheet){
+        usersArray.forEach((user, index)=>{
+            workSheet.cell(index + 2, 1).number(index + 1)
+
+            this.headers.forEach((element, elementIndex) =>{
+                let value
+                if(!user[element.route][element.subRoute]){
+                    if(element.subRoute === "isTechnical"){
+                        let technicalTmp = "Nem"
+                        if(user[element.route][element.subRoute]) tmp = "Igen"
+                        value = technicalTmp
+                    }else{
+                        value = ""
+                    }
+                }else{
+                    if(Number.isInteger(element.subRoute)){
+                        let tmp = "Nem"
+                        if(user[element.route][element.subRoute].value) tmp = "Igen"
+                        value = tmp
+                    }else{
+                        value = user[element.route][element.subRoute]
+                    }
+                }
+                workSheet.cell(index + 2, elementIndex + 2).string(value)
+            })
         })
-        //this.deletedUsers
-        //this.activeWs.cell(1, index + 1).string(name)
     }
 
 
-
     async sendExcel(){
-        this.wb.write('ExcelFile.xlsx', this.res)
+        this.wb.write('Felhasználók.xlsx', this.res)
     }
 }
 
