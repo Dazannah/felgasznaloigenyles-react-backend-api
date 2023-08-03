@@ -67,8 +67,8 @@ const upperFields = [
   {id: "isTechnical", value: "Technikai fiók" },
   { id: "dbId", name: "classId", value: "Osztály", subRoute: "className"  },
   { id: "classLeader", name: "classLeader", value: "Osztályvezető", subRoute: "classLeader"  },
-  { id: "post", name: "post", value: "Beosztás", subRoute: "workLocation"  },
-  { id: "location", name: "workLocation", value: "Munkavégzés helye" },
+  { id: "post", name: "post", value: "Beosztás", subRoute: "workPost"  },
+  { id: "location", name: "workLocation", value: "Munkavégzés helye", subRoute: "workLocation" },
   {  id: "validFrom", value: "Érvényesség kezdete", subRoute: "validFrom"  },
   { id: "validTo", name: "validTo", value: "Érvényesség vége", subRoute: "validTo" }
 ]

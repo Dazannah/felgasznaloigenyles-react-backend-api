@@ -38,6 +38,15 @@ class GetData extends Database {
       throw new Error(err)
     }
   }
+
+  async getAllFromCollectionDescByName() {
+    try {
+      return await this.db.find().sort({ "personalInformations.name" : 1 }).toArray()
+    } catch (err) {
+      console.log(err)
+      throw new Error(err)
+    }
+  }
 }
 
 class GetRequestsData extends Database {

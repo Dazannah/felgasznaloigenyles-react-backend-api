@@ -25,8 +25,8 @@ class GetAllUserExcel extends Excel{
         const getActiveUsers = new GetData({collection: "users"})
         const getDeletedUsers = new GetData({collection: "deletedUsers"})
 
-        this.activeUsers = await getActiveUsers.getAllFromCollection()
-        this.deletedUsers = await getDeletedUsers.getAllFromCollection()
+        this.activeUsers = await getActiveUsers.getAllFromCollectionDescByName()
+        this.deletedUsers = await getDeletedUsers.getAllFromCollectionDescByName()
     }
 
     async addHeaderToExCell(){
@@ -78,7 +78,7 @@ class GetAllUserExcel extends Excel{
                 let value
                 if(!user[element.route][element.subRoute]){
                     if(element.subRoute === "isTechnical"){
-                        let technicalTmp = "Nem"
+                        let technicalTmp = ""
                         if(user[element.route][element.subRoute]) tmp = "Igen"
                         value = technicalTmp
                     }else{
@@ -86,7 +86,7 @@ class GetAllUserExcel extends Excel{
                     }
                 }else{
                     if(Number.isInteger(element.subRoute)){
-                        let tmp = "Nem"
+                        let tmp = ""
                         if(user[element.route][element.subRoute].value) tmp = "Igen"
                         value = tmp
                     }else{
