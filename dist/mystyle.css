@@ -588,6 +588,7 @@ input[type="datetime-local"]:focus {
 /* Toggle Switch */
 
 #toggle-switch-div {
+  float: left;
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   grid-template-rows: 1fr 2fr;
@@ -1068,4 +1069,12 @@ input:checked + .slider:before {
   display: block;
   width: 30%;
   line-break: normal;
+}
+
+#download-user-div{
+  float: right;
+}
+
+#download-user-div button{
+  height: 25px;
 }
