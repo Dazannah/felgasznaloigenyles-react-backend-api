@@ -100,7 +100,11 @@ class GetAllUserExcel extends Excel{
 
 
     async sendExcel(){
-        this.wb.write('Felhasználók.xlsx', this.res)
+        const date = new Date()
+        const splitDate = date.toString().split(" ")
+        const dateToFileName = `${splitDate[1]}_${splitDate[2]}_${splitDate[4]}`
+
+        this.wb.write(`Felhasználók_${dateToFileName}.xlsx`, this.res)
     }
 }
 
