@@ -412,8 +412,6 @@ Ticket.prototype.saveUpdatedRequest = async function () {
       }
     }
   )
-  console.log(this.data.dataToSend.ticketId)
-  console.log(this.data.userNames)
 }
 
 module.exports = Ticket
