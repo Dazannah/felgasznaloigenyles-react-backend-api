@@ -113,6 +113,18 @@ async function closeEditUserRequest(req, res) {
   }
 }
 
+async function updateRequest(req, res){
+  const type = "updateRequest"
+  const ticket = new Ticket(req.body, type)
+
+  try {
+    const response = await ticket.saveUpdatedRequest()
+    res.json(response)
+  } catch (err) {
+    res.json(err)
+  }
+}
+
 async function getRequestsForUser(req, res) {
   try {
     const userRequests = await requestsDB
@@ -136,5 +148,6 @@ module.exports = {
   closeDeleteUserRequest,
   saveEditRequest,
   closeEditUserRequest,
-  getRequestsForUser
+  getRequestsForUser,
+  updateRequest
 }

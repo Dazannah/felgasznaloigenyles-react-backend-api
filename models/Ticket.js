@@ -83,6 +83,11 @@ const Ticket = function (data, type) {
         createTime: require("../utils.js").getCurrentTime()
       }
     }
+
+    if(type === "updateRequest"){
+      this.data = data
+    }
+
     this.data.process = type
     this.errors = []
   } catch (err) {
@@ -395,6 +400,20 @@ Ticket.prototype.updateUser = async function () {
   } catch (err) {
     return err
   }
+  
+}
+
+Ticket.prototype.saveUpdatedRequest = async function () {
+  await requestsDB.findOneAndUpdate(
+    { _id: new ObjectID(this.data.dataToSend.ticketId) },
+    {
+      $set: {
+        userNames: this.data.userNames
+      }
+    }
+  )
+  console.log(this.data.dataToSend.ticketId)
+  console.log(this.data.userNames)
 }
 
 module.exports = Ticket

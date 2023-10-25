@@ -38,6 +38,7 @@ class Request {
       if (this.data.technical) this.data.technical.isTechnical = this.data.technical.isTechnical === "on" ? "Igen" : "Nem"
 
       if (this.process === "Új felhasználó") {
+        this.data.process = "Új felhasználó"
         const havePermissionSelected = this.isThereAnyPermissionChecked()
         if (!havePermissionSelected) this.errors.push("Legalább egy jogosultságot ki kell választani.")
       }

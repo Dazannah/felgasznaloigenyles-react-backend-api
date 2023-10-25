@@ -30,6 +30,8 @@ router.post("/close-new-user-ticket", loginController.administrators, requestCon
 router.post("/close-delete-user-request", loginController.administrators, requestController.closeDeleteUserRequest)
 router.post("/close-edit-user-request", loginController.administrators, requestController.closeEditUserRequest)
 
+router.post("/update-user-request",  loginController.administrators, requestController.updateRequest)
+
 //distributin lists
 router.get("/get-distribution-lists", /* loginController.applicants,*/ distributionListController.getDistributionLists)
 router.post("/create-new-distribution-list", /*loginController.applicants,*/ distributionListController.createNewDistributionList)
