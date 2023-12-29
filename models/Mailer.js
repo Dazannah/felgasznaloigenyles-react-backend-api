@@ -27,6 +27,20 @@ class Mailer{
 
           return result
     }
+
+    parseEmail(json){
+      const subject = `Jogosultság igénylő ${json.length} új esemény`
+      let plainText = ""
+      let htmlText = ""
+
+      json.forEach(email => {
+        plainText += `Név: ${email.name} Folyamat: ${email.process} Osztály: ${email.class} Kérelmező: ${email.requestedBy}
+        `
+        htmlText += `Név: ${email.name} Folyamat: ${email.process} Osztály: ${email.class} Kérelmező: ${email.requestedBy}<br>`
+      })
+
+      return {subject, plainText, htmlText}
+    }
 }
 
 module.exports = Mailer

@@ -17,14 +17,14 @@ async function createNewUserTicket(req, res) {
   } else {
     try {
       const result = await request.createNewUserTicket()
-      const asd = {
+      const data = {
         "name": req.body.dataToSend.personalInformations.name,
         "class": req.body.dataToSend.personalInformations.className,
         "process": type,
         "requestedBy": req.body.decodedToken.data.username,
       }
-      
-      await jsonHandler.addEmail(asd)
+
+      await jsonHandler.addEmail(data)
 
       res.json(result)
     } catch (err) {

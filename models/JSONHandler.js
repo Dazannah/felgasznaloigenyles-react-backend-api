@@ -1,7 +1,20 @@
-const { writeFile, readFile } = require('fs');
+const { writeFile, readFile } = require('fs')
+const dotenv = require("dotenv")
+dotenv.config()
+
+const Mailer = require("./Mailer")
 
 class JSONHandler{
     path = './mails.json'
+
+    constructor(){
+        this.mailer = new Mailer(process.env.EMAILUSER,
+            process.env.EMAILPASSWORD,
+            process.env.SMTP,
+            process.env.SMTPPORT,
+            true,
+            process.env.EMALTOSEND)
+    }
 
     async write(dataToWrite){
         writeFile(this.path, JSON.stringify(dataToWrite, null, 2), (error) => {
@@ -31,8 +44,9 @@ class JSONHandler{
     async sendEmailIfAny(){
         await this.read(async json =>{
             if(json.length > 0){
-                console.log("Parse e-mails")
-                await this.write([])
+                const {subject, palinText, htmlText} = this.mailer.parseEmail(json)
+                this.mailer.sendMail(subject,palinText,htmlText,process.env.EMALTOSEND)
+                //await this.write([])
             }
         })
     }
