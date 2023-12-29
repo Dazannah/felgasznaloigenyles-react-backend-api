@@ -8,7 +8,6 @@ const requestsDB = require("../db").db("jogosultsagigenylo").collection("request
 const jsonHandler = new JSONHandler()
 
 async function createNewUserTicket(req, res) {
-  console.log("asd")
   const type = "Új felhasználó"
   const request = new Request(req.body, type)
   const errors = await request.validate()
@@ -17,20 +16,19 @@ async function createNewUserTicket(req, res) {
     res.json({ errors: errors })
   } else {
     try {
-      console.log("asd2")
       const result = await request.createNewUserTicket()
       const asd = {
-        name: req.body.personalInformations.name,
-        class: req.body.personalInformations.class,
-        typeName: type,
-        type : "new"
-
+        "name": req.body.dataToSend.personalInformations.name,
+        "class": req.body.dataToSend.personalInformations.className,
+        "process": type,
+        "requestedBy": req.body.decodedToken.data.username,
       }
-
-      console.log(asd)
+      
       await jsonHandler.addEmail(asd)
+
       res.json(result)
     } catch (err) {
+      console.log(err)
       res.json(err)
     }
   }

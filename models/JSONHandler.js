@@ -1,7 +1,7 @@
 const { writeFile, readFile } = require('fs');
 
 class JSONHandler{
-    path = '../mails.json'
+    path = './mails.json'
 
     async write(dataToWrite){
         writeFile(this.path, JSON.stringify(dataToWrite, null, 2), (error) => {
@@ -38,12 +38,11 @@ class JSONHandler{
     }
 
     async addEmail(email){
-        await this.read(async json =>{
+        return await this.read(async json =>{
             json.push(email)
             await this.write(json)
         })
     }
-
 }
 
 module.exports = JSONHandler
