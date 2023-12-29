@@ -2,10 +2,13 @@ const ObjectId = require("mongodb").ObjectId
 const Ticket = require("../models/Ticket")
 const Request = require("../models/Request")
 const { Database, GetRequestsData } = require("../models/Database")
+const JSONHandler = require("../models/JSONHandler.js")
 
 const requestsDB = require("../db").db("jogosultsagigenylo").collection("requests")
+const jsonHandler = new JSONHandler()
 
 async function createNewUserTicket(req, res) {
+  console.log("asd")
   const type = "Új felhasználó"
   const request = new Request(req.body, type)
   const errors = await request.validate()
@@ -14,7 +17,18 @@ async function createNewUserTicket(req, res) {
     res.json({ errors: errors })
   } else {
     try {
+      console.log("asd2")
       const result = await request.createNewUserTicket()
+      const asd = {
+        name: req.body.personalInformations.name,
+        class: req.body.personalInformations.class,
+        typeName: type,
+        type : "new"
+
+      }
+
+      console.log(asd)
+      await jsonHandler.addEmail(asd)
       res.json(result)
     } catch (err) {
       res.json(err)
