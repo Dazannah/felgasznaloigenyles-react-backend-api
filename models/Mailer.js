@@ -31,6 +31,7 @@ class Mailer{
     parseEmail(json, process){
       const subject = `[${process}] ${json.length}db` // [ÚJ ÍGÉNY] emaila.length db , 5db Engedélyezett/Elkészült ígény külön e-mailban
       let plainText = ""
+
       let htmlText = `<table style="border: 1px solid black;">
                         <tr>
                           <th style="border: 1px solid black;">Név</th>
@@ -39,9 +40,11 @@ class Mailer{
                           <th style="border: 1px solid black;">Kérelmező</th>
                         </tr>`
 
+
       json.forEach(email => {
         plainText += `Név: ${email.name} Folyamat: ${email.process} Osztály: ${email.class} Kérelmező: ${email.requestedBy}
         `
+
         htmlText += `<tr><td style="border: 1px solid black;">${email.name}</td> <td style="border: 1px solid black;">${email.process}</td> <td style="border: 1px solid black;">${email.class}</td> <td style="border: 1px solid black;">${email.requestedBy}</td></tr>`
       })
 
