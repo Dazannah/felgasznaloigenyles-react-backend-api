@@ -1,8 +1,11 @@
 const dotenv = require("dotenv")
 dotenv.config() //dotenv enviroment variable, a .env fileba mentjük le a mongodb connection stringet, ami a CONNECTIONSTRING ben tároltunk le
 const { MongoClient } = require("mongodb")
+const JSONHandler = require("./models/JSONHandler")
 
 const client = new MongoClient(process.env.CONNECTIONSTRING)
+const jsonHandler = new JSONHandler()
+
 let db
 
 async function start() {
@@ -10,8 +13,16 @@ async function start() {
   db = client.db("jogosultsagigenylo")
   module.exports = client
   const app = require("./index")
+  watchMailsJson()
   app.listen(process.env.PORT) //enviroment variable PORT-ban a 3000
 }
 start()
+
+function watchMailsJson(){
+  setTimeout(async ()=>{
+    jsonHandler.sendEmailIfAny()
+    watchMailsJson()
+}, 1000 * 60 * 5)
+}
 
 module.exports = db
