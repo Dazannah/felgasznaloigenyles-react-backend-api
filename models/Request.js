@@ -1,4 +1,6 @@
 const ObjectID = require("mongodb").ObjectId
+const JSONHandler = require("./JSONHandler.js")
+const jsonHandler = new JSONHandler()
 
 const requestsDB = require("../db").db("jogosultsagigenylo").collection("requests")
 const usersDB = require("../db").db("jogosultsagigenylo").collection("users")

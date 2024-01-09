@@ -267,7 +267,7 @@ Ticket.prototype.createUser = async function () {
 Ticket.prototype.findDeletedRequestInProgress = async function () {
   try {
     const deletInProgress = await requestsDB.findOne({
-      $and: [{ userId: new ObjectID(this.data.userId) }, { process: "Felhasználó törlése" }, { isCompleted: { $nin: [true] } }]
+      $and: [{ userId: new ObjectID(this.data.userId) }, { process: "Felhasználó törlése" }, { isCompleted: { $nin: [true] } }, { "permission.allowed": { $nin: ["Elutasított"] } }]
     })
     return deletInProgress
   } catch (err) {
@@ -314,7 +314,7 @@ Ticket.prototype.closeDeleteUserRequest = async function () {
             }
           }
         )
-        return "Felhasználó törlése sikeres"
+        return {message: "Felhasználó törlése sikeres", closeTicket}
       } catch (err) {
         return err
       }
@@ -386,7 +386,7 @@ Ticket.prototype.updateUser = async function () {
       }
     )
 
-    await requestsDB.findOneAndUpdate(
+    const savedResponse = await requestsDB.findOneAndUpdate(
       { _id: new ObjectID(this.data.ticketId) },
       {
         $set: {
@@ -396,7 +396,7 @@ Ticket.prototype.updateUser = async function () {
       }
     )
 
-    return "Módosítás sikeresen mentve."
+    return {response: "Módosítás sikeresen mentve.", savedResponse}
   } catch (err) {
     return err
   }
