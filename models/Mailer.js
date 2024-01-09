@@ -28,8 +28,8 @@ class Mailer{
           return result
     }
 
-    parseEmail(json){
-      const subject = `Jogosultság igénylő ${json.length} új esemény`
+    parseEmail(json, process){
+      const subject = `[${process}] ${json.length}db` // [ÚJ ÍGÉNY] emaila.length db , 5db Engedélyezett/Elkészült ígény külön e-mailban
       let plainText = ""
       let htmlText = ""
 

@@ -13,16 +13,16 @@ async function start() {
   db = client.db("jogosultsagigenylo")
   module.exports = client
   const app = require("./index")
-  startWatchMailsJson()
+  watchMailsJson()
   app.listen(process.env.PORT) //enviroment variable PORT-ban a 3000
 }
 start()
 
-function startWatchMailsJson(){
+function watchMailsJson(){
   setTimeout(async ()=>{
     jsonHandler.sendEmailIfAny()
-    startWatchMailsJson()
-}, 2000)
+    watchMailsJson()
+}, 1000 * 60 * 5)
 }
 
 module.exports = db

@@ -1,5 +1,8 @@
 const Users = require("../models/Users")
 const Ticket = require("../models/Ticket")
+const JSONHandler = require("../models/JSONHandler.js")
+
+const jsonHandler = new JSONHandler()
 
 async function listUsers(req, res) {
   try {
@@ -36,6 +39,15 @@ async function requestDeleteUser(req, res) {
 
       const ticket = new Ticket({ user: userWholeData, decodedToken: req.body.decodedToken }, "Felhasználó törlése")
       const response = await ticket.createDeleteTicket()
+
+      const data = {
+        "name": userWholeData.personalInformations.name,
+        "class": userWholeData.personalInformations.className,
+        "process": userWholeData.process,
+        "requestedBy": userWholeData.ticketCreation.userName,
+      }
+      await jsonHandler.addEmail( "./json/ujigeny.json", data)
+
       res.json(response)
     }
   } catch (err) {

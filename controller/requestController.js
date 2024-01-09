@@ -17,6 +17,7 @@ async function createNewUserTicket(req, res) {
   } else {
     try {
       const result = await request.createNewUserTicket()
+
       const data = {
         "name": req.body.dataToSend.personalInformations.name,
         "class": req.body.dataToSend.personalInformations.className,
@@ -24,7 +25,7 @@ async function createNewUserTicket(req, res) {
         "requestedBy": req.body.decodedToken.data.username,
       }
 
-      await jsonHandler.addEmail(data)
+      await jsonHandler.addEmail( "./json/ujigeny.json", data)
 
       res.json(result)
     } catch (err) {
@@ -50,6 +51,15 @@ async function updateTicketPermission(req, res) {
     request.setDataForUpdatePermission()
     const result = await request.updatePermission()
 
+    const data = {
+      "name": result.value.personalInformations.name,
+      "class": result.value.personalInformations.className,
+      "process": result.value.process + " -- " + req.body.dataToSend.permission,
+      "requestedBy": result.value.ticketCreation.userName,
+    }
+    await jsonHandler.addEmail( "./json/engedelyezett.json", data)
+
+
     res.json(result)
   } catch (err) {
     res.json(err)
@@ -72,6 +82,16 @@ async function closeNewUserTicket(req, res) {
   try {
     await ticket.createUser()
     const closeResult = await ticket.closeNewUserTicket()
+
+    const data = {
+      "name": closeResult.value.personalInformations.name,
+      "class": closeResult.value.personalInformations.className,
+      "process": closeResult.value.process,
+      "requestedBy": closeResult.value.ticketCreation.userName,
+    }
+    
+    await jsonHandler.addEmail( "./json/elkeszult.json", data)
+
     res.json(closeResult)
   } catch (err) {
     res.json(err)
@@ -90,7 +110,16 @@ async function completedTickets(req, res) {
 async function closeDeleteUserRequest(req, res) {
   const ticket = new Ticket(req.body, "closeDeleteUserRequest")
   try {
-    const closeDeleteResult = await ticket.closeDeleteUserRequest()
+    const {closeDeleteResult, closeTicket} = await ticket.closeDeleteUserRequest()
+
+    const data = {
+      "name": closeTicket.value.personalInformations.name,
+      "class": closeTicket.value.personalInformations.className,
+      "process": closeTicket.value.process,
+      "requestedBy": closeTicket.value.ticketCreation.userName,
+    }
+    await jsonHandler.addEmail( "./json/elkeszult.json", data)
+
     res.json(closeDeleteResult)
   } catch (err) {
     res.json(err)
@@ -106,8 +135,18 @@ async function saveEditRequest(req, res) {
   } else {
     try {
       const result = await ticket.createNewUserTicket()
+
+      const data = {
+        "name": req.body.dataToSend.personalInformations.name,
+        "class": req.body.dataToSend.personalInformations.className,
+        "process": req.body.dataToSend.process,
+        "requestedBy": req.body.dataToSend.ticketCreation.userName,
+      }
+      await jsonHandler.addEmail( "./json/ujigeny.json", data)
+
       res.json(result)
     } catch (err) {
+      console.log(err)
       res.json(err)
     }
   }
@@ -118,7 +157,19 @@ async function closeEditUserRequest(req, res) {
   const ticket = new Ticket(req.body, type)
 
   try {
-    const response = await ticket.updateUser()
+    const {response, savedResponse} = await ticket.updateUser()
+
+    console.log(req.body)
+
+    const data = {
+      "name": savedResponse.value.personalInformations.name,
+      "class": savedResponse.value.personalInformations.className,
+      "process": savedResponse.value.process,
+      "requestedBy": savedResponse.value.ticketCreation.userName,
+    }
+    
+    await jsonHandler.addEmail( "./json/elkeszult.json", data)
+
     res.json(response)
   } catch (err) {
     res.json(err)
