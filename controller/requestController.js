@@ -25,7 +25,7 @@ async function createNewUserTicket(req, res) {
         "requestedBy": req.body.decodedToken.data.username,
       }
 
-      await jsonHandler.addEmail( "./json/ujigeny.json", data)
+      await jsonHandler.addEmail( "./json/ujhmekfelhasznaloigeny.json", data)
 
       res.json(result)
     } catch (err) {
@@ -142,7 +142,7 @@ async function saveEditRequest(req, res) {
         "process": req.body.dataToSend.process,
         "requestedBy": req.body.dataToSend.ticketCreation.userName,
       }
-      await jsonHandler.addEmail( "./json/ujigeny.json", data)
+      await jsonHandler.addEmail( "./json/ujhmekfelhasznaloigeny.json", data)
 
       res.json(result)
     } catch (err) {

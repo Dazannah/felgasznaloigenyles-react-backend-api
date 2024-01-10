@@ -52,7 +52,7 @@ class JSONHandler{
 
     async sendEmailIfAny(){
         for(const process of processes){
-            const processPath = `./json/${process.normalize("NFD").replace(/\p{Diacritic}/gu, "").replace(" ","").toLowerCase()}.json`
+            const processPath = `./json/${process.normalize("NFD").replace(/\p{Diacritic}/gu, "").replaceAll(" ","").toLowerCase()}.json`
             await this.sendEmail(processPath, process)
         }
     }
