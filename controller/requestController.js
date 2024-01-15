@@ -81,13 +81,17 @@ async function closeNewUserTicket(req, res) {
 
   try {
     await ticket.createUser()
-    const closeResult = await ticket.closeNewUserTicket()
+    const {closeResult, completed} = await ticket.closeNewUserTicket()
+
+    console.log(closeResult)
+    console.log("asd")
 
     const data = {
       "name": closeResult.value.personalInformations.name,
       "class": closeResult.value.personalInformations.className,
       "process": closeResult.value.process,
       "requestedBy": closeResult.value.ticketCreation.userName,
+      "closedBy": completed.userName,
     }
     
     await jsonHandler.addEmail( "./json/elkeszult.json", data)
@@ -110,13 +114,14 @@ async function completedTickets(req, res) {
 async function closeDeleteUserRequest(req, res) {
   const ticket = new Ticket(req.body, "closeDeleteUserRequest")
   try {
-    const {closeDeleteResult, closeTicket} = await ticket.closeDeleteUserRequest()
+    const {closeDeleteResult, closeTicket, completed} = await ticket.closeDeleteUserRequest()
 
     const data = {
       "name": closeTicket.value.personalInformations.name,
       "class": closeTicket.value.personalInformations.className,
       "process": closeTicket.value.process,
       "requestedBy": closeTicket.value.ticketCreation.userName,
+      "closedBy": completed.userName,
     }
     await jsonHandler.addEmail( "./json/elkeszult.json", data)
 
@@ -157,17 +162,17 @@ async function closeEditUserRequest(req, res) {
   const ticket = new Ticket(req.body, type)
 
   try {
-    const {response, savedResponse} = await ticket.updateUser()
-
-    console.log(req.body)
+    const {response, savedResponse, completed} = await ticket.updateUser()
 
     const data = {
       "name": savedResponse.value.personalInformations.name,
       "class": savedResponse.value.personalInformations.className,
       "process": savedResponse.value.process,
       "requestedBy": savedResponse.value.ticketCreation.userName,
+      "closedBy": completed.userName,
     }
-    
+
+    console.log(data)
     await jsonHandler.addEmail( "./json/elkeszult.json", data)
 
     res.json(response)

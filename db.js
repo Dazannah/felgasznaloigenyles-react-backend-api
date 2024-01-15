@@ -22,7 +22,7 @@ function watchMailsJson(){
   setTimeout(async ()=>{
     jsonHandler.sendEmailIfAny()
     watchMailsJson()
-}, 1000 /** 60 * 5*/)
+}, 1000 /* 60 * 5*/)
 }
 
 module.exports = db

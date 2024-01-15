@@ -38,18 +38,31 @@ class Mailer{
                           <th style="border: 1px solid black;">Folyamat</th>
                           <th style="border: 1px solid black;">Osztály</th>
                           <th style="border: 1px solid black;">Kérelmező</th>
-                        </tr>`
-
+                        `
+      if(process === "ELKÉSZÜLT") htmlText += '<th style="border: 1px solid black;">Lezárta</th>'
+      htmlText += "</tr>"
 
       json.forEach(email => {
-        plainText += `Név: ${email.name} Folyamat: ${email.process} Osztály: ${email.class} Kérelmező: ${email.requestedBy}
-        `
+        plainText += `Név: ${email.name} Folyamat: ${email.process} Osztály: ${email.class} Kérelmező: ${email.requestedBy}`
+        if(process === "ELKÉSZÜLT") {
+          plainText += `Lezárta: ${email.closedBy}
+          `
+        }else{
+          plainText += `
+          `
+        }
 
-        htmlText += `<tr><td style="border: 1px solid black;">${email.name}</td> <td style="border: 1px solid black;">${email.process}</td> <td style="border: 1px solid black;">${email.class}</td> <td style="border: 1px solid black;">${email.requestedBy}</td></tr>`
+        htmlText += `<tr><td style="border: 1px solid black;">${email.name}</td>
+        <td style="border: 1px solid black;">${email.process}</td>
+        <td style="border: 1px solid black;">${email.class}</td>
+        <td style="border: 1px solid black;">${email.requestedBy}</td>`
+
+        if(process === "ELKÉSZÜLT") htmlText += `<td style="border: 1px solid black;">${email.closedBy}</td>`
+
+        htmlText += "</tr>"
+
       })
-
       htmlText += "</table>"
-
       return {subject, plainText, htmlText}
     }
 }
