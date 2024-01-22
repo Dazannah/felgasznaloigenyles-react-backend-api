@@ -53,18 +53,19 @@ class DistributionListsApi{
         })
     }
 
-    getDistributionLists(){
-        exec(`${phpCommand}php ./php/getDistributionLists.php`, (error, stdout, stderr) =>{
+    async getDistributionLists(res){
+        let users
 
+        exec(`${phpCommand}php ./php/getDistributionLists.php`, async (error, stdout, stderr) =>{
             if(error) console.log(error)
             if(stdout) {
                 const jsonStringBuffer = fs.readFileSync("./json/tempGetDistributionlists.json")
-                const users = JSON.parse(jsonStringBuffer)
+                users = JSON.parse(jsonStringBuffer)
 
                 users.forEach(user => {
                     delete user.password
 
-                    user.emaiRedirects = []
+                    user.emailRedirects = []
                     user.specialFilter = false
 
                     if(!/if /.test(user.custom_mailfilter)) {
@@ -72,20 +73,20 @@ class DistributionListsApi{
 
                         emailsStrings.forEach(emailString =>{
                             emailString = emailString.substring(emailString.indexOf('"') + 1, emailString.lastIndexOf('"'))
-                            if(emailString !== "") user.emaiRedirects.push(emailString)
+                            if(emailString !== "") user.emailRedirects.push(emailString)
                         })
                     }else{
-                        user.emaiRedirects = user.custom_mailfilter
+                        user.emailRedirects = user.custom_mailfilter
                         user.specialFilter = true
                     }
                 })
-
-                return users;
             }
 
-
             if(stderr) console.log(stderr)
+
+            res.json(users)
         })
+
     }
 
     updateDistributionList(){

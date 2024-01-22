@@ -33,12 +33,8 @@ async function closeCreateDistributionList(req, res) {
 
 async function getDistributionLists(req, res) {
   try {
-    console.log("asd")
     const distributionListsApi = new DistributionListsApi()
-    const results = distributionListsApi.getDistributionLists()
-
-    console.log(results)
-    res.json(results)
+    distributionListsApi.getDistributionLists(res)
   } catch (err) {
     res.json(err)
   }
