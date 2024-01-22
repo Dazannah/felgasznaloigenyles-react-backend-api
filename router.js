@@ -33,6 +33,7 @@ router.post("/close-edit-user-request", loginController.administrators, requestC
 router.post("/update-user-request",  loginController.administrators, requestController.updateRequest)
 
 //distributin lists
+
 router.get("/get-distribution-lists", /* loginController.applicants,*/ distributionListController.getDistributionLists)
 router.post("/create-new-distribution-list", /*loginController.applicants,*/ distributionListController.createNewDistributionList)
 router.post("/close-distribution-list-create-request", /*loginController.administrators,*/ distributionListController.closeCreateDistributionList)

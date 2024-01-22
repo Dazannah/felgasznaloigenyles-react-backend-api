@@ -1,4 +1,5 @@
 const { DistributionList, CloseNewDistributionList } = require("../models/DistributionList")
+const DistributionListsApi = require("../models/DistributionListsApi")
 const { GetData } = require("../models/Database")
 
 async function createNewDistributionList(req, res) {
@@ -32,9 +33,12 @@ async function closeCreateDistributionList(req, res) {
 
 async function getDistributionLists(req, res) {
   try {
-    const getData = new GetData({ collection: "distributionLists" })
-    const distributionLists = await getData.getAllFromCollection()
-    res.json(distributionLists)
+    console.log("asd")
+    const distributionListsApi = new DistributionListsApi()
+    const results = distributionListsApi.getDistributionLists()
+
+    console.log(results)
+    res.json(results)
   } catch (err) {
     res.json(err)
   }
