@@ -30,9 +30,15 @@
             }
         }
 
-        public function getDistributionListsToFile(){
+        public function getDistributionListsToFile($accessor, $value){
             try {
                 $params = array('custom_mailfilter' => "%redirect%");
+
+                if($accessor === "email"){
+                    $params[$accessor] = "%$value%";
+                }
+
+                //$params = array('custom_mailfilter' => "%redirect%");
         
                 $response = $this->client->mail_user_get($this->session_id, $params);
 

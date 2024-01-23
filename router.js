@@ -40,6 +40,7 @@ router.post("/close-distribution-list-create-request", /*loginController.adminis
 
 //table head search
 router.post("/table-head-search", /*loginController.applicants,*/ searchController.tableHeadSearch)
+router.post("/distributionlist-search", searchController.distributionlistSearch)
 
 //user
 router.get("/list-active-users", /*loginController.applicants,*/ userController.listUsers)

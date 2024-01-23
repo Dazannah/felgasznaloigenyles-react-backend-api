@@ -1,4 +1,5 @@
 const { Serach } = require("../models/Database")
+const DistributionListsApi = require("../models/DistributionListsApi")
 
 async function tableHeadSearch(req, res) {
   try {
@@ -12,6 +13,20 @@ async function tableHeadSearch(req, res) {
   }
 }
 
+async function distributionlistSearch(req, res){
+  const accessor = req.body.accessor
+  const value = req.body.value
+
+  try {
+    const distributionListsApi = new DistributionListsApi()
+    distributionListsApi.getDistributionLists(res, accessor, value)
+  } catch (err) {
+    res.json(err)
+  }
+
+}
+
 module.exports = {
-  tableHeadSearch
+  tableHeadSearch,
+  distributionlistSearch
 }

@@ -53,16 +53,22 @@ class DistributionListsApi{
         })
     }
 
-    async getDistributionLists(res){
-        let users
+    async getDistributionLists(res, accessor = false, value = false){
+        let users = []
+        let toDelete = []
 
-        exec(`${phpCommand}php ./php/getDistributionLists.php`, async (error, stdout, stderr) =>{
+        if(accessor === "" || value === ""){
+            accessor = false
+            value = false
+        }
+
+        exec(`${phpCommand}php ./php/getDistributionLists.php ${accessor} ${value}`, async (error, stdout, stderr) =>{
             if(error) console.log(error)
             if(stdout) {
                 const jsonStringBuffer = fs.readFileSync("./json/tempGetDistributionlists.json")
                 users = JSON.parse(jsonStringBuffer)
 
-                users.forEach(user => {
+                users.forEach((user, index) => {
                     delete user.password
 
                     user.emailRedirects = []
@@ -75,10 +81,21 @@ class DistributionListsApi{
                             emailString = emailString.substring(emailString.indexOf('"') + 1, emailString.lastIndexOf('"'))
                             if(emailString !== "") user.emailRedirects.push(emailString)
                         })
+
+                        user.emailsCount = user.emailRedirects.length
                     }else{
                         user.emailRedirects = user.custom_mailfilter
+                        user.emailsCount = 1
                         user.specialFilter = true
                     }
+
+                    if(accessor === "emailsCount" && user.emailsCount != value){
+                        toDelete.push(index)
+                    }
+                })
+
+                toDelete.forEach((number, index) =>{
+                    users.splice(number - index, 1)
                 })
             }
 
