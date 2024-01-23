@@ -38,6 +38,7 @@ class Mailer{
                           <th style="border: 1px solid black;">Folyamat</th>
                           <th style="border: 1px solid black;">Osztály</th>
                           <th style="border: 1px solid black;">Kérelmező</th>
+ 
                         `
       if(process === "ELKÉSZÜLT") htmlText += '<th style="border: 1px solid black;">Lezárta</th>'
       htmlText += "</tr>"
@@ -63,6 +64,7 @@ class Mailer{
 
       })
       htmlText += "</table>"
+
       return {subject, plainText, htmlText}
     }
 }
