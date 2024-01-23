@@ -218,7 +218,7 @@ Ticket.prototype.updatePermission = async function () {
 
 Ticket.prototype.closeNewUserTicket = async function () {
   try {
-    const response = await requestsDB.findOneAndUpdate(
+    const closeResult = await requestsDB.findOneAndUpdate(
       {
         _id: new ObjectID(this.data.ticketId)
       },
@@ -231,7 +231,8 @@ Ticket.prototype.closeNewUserTicket = async function () {
         }
       }
     )
-    return response
+
+    return {closeResult: closeResult, completed: this.data.createdBy}
   } catch (err) {
     return err
   }
@@ -314,7 +315,7 @@ Ticket.prototype.closeDeleteUserRequest = async function () {
             }
           }
         )
-        return {message: "Felhasználó törlése sikeres", closeTicket}
+        return {message: "Felhasználó törlése sikeres", closeTicket, completed: this.data.createdBy}
       } catch (err) {
         return err
       }
@@ -396,7 +397,7 @@ Ticket.prototype.updateUser = async function () {
       }
     )
 
-    return {response: "Módosítás sikeresen mentve.", savedResponse}
+    return {response: "Módosítás sikeresen mentve.", savedResponse, completed: this.data.createdBy}
   } catch (err) {
     return err
   }

@@ -33,12 +33,14 @@ router.post("/close-edit-user-request", loginController.administrators, requestC
 router.post("/update-user-request",  loginController.administrators, requestController.updateRequest)
 
 //distributin lists
+
 router.get("/get-distribution-lists", /* loginController.applicants,*/ distributionListController.getDistributionLists)
 router.post("/create-new-distribution-list", /*loginController.applicants,*/ distributionListController.createNewDistributionList)
 router.post("/close-distribution-list-create-request", /*loginController.administrators,*/ distributionListController.closeCreateDistributionList)
 
 //table head search
 router.post("/table-head-search", /*loginController.applicants,*/ searchController.tableHeadSearch)
+router.post("/distributionlist-search", searchController.distributionlistSearch)
 
 //user
 router.get("/list-active-users", /*loginController.applicants,*/ userController.listUsers)

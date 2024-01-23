@@ -46,7 +46,7 @@ async function requestDeleteUser(req, res) {
         "process": userWholeData.process,
         "requestedBy": userWholeData.ticketCreation.userName,
       }
-      await jsonHandler.addEmail( "./json/ujigeny.json", data)
+      await jsonHandler.addEmail( "./json/ujhmekfelhasznaloigeny.json", data)
 
       res.json(response)
     }
