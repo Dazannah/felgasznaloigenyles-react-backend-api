@@ -3,19 +3,16 @@ const DistributionListsApi = require("../models/DistributionListsApi")
 const { GetData } = require("../models/Database")
 
 async function createNewDistributionList(req, res) {
-  const distributionList = new DistributionList(req.body)
-  const errors = await distributionList.validateData()
+  const username = req.body.decodedToken.data.username
+  const distributionListAddres = req.body.dataToSend.distributionListAddy
+  const addresses = []
 
-  if (errors.length > 0) {
-    res.json({ errors: errors })
-  } else {
-    try {
-      const createResult = await distributionList.createNewDistributionRequest()
-      res.json(createResult)
-    } catch (err) {
-      res.json(JSON.stringify(err))
-    }
+  for(const addy in req.body.dataToSend){
+    if(/email/.test(addy)) addresses.push(req.body.dataToSend[addy])
   }
+
+  const distributionList = new DistributionListsApi()
+  distributionList.createDisributionList(username, distributionListAddres, addresses, res)
 }
 
 async function closeCreateDistributionList(req, res) {
