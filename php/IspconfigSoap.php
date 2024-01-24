@@ -61,7 +61,7 @@
                 $email = $json["distributionListAddres"];
                 $custom_mailfilter = "";
 
-                foreach($json["adresses"] as $address){
+                foreach($json["addresses"] as $address){
                     $custom_mailfilter = $custom_mailfilter . <<<STR
                     redirect "{$address}";
                     STR;
@@ -96,12 +96,13 @@
                     'purge_trash_days' => 0,
                     'purge_junk_days' => 0
                 );
-                $mailuser_id = $this->client->mail_user_add($this->session_id, $client_id, $params);
+
+                $response = $this->client->mail_user_add($this->session_id, $client_id, $params);
 
                 return "sucess";
 
             } catch (SoapFault $err) {
-                die('SOAP Error: '.$err); 
+                return "Felhasználó létrehozása sikertelen."; 
             }
         }
 

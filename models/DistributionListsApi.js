@@ -1,5 +1,6 @@
 const dotenv = require("dotenv")
 dotenv.config()
+const { CloseNewDistributionList } = require("../models/DistributionList")
 
 const phpCommand = process.env.PHPCOMMAND || ""
 
@@ -8,28 +9,44 @@ const exec = require("child_process").exec;
 
 
 class DistributionListsApi{
-    createDisributionList(){
+    createDisributionList(username, distributionListAddres, addresses, res){
         const timestamp = Date.now()
-        const username = "teszt.elek"
         const fileName = `./json/tempCreateDistributionlist-${username}-${timestamp}.json`
         const data = JSON.stringify({
-            distributionListAddres: "apiteszt",
-            adresses: ["fabian.david@infolankft.hu"]
+            distributionListAddres,
+            addresses
         })
 
         fs.writeFileSync(fileName, data)
 
-        exec(`${phpCommand}php ./php/createDisributionList.php ${fileName}`, (error, stdout, stderr) =>{
-            if(error) console.log(error)
+        exec(`${phpCommand}php ./php/createDisributionList.php ${fileName}`, async (error, stdout, stderr) =>{
+            if(error) {
+                res.json(error)
+                console.log(error)
+                return
+            }
+
             if(stdout) {
                 if(stdout == "sucess"){
+                    const closeNewDistributionList = new CloseNewDistributionList(distributionListAddres, addresses, username)
+                    await closeNewDistributionList.save()
+
+                    //create and close distribution list here
+                    res.json("done")
                     console.log("done")
+                    return
                 }else{
+                    res.json({errors: stdout})
                     console.log("failed")
+                    return
                 }
             }
 
-            if(stderr) console.log(stderr)
+            if(stderr) {
+                res.json(stderr)
+                console.log(stderr)
+                return
+            }
         })
     }
 

@@ -5,20 +5,30 @@ const requestsDB = require("../db").db("jogosultsagigenylo").collection("request
 const distributionDB = require("../db").db("jogosultsagigenylo").collection("distributionLists")
 
 class DistributionList {
-  constructor(data) {
-    this.data = data
-    this.data.creationData = {
-      userName: data.decodedToken.data.username,
+  constructor(distributionListAddres, addresses, username) {
+    //is.data = {distributionListAddres, addresses}
+    const creationData = {
+      userName: username,
       createTime: require("../utils.js").getCurrentTime()
     }
+
+    this.dataToSave = {      
+        email: distributionListAddres,
+        emailRedirects: addresses,
+        ticketCreation: creationData,
+        isCompleted: true,
+        completed: creationData,
+        process: "Új terjesztési lista"
+    }
+
     this.errors = []
   }
 
-  async validateData() {
-    if (this.data.dataToSend.distributionListAddy === "") {
+  /*async validateData() {
+    if (this.data.distributionListAddres === "") {
       this.errors.push(`Terjesztési lista cím megadása kötelező.`)
     } else {
-      const splitIt = this.data.dataToSend.distributionListAddy.split("@")
+      const splitIt = this.data.distributionListAddy.split("@")
       this.create = {
         mainAddress: splitIt[0],
         addresses: []
@@ -43,9 +53,9 @@ class DistributionList {
     }
 
     return this.errors
-  }
+  }*/
 
-  async createNewDistributionRequest() {
+  /*async createNewDistributionRequest() {
     try {
       const insertResult = await requestsDB.insertOne({
         mainAddress: this.create.mainAddress,
@@ -58,15 +68,15 @@ class DistributionList {
     } catch (err) {
       return JSON.stringify(err)
     }
-  }
+  }*/
 }
 
 class CloseNewDistributionList extends DistributionList {
-  constructor(data) {
-    super(data)
+  constructor(distributionListAddres, addresses, username) {
+    super(distributionListAddres, addresses, username)
   }
 
-  async getDataToSave(){
+  /*async getDataToSave(){
     try{
       const getRequestData = new GetRequestsData({collection: "requests", _id: `${this.data.dataToSend.ticketId}`})
       const ticketToClose = await getRequestData.findOneById()
@@ -82,30 +92,20 @@ class CloseNewDistributionList extends DistributionList {
       throw new Error(err)
     }
 
-  }
+  }*/
 
-  async saveDistributionList() {
+  /*async saveDistributionList() {
     try{
       const result = await distributionDB.insertOne(this.dataToSave)
       this.insertedId = result.insertedId
     }catch(err){
       throw new Error(err)
     }
-  }
+  }*/
 
-  async closeRequest(){
+  async save(){
     try{
-      const completed = this.data.creationData
-      const isCompleted = true
-      const userId = this.insertedId
-
-      await requestsDB.findOneAndUpdate({_id: new ObjectId(this.data.dataToSend.ticketId)},{
-        $set:{
-        completed,
-        isCompleted,
-        userId}
-      })
-
+      const response = await requestsDB.insertOne(this.dataToSave)
     }catch(err){
       throw new Error(err)
     }
