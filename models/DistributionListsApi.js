@@ -1,5 +1,6 @@
 const dotenv = require("dotenv")
 dotenv.config()
+const { CloseNewDistributionList } = require("../models/DistributionList")
 
 const phpCommand = process.env.PHPCOMMAND || ""
 
@@ -18,7 +19,7 @@ class DistributionListsApi{
 
         fs.writeFileSync(fileName, data)
 
-        exec(`${phpCommand}php ./php/createDisributionList.php ${fileName}`, (error, stdout, stderr) =>{
+        exec(`${phpCommand}php ./php/createDisributionList.php ${fileName}`, async (error, stdout, stderr) =>{
             if(error) {
                 res.json(error)
                 console.log(error)
@@ -27,6 +28,10 @@ class DistributionListsApi{
 
             if(stdout) {
                 if(stdout == "sucess"){
+                    const closeNewDistributionList = new CloseNewDistributionList(distributionListAddres, addresses, username)
+                    await closeNewDistributionList.save()
+
+                    //create and close distribution list here
                     res.json("done")
                     console.log("done")
                     return
