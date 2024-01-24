@@ -50,9 +50,7 @@ class DistributionListsApi{
         })
     }
 
-    deleteDistributionList(){
-        const username = "apiteszt"
-
+    deleteDistributionList(req, username){
         exec(`${phpCommand}php ./php/deleteDisributionList.php ${username}`, (error, stdout, stderr) =>{
 
             if(error) console.log(error)
@@ -60,8 +58,10 @@ class DistributionListsApi{
                 if(stdout) {
                     if(stdout == "sucess"){
                         console.log("done")
+                        req.json({acknowledged: true})
                     }else{
                         console.log("failed")
+                        req.json({acknowledged: false})
                     }
                 }
             }

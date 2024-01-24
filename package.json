@@ -4,7 +4,7 @@
   "description": "",
   "main": "db.js",
   "scripts": {
-    "auto": "nodemon db.js",
+    "auto": "nodemon db.js --ignore 'json/'",
     "test": "echo \"Error: no test specified\" && exit 1",
     "debug": "nodemon --inspect db.js"
   },

@@ -37,8 +37,20 @@ async function getDistributionLists(req, res) {
   }
 }
 
+async function deleteDistributionlist(req, res){
+  try {
+    const username = req.body.toDelete.split("@")
+    
+    const distributionListsApi = new DistributionListsApi()
+    distributionListsApi.deleteDistributionList(res, username[0])
+  } catch (err) {
+    res.json(err)
+  }
+}
+
 module.exports = {
   createNewDistributionList,
   closeCreateDistributionList,
-  getDistributionLists
+  getDistributionLists,
+  deleteDistributionlist
 }

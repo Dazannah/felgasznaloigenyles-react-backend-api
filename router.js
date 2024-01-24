@@ -36,7 +36,8 @@ router.post("/update-user-request",  loginController.administrators, requestCont
 
 router.get("/get-distribution-lists", /* loginController.applicants,*/ distributionListController.getDistributionLists)
 router.post("/create-new-distribution-list", /*loginController.applicants,*/ distributionListController.createNewDistributionList)
-router.post("/close-distribution-list-create-request", /*loginController.administrators,*/ distributionListController.closeCreateDistributionList)
+router.post("/delete-distributionlist", distributionListController.deleteDistributionlist)
+//router.post("/close-distribution-list-create-request", /*loginController.administrators,*/ distributionListController.closeCreateDistributionList)
 
 //table head search
 router.post("/table-head-search", /*loginController.applicants,*/ searchController.tableHeadSearch)
