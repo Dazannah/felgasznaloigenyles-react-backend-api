@@ -6,6 +6,7 @@ const distributionDB = require("../db").db("jogosultsagigenylo").collection("dis
 
 class DistributionList {
   constructor(distributionListAddres, addresses, username, process) {
+
     //is.data = {distributionListAddres, addresses}
     const creationData = {
       userName: username,

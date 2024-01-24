@@ -1,5 +1,6 @@
 const dotenv = require("dotenv")
 dotenv.config()
+
 const { CloseDistributionList } = require("../models/DistributionList")
 
 const phpCommand = process.env.PHPCOMMAND || ""
