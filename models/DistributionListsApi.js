@@ -1,6 +1,7 @@
 const dotenv = require("dotenv")
 dotenv.config()
-const { CloseNewDistributionList } = require("../models/DistributionList")
+
+const { CloseDistributionList } = require("../models/DistributionList")
 
 const phpCommand = process.env.PHPCOMMAND || ""
 
@@ -28,8 +29,8 @@ class DistributionListsApi{
 
             if(stdout) {
                 if(stdout == "sucess"){
-                    const closeNewDistributionList = new CloseNewDistributionList(distributionListAddres, addresses, username)
-                    await closeNewDistributionList.save()
+                    const closeDistributionList = new CloseDistributionList(distributionListAddres, addresses, username, "Új terjesztési lista")
+                    await closeDistributionList.save()
 
                     //create and close distribution list here
                     res.json("done")
@@ -50,18 +51,21 @@ class DistributionListsApi{
         })
     }
 
-    deleteDistributionList(){
-        const username = "apiteszt"
-
-        exec(`${phpCommand}php ./php/deleteDisributionList.php ${username}`, (error, stdout, stderr) =>{
+    deleteDistributionList(req, distributionListAddres, username){
+        console.log(distributionListAddres)
+        exec(`${phpCommand}php ./php/deleteDisributionList.php ${distributionListAddres}`, async (error, stdout, stderr) =>{
 
             if(error) console.log(error)
             if(stdout) {
                 if(stdout) {
                     if(stdout == "sucess"){
                         console.log("done")
+                        const closeDistributionList = new CloseDistributionList(distributionListAddres, [], username, "Terjesztési lista törlése")
+                        await closeDistributionList.save()
+                        req.json({acknowledged: true})
                     }else{
                         console.log("failed")
+                        req.json({acknowledged: false})
                     }
                 }
             }
