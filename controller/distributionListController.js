@@ -1,4 +1,4 @@
-const { DistributionList, CloseNewDistributionList } = require("../models/DistributionList")
+const { DistributionList, CloseDistributionList } = require("../models/DistributionList")
 const DistributionListsApi = require("../models/DistributionListsApi")
 const { GetData } = require("../models/Database")
 
@@ -17,7 +17,7 @@ async function createNewDistributionList(req, res) {
 
 async function closeCreateDistributionList(req, res) {
   try {
-    const distributionList = new CloseNewDistributionList(req.body)
+    const distributionList = new CloseDistributionList(req.body)
     await distributionList.getDataToSave()
     await distributionList.saveDistributionList()
     await distributionList.closeRequest()
@@ -39,10 +39,11 @@ async function getDistributionLists(req, res) {
 
 async function deleteDistributionlist(req, res){
   try {
-    const username = req.body.toDelete.split("@")
-    
+    const distributionListAddres = req.body.toDelete.split("@")
+
+    const username = req.body.decodedToken.data.username
     const distributionListsApi = new DistributionListsApi()
-    distributionListsApi.deleteDistributionList(res, username[0])
+    distributionListsApi.deleteDistributionList(res, distributionListAddres[0], username)
   } catch (err) {
     res.json(err)
   }

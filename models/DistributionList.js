@@ -5,7 +5,7 @@ const requestsDB = require("../db").db("jogosultsagigenylo").collection("request
 const distributionDB = require("../db").db("jogosultsagigenylo").collection("distributionLists")
 
 class DistributionList {
-  constructor(distributionListAddres, addresses, username) {
+  constructor(distributionListAddres, addresses, username, process) {
     //is.data = {distributionListAddres, addresses}
     const creationData = {
       userName: username,
@@ -18,7 +18,7 @@ class DistributionList {
         ticketCreation: creationData,
         isCompleted: true,
         completed: creationData,
-        process: "Új terjesztési lista"
+        process: process
     }
 
     this.errors = []
@@ -71,37 +71,10 @@ class DistributionList {
   }*/
 }
 
-class CloseNewDistributionList extends DistributionList {
-  constructor(distributionListAddres, addresses, username) {
-    super(distributionListAddres, addresses, username)
+class CloseDistributionList extends DistributionList {
+  constructor(distributionListAddres, addresses, username, process) {
+    super(distributionListAddres, addresses, username, process)
   }
-
-  /*async getDataToSave(){
-    try{
-      const getRequestData = new GetRequestsData({collection: "requests", _id: `${this.data.dataToSend.ticketId}`})
-      const ticketToClose = await getRequestData.findOneById()
-  
-      this.dataToSave = {
-        mainAddress: ticketToClose.mainAddress,
-        addresses: ticketToClose.addresses,
-        status: "Aktív",
-        createTime: this.data.creationData.createTime
-      }
-
-    }catch(err){
-      throw new Error(err)
-    }
-
-  }*/
-
-  /*async saveDistributionList() {
-    try{
-      const result = await distributionDB.insertOne(this.dataToSave)
-      this.insertedId = result.insertedId
-    }catch(err){
-      throw new Error(err)
-    }
-  }*/
 
   async save(){
     try{
@@ -112,4 +85,4 @@ class CloseNewDistributionList extends DistributionList {
   }
 }
 
-module.exports = { DistributionList, CloseNewDistributionList }
+module.exports = { DistributionList, CloseDistributionList }
