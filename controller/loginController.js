@@ -114,6 +114,17 @@ function administratorsAndAuthorizers(req, res, next) {
   }
 }
 
+function distributionlistEditors(req, res, next){
+  const authorization = new Autherization(req.body.decodedToken.data.userGroups)
+  const isAuthorized = authorization.isDistributionlistEditor()
+
+  if (isAuthorized) {
+    next()
+  } else {
+    res.status(403).send()
+  }
+}
+
 module.exports = {
   login,
   verifyToken,
@@ -121,5 +132,6 @@ module.exports = {
   applicants,
   authorizers,
   administrators,
-  administratorsAndAuthorizers
+  administratorsAndAuthorizers,
+  distributionlistEditors
 }
