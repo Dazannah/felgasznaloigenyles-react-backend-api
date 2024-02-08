@@ -29,7 +29,7 @@ class DistributionListsApi{
 
             if(stdout) {
                 if(stdout == "sucess"){
-                    const closeDistributionList = new CloseDistributionList(distributionListAddres, addresses, username, "Új terjesztési lista")
+                    const closeDistributionList = new CloseDistributionList(distributionListAddres + process.env.EMAILDOMAIN, addresses, username, "Új terjesztési lista")
                     await closeDistributionList.save()
 
                     //create and close distribution list here
@@ -51,7 +51,7 @@ class DistributionListsApi{
         })
     }
 
-    deleteDistributionList(req, distributionListAddres, username){
+    deleteDistributionList(req, distributionListAddres, username, emails){
         console.log(distributionListAddres)
         exec(`${phpCommand}php ./php/deleteDisributionList.php ${distributionListAddres}`, async (error, stdout, stderr) =>{
 
@@ -60,7 +60,7 @@ class DistributionListsApi{
                 if(stdout) {
                     if(stdout == "sucess"){
                         console.log("done")
-                        const closeDistributionList = new CloseDistributionList(distributionListAddres, [], username, "Terjesztési lista törlése")
+                        const closeDistributionList = new CloseDistributionList(distributionListAddres + process.env.EMAILDOMAIN, emails, username, "Terjesztési lista törlése")
                         await closeDistributionList.save()
                         req.json({acknowledged: true})
                     }else{
@@ -127,30 +127,44 @@ class DistributionListsApi{
 
     }
 
-    updateDistributionList(){
+    updateDistributionList(username, distributionListAddres, adresses, adressesForSave, res){
         const timestamp = Date.now()
-        const username = "teszt.elek"
         const fileName = `./json/tempUpdateDistributionlist-${username}-${timestamp}.json`
         const data = JSON.stringify({
-            distributionListAddres: "apiteszt",
-            adresses: ["teszt1@hmek.hu", "fabian.david@infolankft.hu"]
+            distributionListAddres ,
+            adresses //["teszt1@hmek.hu", "fabian.david@infolankft.hu"]
         })
 
         fs.writeFileSync(fileName, data)
 
-        exec(`${phpCommand}php ./php/updateDistributionList.php ${fileName}`, (error, stdout, stderr) =>{
+        exec(`${phpCommand}php ./php/updateDistributionList.php ${fileName}`, async (error, stdout, stderr) =>{
 
             if(error) console.log(error)
             if(stdout) {
                 if(stdout === "sucess"){
-                    console.log("done")
+                    const closeDistributionList = new CloseDistributionList(distributionListAddres, adressesForSave, username, "Terjesztési lista módosítása")
+                    await closeDistributionList.save()
+
+                    res.json("done")
                 }else{
-                    console.log("fail")
+                    res.json({errors: stdout})
                 }
             }
 
-            if(stderr) console.log(stderr)
+            if(stderr) {
+                res.json({errors: stderr})
+            }
         })
+    }
+
+    getAdressesForUpdate(adresses){
+        const result = []
+
+        adresses.forEach(adress =>{
+            if(adress[1] === false || adress[1] === "new") result.push(adress[0])
+        })
+
+        return result
     }
 }
 
