@@ -38,6 +38,10 @@
                     $params[$accessor] = "%$value%";
                 }
 
+                if($accessor === "fullEmail"){
+                    $params["email"] = "$value";
+                }
+
                 //$params = array('custom_mailfilter' => "%redirect%");
         
                 $response = $this->client->mail_user_get($this->session_id, $params);
@@ -138,7 +142,7 @@
                 $custom_mailfilter = $custom_mailfilter . "keep;";
 
                 $client_id = 1;
-                $params = array("email" => $email . "@hmek.hu");
+                $params = array("email" => $email /*. "@hmek.hu"*/);
                 $mailuser = $this->client->mail_user_get($this->session_id, $params);
                 $userid = $mailuser[0]["mailuser_id"];
 

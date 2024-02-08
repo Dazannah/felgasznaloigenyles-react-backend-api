@@ -53,6 +53,9 @@ class Login {
             if (element.cn == "JogosultsagigenyAdminisztrator") {
               this.userGroups[2] = element.cn
             } //létrehozók AD csoport neve
+            if (element.cn == "JogosultsagigenyTerjesztesilista") {
+              this.userGroups[3] = element.cn
+            } //terjesztési lista kezelők
           })
 
           resolve({ username: this.username, userGroups: this.userGroups })
@@ -70,7 +73,7 @@ class Autherization {
   }
 
   getAccess(authorizationLevel) {
-    let isAuthorized = true //in prod set it false
+    let isAuthorized = false //in prod set it false
 
     this.userGroups.forEach(group => {
       authorizationLevel.forEach(auth => {
@@ -96,6 +99,11 @@ class Autherization {
   isAdministratorOrAuthorizer() {
     return this.getAccess(["JogosultsagigenyEngedelyezok", "JogosultsagigenyAdminisztrator"])
   }
+
+  isDistributionlistEditor(){
+    return this.getAccess(["JogosultsagigenyTerjesztesilista"])
+  }
 }
 
 module.exports = { Login, Autherization }
+

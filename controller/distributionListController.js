@@ -37,13 +37,34 @@ async function getDistributionLists(req, res) {
   }
 }
 
+async function editDistributionList(req, res) {
+  try {
+    const distributionListsApi = new DistributionListsApi()
+    distributionListsApi.getDistributionLists(res, "fullEmail", req.params.email)
+  } catch (err) {
+    res.json(err)
+  }
+}
+
+async function editDistributionListPost(req, res){
+  try {
+    const distributionListsApi = new DistributionListsApi()
+
+    const adresses = distributionListsApi.getAdressesForUpdate(req.body.ditributionlist.emailRedirects)
+
+    distributionListsApi.updateDistributionList(req.body.decodedToken.data.username, req.body.ditributionlist.email, adresses, req.body.ditributionlist.emailRedirects, res)
+  } catch (err) {
+    res.json(err)
+  }
+}
+
 async function deleteDistributionlist(req, res){
   try {
     const distributionListAddres = req.body.toDelete.split("@")
-
     const username = req.body.decodedToken.data.username
+
     const distributionListsApi = new DistributionListsApi()
-    distributionListsApi.deleteDistributionList(res, distributionListAddres[0], username)
+    distributionListsApi.deleteDistributionList(res, distributionListAddres[0], username, req.body.emails)
   } catch (err) {
     res.json(err)
   }
@@ -53,5 +74,7 @@ module.exports = {
   createNewDistributionList,
   closeCreateDistributionList,
   getDistributionLists,
-  deleteDistributionlist
+  deleteDistributionlist,
+  editDistributionList,
+  editDistributionListPost
 }
