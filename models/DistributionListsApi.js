@@ -30,6 +30,7 @@ class DistributionListsApi{
             if(stdout) {
                 if(stdout == "sucess"){
                     const closeDistributionList = new CloseDistributionList(distributionListAddres + process.env.EMAILDOMAIN, addresses, username, "Új terjesztési lista")
+
                     await closeDistributionList.save()
 
                     //create and close distribution list here
@@ -50,6 +51,7 @@ class DistributionListsApi{
             }
         })
     }
+
 
     deleteDistributionList(req, distributionListAddres, username, emails){
         console.log(distributionListAddres)
