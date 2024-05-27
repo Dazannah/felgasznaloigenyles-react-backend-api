@@ -5,6 +5,7 @@ const leftColumn = [
   { name: "emedworks", id: "emedworks", value: "Emedworks", for: "emedworks" },
   { name: "ecostat", id: "ecostat", value: "Ecostat", for: "ecostat" },
   { name: "kira", id: "kira", value: "KIRA", for: "kira" },
+  { name: "beeWise", id: "beeWise", value: "Bee Wise", for: "beeWise" },
   { name: "makElektra", id: "makElektra", value: "MÁK Electra", for: "makElektra" },
   { name: "opalIktato", id: "opalIktato", value: "Opal Iktató rendszer", for: "opalIktato" },
   { name: "jdolber", id: "jdolber", value: "Jdolber", for: "jdolber" },

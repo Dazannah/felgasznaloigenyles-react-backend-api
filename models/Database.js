@@ -65,7 +65,8 @@ class GetRequestsData extends Database {
     try {
       const response = await this.reUsableFind(
         {
-          "permission.allowed": { $nin: ["Elutasított", "Engedélyezett"] }
+          "permission.allowed": { $nin: ["Elutasított", "Engedélyezett"] },
+          "personalInformations.name": { $exists: true },
         },
         "permission.permissionTime",
         "asc"
