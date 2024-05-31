@@ -9,6 +9,7 @@ const jsonHandler = new JSONHandler()
 
 async function createNewUserTicket(req, res) {
   const type = "Új felhasználó"
+
   const request = new Request(req.body, type)
   const errors = await request.validate()
 
