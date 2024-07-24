@@ -1,14 +1,1 @@
-[
-  {
-    "name": "teszt",
-    "class": "1-01010100 | Belgyógyászat",
-    "process": "Felhasználó törlése",
-    "requestedBy": "fabian.david"
-  },
-  {
-    "name": "Ádám Melinda",
-    "class": "1-01000100 | Belgyógyászati Osztály",
-    "process": "Felhasználó módosítása",
-    "requestedBy": "fabian.david"
-  }
-]
+[]
