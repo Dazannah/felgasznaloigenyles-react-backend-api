@@ -70,12 +70,13 @@ class Mailer{
 
     parseDailyReportEmail(data){
       const subject = `Jóváhagyandó tételek emlékeztető`
-      const plainText = `Tisztelt Cím! 
+      const plainText = `Tisztelt Cím!
+
 Az Jogosultság igénylő rendszerben önnek ${data.forAllow} darab jóváhagyásra váró tétele van. 
 A rendszert a következő webcímen tudja elérni: 
 http://jogosultsagigenylo.csmek.local/
 `
-      const htmlText = `Tisztelt Cím!<br>
+      const htmlText = `Tisztelt Cím!<br><br>
 Az Jogosultság igénylő rendszerben önnek <b>${data.forAllow}</b> darab jóváhagyásra váró tétele van.<br>
 A rendszert a következő webcímen tudja elérni:<br>
 http://jogosultsagigenylo.csmek.local/
