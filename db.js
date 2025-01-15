@@ -22,7 +22,7 @@ async function start() {
   module.exports = client
   const app = require("./index")
   watchMailsJson()
-  //sendDailyReport()
+  sendDailyReport()
   app.listen(process.env.PORT) //enviroment variable PORT-ban a 3000
 }
 start()
@@ -35,10 +35,24 @@ function watchMailsJson(){
 }
 
 function sendDailyReport(){
+  const { GetRequestsData } = require("./models/Database")
+
+  const now = new Date(Date.now());
+  const millisTillTime = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 14, 0, 0, 0) - now; // 14:00
+
   setTimeout(async ()=>{
-    const {subject, plainText, htmlText} = mailer.parseDailyReportEmail()
-    mailer.sendMail(subject, plainText, htmlText, process.env.DAILYREPORTTO)
-  }, 1000 * 60 * 60 * 24)
+    const forAllowTickets = await GetRequestsData.prototype.getAllRequestForPermission()
+    const forAllow = forAllowTickets.length
+    
+    const data = {
+      forAllow
+    }
+
+    const {subject, plainText, htmlText} = mailer.parseDailyReportEmail(data)
+    await mailer.sendMail(subject, plainText, htmlText, process.env.DAILYREPORTTO)
+    sendDailyReport()
+
+  }, millisTillTime)
 }
 
 module.exports = db
