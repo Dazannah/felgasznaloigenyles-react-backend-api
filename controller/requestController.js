@@ -8,20 +8,16 @@ const requestsDB = require("../db").db("jogosultsagigenylo").collection("request
 const jsonHandler = new JSONHandler()
 
 async function createNewUserTicket(req, res) {
-
   const type = "Új felhasználó"
   const request = new Request(req.body, type)
   const errors = await request.validate()
-
-  //itt jó
-  console.log(request.data.userPermissionsLeft)
 
   if (errors) {
     res.json({ errors: errors })
   } else {
     try {
       const result = await request.createNewUserTicket()
-      
+
       const data = {
         "name": req.body.dataToSend.personalInformations.name,
         "class": req.body.dataToSend.personalInformations.className,
