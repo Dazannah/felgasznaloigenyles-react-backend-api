@@ -7,15 +7,9 @@ const Mailer = require("./Mailer")
 
 class JSONHandler{
 
-    constructor(){
-        this.mailer = new Mailer(process.env.EMAILUSER,
-            process.env.EMAILPASSWORD,
-            process.env.SMTP,
-            process.env.SMTPPORT,
-            true,
-            process.env.EMAILTO)
+    constructor(mailer){
+        this.mailer = mailer
     }
-
 
     async write(path, dataToWrite){
         return writeFile(path, JSON.stringify(dataToWrite, { flag: 'wx' }, 2), (error) => {
