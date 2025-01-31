@@ -15,8 +15,9 @@ const leftColumn = [
   { name: "ecostat", status: "active", id: "ecostat", value: "Ecostat", for: "ecostat" },
   { name: "kira", status: "active", id: "kira", value: "KIRA", for: "kira" },
   { name: "beeWise", status: "active", id: "beeWise", value: "Bee Wise", for: "beeWise" },
+  { name: "ekeidr", status: "active", id: "ekeidr", value: "EKEIDR", for: "ekeidr" },
   { name: "makElektra", status: "active", id: "makElektra", value: "MÁK Electra", for: "makElektra" },
-  { name: "opalIktato", status: "active", id: "opalIktato", value: "Opal Iktató rendszer", for: "opalIktato" },
+  { name: "opalIktato", status: "inactive", id: "opalIktato", value: "Opal Iktató rendszer", for: "opalIktato" },
   { name: "jdolber", status: "active", id: "jdolber", value: "Jdolber", for: "jdolber" },
   { name: "quadroByte", status: "active", id: "quadroByte", value: "Quadro Byte Élelmezés", for: "quadroByte" },
   { name: "ovszTraceline", status: "active", id: "ovszTraceline", value: "OVSZ Traceline", for: "ovszTraceline" },
@@ -24,10 +25,14 @@ const leftColumn = [
   { name: "progesa", status: "active", id: "progesa", value: "Progesa Országos donor nyilvántartó", for: "progesa" },
   { name: "hcPointer", status: "active", id: "hcPointer", value: "HC-Pointer Medivus", for: "hcPointer" },
   { name: "bsoftEkvik", status: "active", id: "bsoftEkvik", value: "BSoft eKVIK kontrolling rendszer", for: "bsoftEkvik" },
-  { name: "tetfog", status: "active", id: "tetfog", value: "Tetfog fogászati nyilvántartó szoftver", for: "tetfog" },
+  { name: "tetfog", status: "inactive", id: "tetfog", value: "Tetfog fogászati nyilvántartó szoftver", for: "tetfog" },
   { name: "tavleletezes", status: "active", id: "tavleletezes", value: "Távleletezés VPN", for: "tavleletezes" },
+  { name: "eeszt", status: "active", id: "eeszt", value: "EESZT", for: "eeszt" },
+  { name: "kper", status: "active", id: "kper", value: "KPER", for: "kper" },
+  { name: "erad", status: "active", id: "erad", value: "eRAD", for: "erad" },
+  { name: "patientPortal", status: "active", id: "patientPortal", value: "Patient Portál", for: "patientPortal" },
   { name: "ipTelefonMellek", status: "active", id: "ipTelefonMellek", value: "IP telefon mellék", for: "ipTelefonMellek" },
-  { name: "ipTelefonKilepoKod", status: "active", id: "ipTelefonKilepoKod", value: "IP telefon kilépő kód", for: "ipTelefonKilepoKod" }
+  { name: "ipTelefonKilepoKod", status: "active", id: "ipTelefonKilepoKod", value: "IP telefon kilépő kód", for: "ipTelefonKilepoKod" },
 ]
 
 const middleColumn = [
@@ -74,12 +79,12 @@ const rightColumn = [
 
 const upperFields = [
   { id: "name", name: "name", value: "Név", subRoute: "name" },
-  {id: "isTechnical", value: "Technikai fiók" },
-  { id: "dbId", name: "classId", value: "Osztály", subRoute: "className"  },
-  { id: "classLeader", name: "classLeader", value: "Osztályvezető", subRoute: "classLeader"  },
-  { id: "post", name: "post", value: "Beosztás", subRoute: "workPost"  },
+  { id: "isTechnical", value: "Technikai fiók" },
+  { id: "dbId", name: "classId", value: "Osztály", subRoute: "className" },
+  { id: "classLeader", name: "classLeader", value: "Osztályvezető", subRoute: "classLeader" },
+  { id: "post", name: "post", value: "Beosztás", subRoute: "workPost" },
   { id: "location", name: "workLocation", value: "Munkavégzés helye", subRoute: "workLocation" },
-  {  id: "validFrom", value: "Érvényesség kezdete", subRoute: "validFrom"  },
+  { id: "validFrom", value: "Érvényesség kezdete", subRoute: "validFrom" },
   { id: "validTo", name: "validTo", value: "Érvényesség vége", subRoute: "validTo" }
 ]
 

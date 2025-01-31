@@ -20,7 +20,7 @@ router.get("/validate-token", verifyToken, (req, res) => res.json({ tokenExpired
 router.use(verifyToken)
 
 //requests
-router.post("/create-new-ticket", /*loginController.applicants,*/ requestController.createNewUserTicket)
+router.post("/create-new-ticket", loginController.applicants, requestController.createNewUserTicket)
 
 router.get("/requests-list-all", loginController.authorizers, requestController.getAllForPermission)
 router.post("/request-update", loginController.authorizers, requestController.updateTicketPermission)
@@ -48,9 +48,9 @@ router.post("/distributionlist-search", searchController.distributionlistSearch)
 //user
 router.get("/list-active-users", /*loginController.applicants,*/ userController.listUsers)
 router.get("/list-deleted-users", /*loginController.applicants,*/ userController.listDeletedUsers)
-router.post("/user/:id/delete", /*loginController.applicants,*/ userController.requestDeleteUser)
-router.get("/user/:id/edit", /*loginController.applicants,*/ userController.requestEditUser)
-router.post("/user/:id/edit", /*loginController.applicants,*/ requestController.saveEditRequest)
+router.post("/user/:id/delete", loginController.applicants, userController.requestDeleteUser)
+router.get("/user/:id/edit", loginController.applicants, userController.requestEditUser)
+router.post("/user/:id/edit", loginController.applicants, requestController.saveEditRequest)
 router.get("/user/:id/requests", requestController.getRequestsForUser)
 
 //excell

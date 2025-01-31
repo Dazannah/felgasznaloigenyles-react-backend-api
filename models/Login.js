@@ -85,11 +85,11 @@ class Autherization {
   }
 
   isApplicant() {
-    return this.getAccess(["Tartományfelhasználók"])
+    return this.getAccess(["JogosultsagigenyAlap", "JogosultsagigenyAdminisztrator"])
   }
 
   isAuthorizer() {
-    return this.getAccess(["JogosultsagigenyEngedelyezok"])
+    return this.getAccess(["JogosultsagigenyEngedelyezok", "JogosultsagigenyAdminisztrator"])
   }
 
   isAdministrator() {
@@ -101,7 +101,7 @@ class Autherization {
   }
 
   isDistributionlistEditor(){
-    return this.getAccess(["JogosultsagigenyTerjesztesilista"])
+    return this.getAccess(["JogosultsagigenyTerjesztesilista", "JogosultsagigenyAdminisztrator"])
   }
 }
 

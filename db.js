@@ -35,12 +35,12 @@ function watchMailsJson(){
 }
 
 function sendDailyReport(){
-  const sendHour = 14
+  const sendHour = 12
   const sendMinutes = 0
   const { GetRequestsData } = require("./models/Database")
 
   const now = new Date(Date.now());
-  let millisTillTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), sendHour, sendMinutes, 0, 0) - now; // 14:00
+  let millisTillTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), sendHour, sendMinutes, 0, 0) - now; // 12:00
   if (millisTillTime < 0) millisTillTime = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, sendHour, sendMinutes, 0, 0) - now
 
   setTimeout(async ()=>{
