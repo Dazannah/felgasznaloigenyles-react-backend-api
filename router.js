@@ -34,7 +34,7 @@ router.post("/update-user-request",  loginController.administrators, requestCont
 
 //distributin lists
 
-router.get("/get-distribution-lists", /*loginController.distributionlistEditors,*/ distributionListController.getDistributionLists)
+router.get("/get-distribution-lists", loginController.distributionlistEditors, distributionListController.getDistributionLists)
 router.post("/create-new-distribution-list", loginController.distributionlistEditors, distributionListController.createNewDistributionList)
 router.post("/delete-distributionlist", loginController.distributionlistEditors, distributionListController.deleteDistributionlist)
 router.get("/distribution-list/:email/edit", loginController.distributionlistEditors, distributionListController.editDistributionList)
@@ -46,8 +46,8 @@ router.post("/table-head-search", /*loginController.applicants,*/ searchControll
 router.post("/distributionlist-search", searchController.distributionlistSearch)
 
 //user
-router.get("/list-active-users", /*loginController.applicants,*/ userController.listUsers)
-router.get("/list-deleted-users", /*loginController.applicants,*/ userController.listDeletedUsers)
+router.get("/list-active-users", loginController.applicants, userController.listUsers)
+router.get("/list-deleted-users", loginController.applicants, userController.listDeletedUsers)
 router.post("/user/:id/delete", loginController.applicants, userController.requestDeleteUser)
 router.get("/user/:id/edit", loginController.applicants, userController.requestEditUser)
 router.post("/user/:id/edit", loginController.applicants, requestController.saveEditRequest)
